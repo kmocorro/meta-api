@@ -40,7 +40,7 @@ module.exports = function(app){
                     passport.use(strategy);
                     passport.initialize();
 
-                    res.render('index', passport.authenticate('ldapauth', function(err, user, info){
+                    passport.authenticate('ldapauth', (err, user, info) => {
 
                         if(err){
                             res.send({err: err})
@@ -71,7 +71,9 @@ module.exports = function(app){
                             res.status(200).send();
                         }
 
-                    }));
+                    });
+
+
                     
                 } else {
                     res.send({err: 'incomplete fields.'});
