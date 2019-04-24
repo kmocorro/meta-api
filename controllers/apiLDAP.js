@@ -1,9 +1,11 @@
-const ldap = require('../config').ldap_config;
-const formidable = require('formidable');
-const passport = require('passport');
-const LdapStrategy = require('passport-ldapauth');
-const jwt = require('jsonwebtoken');
-const jwt_privkey = require('../config').jwt_privkey;
+
+let formidable = require('formidable');
+let passport = require('passport');
+let LdapStrategy = require('passport-ldapauth');
+let jwt = require('jsonwebtoken');
+let jwt_privkey = require('../config').jwt_privkey;
+
+let ldap = require('../config').ldap_config;
 
 module.exports = function(app){
 
@@ -20,7 +22,7 @@ module.exports = function(app){
                 if(login_data.username && login_data.password){
 
                     // ldap settings
-                    let OPTS = {
+                    let LDAPSET = {
                         server: {
                             url: ldap.url,
                             bindDN: ldap.bindUser,
@@ -29,21 +31,15 @@ module.exports = function(app){
                             searchBase: ldap.searchBase,
                             connectionTimeout: ldap.connectionTimeout
                         },
-                        
                         credentialsLookup: function(){
-                            return { 
-                                username: login_data.username,
-                                password: login_data.password
-                            }
+                            return { username: login_data.username , password: login_data.password };
                         }
-                    }
+                    };
 
-                    let strategy = new LdapStrategy(OPTS);
+                    let strategy = new LdapStrategy(LDAPSET);
                     passport.use(strategy);
                     passport.initialize();
 
-                    console.log(login_data);
-                    
                     passport.authenticate('ldapauth', function(err, user, info){
 
                         if(err){
@@ -78,8 +74,8 @@ module.exports = function(app){
 
                     });
                     
-                    
-
+                } else {
+                    res.send({err: 'incomplete fields.'});
                 }
             } else {
                 res.send({err: 'no fields.'});

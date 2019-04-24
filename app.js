@@ -3,16 +3,19 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 
 const apiLDAP = require('./controllers/apiLDAP');
 
 const app = express();
 const port = process.env.PORT || 8080;
 
+app.use(cookieParser());
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('combined'));
+
 
 apiLDAP(app);
 
