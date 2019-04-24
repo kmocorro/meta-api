@@ -17,40 +17,25 @@ module.exports = function(app){
             if(err){return res.send(err)};
 
             if(fields){
-                // ldap settings
-                let LDAPSET = {
-                    server: {
-                        url: ldap.url,
-                        bindDN: ldap.bindUser,
-                        bindCredentials: ldap.bindPass,
-                        searchFilter: '(sAMAccountName={{username}})',
-                        searchBase: ldap.searchBase,
-                        connectionTimeout: ldap.connectionTimeout
-                    },
-                    credentialsLookup: function(){
-                        return { username: fields.username , password: fields.password };
-                    }
-                };
+                
+                passport.use(setupLDAP());
 
-                let strategy = new LdapStrategy(LDAPSET);
-                passport.use(strategy);
                 passport.initialize();
-
                 passport.authenticate('ldapauth', (err, user, info) => {
-
                     if(err){
-                        res.send({err: err})
+                        res.json({"err": err})
                     } else if(!user){
-                        res.send({err: info.message});
+                        res.json({"err": info.message});
                     } else {
-                        
+
                         let token = generateJWT();
                         
                         return res.status(200).json({
                             "token": token
                         });
                     }
-                    
+
+                    // generateJWT - 
                     function generateJWT(){
                         let nickName_array = (user.displayName).split(" ");
 
@@ -72,6 +57,28 @@ module.exports = function(app){
                     }
 
                 })(req, res);
+
+                // setupLDAP - 
+                function setupLDAP(){
+                    let LDAPSET = {
+                        server: {
+                            url: ldap.url,
+                            bindDN: ldap.bindUser,
+                            bindCredentials: ldap.bindPass,
+                            searchFilter: '(sAMAccountName={{username}})',
+                            searchBase: ldap.searchBase,
+                            connectionTimeout: ldap.connectionTimeout
+                        },
+                        credentialsLookup: function(){
+                            return { username: fields.username , password: fields.password };
+                        }
+                    };
+
+                    let strategy = new LdapStrategy(LDAPSET);
+
+                    return strategy;
+                }
+
             }
         });
 
