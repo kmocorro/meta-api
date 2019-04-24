@@ -40,38 +40,42 @@ module.exports = function(app){
                     passport.use(strategy);
                     passport.initialize();
 
-                    passport.authenticate('ldapauth', (err, user, info) => {
+                    () => {
+                        passport.authenticate('ldapauth', (err, user, info) => {
 
-                        if(err){
-                            res.send({err: err})
-                        } else if(!user){
-                            res.send({err: info.message});
-                        } else {
-                            console.log(user);
+                            if(err){
+                                res.send({err: err})
+                            } else if(!user){
+                                res.send({err: info.message});
+                            } else {
+                                console.log(user);
+    
+                                let nickName_array = (user.displayName).split(" ");
+    
+                                let token = jwt.sign(
+                                    {
+                                        id: user.employeeID,
+                                        claim: {
+                                            employeeNumber: user.employeeNumber,
+                                            nickName: nickName_array[0],
+                                            displayName: user.displayName,
+                                            title: user.title,
+                                            department: user.department,
+                                            username: user.sAMAccountName
+                                        }
+                                    }, 
+                                    jwt_secret.key
+                                );
+                                
+                                console.log(token);
+                                res.cookie('ldap_cookie', token);
+                                res.status(200).send();
+                            }
+    
+                        });
+                    }
 
-                            let nickName_array = (user.displayName).split(" ");
-
-                            let token = jwt.sign(
-                                {
-                                    id: user.employeeID,
-                                    claim: {
-                                        employeeNumber: user.employeeNumber,
-                                        nickName: nickName_array[0],
-                                        displayName: user.displayName,
-                                        title: user.title,
-                                        department: user.department,
-                                        username: user.sAMAccountName
-                                    }
-                                }, 
-                                jwt_secret.key
-                            );
-                            
-                            console.log(token);
-                            res.cookie('ldap_cookie', token);
-                            res.status(200).send();
-                        }
-
-                    });
+                    
 
 
                     
