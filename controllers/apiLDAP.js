@@ -43,8 +43,6 @@ module.exports = function(app){
                     } else if(!user){
                         res.send({err: info.message});
                     } else {
-                        console.log(user);
-
                         let nickName_array = (user.displayName).split(" ");
 
                         let token = jwt.sign(
@@ -62,9 +60,9 @@ module.exports = function(app){
                             jwt_secret.key
                         );
                         
-                        console.log(token);
-                        res.cookie('ldap_cookie', token);
-                        res.status(200).send();
+                        return res.status(200).json({
+                            "token": token
+                        });
                     }
 
                 })(req, res);
