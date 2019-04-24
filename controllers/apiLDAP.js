@@ -67,7 +67,8 @@ module.exports = function(app){
                                 jwt_privkey,
                                 {algorithm: 'RS256'}
                             );
-
+                            
+                            console.log(token);
                             res.cookie('ldap_cookie', token);
                             res.status(200).send();
                         }
