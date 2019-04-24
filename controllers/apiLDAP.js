@@ -49,7 +49,8 @@ module.exports = function(app){
                         } else if(!user){
                             res.send({err: info.message});
                         } else {
-
+                            console.log(user);
+                            
                             let nickName_array = (user.displayName).split(" ");
 
                             let token = jwt.sign(
