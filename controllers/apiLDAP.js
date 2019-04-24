@@ -17,6 +17,8 @@ module.exports = function(app){
             if(err){return res.send(err)};
 
             if(fields){
+
+                console.log(fields);
                 
                 passport.use(setupLDAP());
 
