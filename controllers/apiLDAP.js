@@ -53,7 +53,7 @@ module.exports = function(app){
 
                             let token = jwt.sign(
                                 {
-                                    id: user.employeeNumber,
+                                    id: user.employeeID,
                                     claim: {
                                         employeeNumber: user.employeeNumber,
                                         nickName: nickName_array[0],
@@ -63,8 +63,7 @@ module.exports = function(app){
                                         username: user.sAMAccountName
                                     }
                                 }, 
-                                jwt_privkey,
-                                {algorithm: 'RS256'}
+                                jwt_privkey.secret
                             );
                             
                             console.log(token);
