@@ -43,6 +43,15 @@ module.exports = function(app){
                     } else if(!user){
                         res.send({err: info.message});
                     } else {
+                        
+                        let token = generateJWT();
+                        
+                        return res.status(200).json({
+                            "token": token
+                        });
+                    }
+                    
+                    function generateJWT(){
                         let nickName_array = (user.displayName).split(" ");
 
                         let token = jwt.sign(
@@ -59,10 +68,7 @@ module.exports = function(app){
                             }, 
                             jwt_secret.key
                         );
-                        
-                        return res.status(200).json({
-                            "token": token
-                        });
+                        return token;
                     }
 
                 })(req, res);
