@@ -3,7 +3,7 @@ let formidable = require('formidable');
 let passport = require('passport');
 let LdapStrategy = require('passport-ldapauth');
 let jwt = require('jsonwebtoken');
-let jwt_privkey = require('../config').jwt_privkey;
+let jwt_secret = require('../config').jwt_secret;
 
 let ldap = require('../config').ldap_config;
 
@@ -63,7 +63,7 @@ module.exports = function(app){
                                         username: user.sAMAccountName
                                     }
                                 }, 
-                                jwt_privkey.secret
+                                jwt_secret.key
                             );
                             
                             console.log(token);
