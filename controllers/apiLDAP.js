@@ -9,83 +9,66 @@ let ldap = require('../config').ldap_config;
 
 module.exports = function(app){
 
-    app.post('/api/login', function(req, res){
-        // no access token for now.
+    app.post('/api/login', (req, res) => {
+        
         let form = new formidable.IncomingForm();
 
-        form.parse(req, function(err, fields){
-            if(err){return res.send({err: 'form parse error.'})};
+        form.parse(req, (err, fields) => {
+            if(err){return res.send(err)};
 
             if(fields){
-                let login_data = fields;
+                // ldap settings
+                let LDAPSET = {
+                    server: {
+                        url: ldap.url,
+                        bindDN: ldap.bindUser,
+                        bindCredentials: ldap.bindPass,
+                        searchFilter: '(sAMAccountName={{username}})',
+                        searchBase: ldap.searchBase,
+                        connectionTimeout: ldap.connectionTimeout
+                    },
+                    credentialsLookup: function(){
+                        return { username: fields.username , password: fields.password };
+                    }
+                };
 
-                if(login_data.username && login_data.password){
+                let strategy = new LdapStrategy(LDAPSET);
+                passport.use(strategy);
+                passport.initialize();
 
-                    // ldap settings
-                    let LDAPSET = {
-                        server: {
-                            url: ldap.url,
-                            bindDN: ldap.bindUser,
-                            bindCredentials: ldap.bindPass,
-                            searchFilter: '(sAMAccountName={{username}})',
-                            searchBase: ldap.searchBase,
-                            connectionTimeout: ldap.connectionTimeout
-                        },
-                        credentialsLookup: function(){
-                            return { username: login_data.username , password: login_data.password };
-                        }
-                    }; //weh
+                passport.authenticate('ldapauth', (err, user, info) => {
 
-                    let strategy = new LdapStrategy(LDAPSET);
-                    passport.use(strategy);
-                    passport.initialize();
+                    if(err){
+                        res.send({err: err})
+                    } else if(!user){
+                        res.send({err: info.message});
+                    } else {
+                        console.log(user);
 
-                    () => {
-                        passport.authenticate('ldapauth', (err, user, info) => {
+                        let nickName_array = (user.displayName).split(" ");
 
-                            if(err){
-                                res.send({err: err})
-                            } else if(!user){
-                                res.send({err: info.message});
-                            } else {
-                                console.log(user);
-    
-                                let nickName_array = (user.displayName).split(" ");
-    
-                                let token = jwt.sign(
-                                    {
-                                        id: user.employeeID,
-                                        claim: {
-                                            employeeNumber: user.employeeNumber,
-                                            nickName: nickName_array[0],
-                                            displayName: user.displayName,
-                                            title: user.title,
-                                            department: user.department,
-                                            username: user.sAMAccountName
-                                        }
-                                    }, 
-                                    jwt_secret.key
-                                );
-                                
-                                console.log(token);
-                                res.cookie('ldap_cookie', token);
-                                res.status(200).send();
-                            }
-    
-                        });
+                        let token = jwt.sign(
+                            {
+                                id: user.employeeID,
+                                claim: {
+                                    employeeNumber: user.employeeNumber,
+                                    nickName: nickName_array[0],
+                                    displayName: user.displayName,
+                                    title: user.title,
+                                    department: user.department,
+                                    username: user.sAMAccountName
+                                }
+                            }, 
+                            jwt_secret.key
+                        );
+                        
+                        console.log(token);
+                        res.cookie('ldap_cookie', token);
+                        res.status(200).send();
                     }
 
-                    
-
-
-                    
-                } else {
-                    res.send({err: 'incomplete fields.'});
-                }
-            } else {
-                res.send({err: 'no fields.'});
+                })(req, res);
             }
-
         });
 
     });
