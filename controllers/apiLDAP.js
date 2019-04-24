@@ -34,7 +34,7 @@ module.exports = function(app){
                         credentialsLookup: function(){
                             return { username: login_data.username , password: login_data.password };
                         }
-                    };
+                    }; //weh
 
                     let strategy = new LdapStrategy(LDAPSET);
                     passport.use(strategy);
