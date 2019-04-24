@@ -21,59 +21,69 @@ module.exports = function(app){
 
                 if(login_data.username && login_data.password){
 
-                    // ldap settings
-                    let LDAPSET = {
-                        server: {
-                            url: ldap.url,
-                            bindDN: ldap.bindUser,
-                            bindCredentials: ldap.bindPass,
-                            searchFilter: '(sAMAccountName={{username}})',
-                            searchBase: ldap.searchBase,
-                            connectionTimeout: ldap.connectionTimeout
-                        },
-                        credentialsLookup: function(){
-                            return { username: login_data.username , password: login_data.password };
-                        }
-                    };
+                    function ldapSetup(){
+                        return new Promise((resolve, reject) => {
+                            // ldap settings
+                            let LDAPSET = {
+                                server: {
+                                    url: ldap.url,
+                                    bindDN: ldap.bindUser,
+                                    bindCredentials: ldap.bindPass,
+                                    searchFilter: '(sAMAccountName={{username}})',
+                                    searchBase: ldap.searchBase,
+                                    connectionTimeout: ldap.connectionTimeout
+                                },
+                                credentialsLookup: function(){
+                                    return { username: login_data.username , password: login_data.password };
+                                }
+                            };
 
-                    let strategy = new LdapStrategy(LDAPSET);
-                    passport.use(strategy);
-                    passport.initialize();
+                            let strategy = new LdapStrategy(LDAPSET);
 
-                    res.render('index', passport.authenticate('ldapauth', function(err, user, info){
+                            resolve(strategy);
+                        });
+                    }
 
-                        if(err){
-                            res.send({err: err})
-                        } else if(!user){
-                            res.send({err: info.message});
-                        } else {
-                            console.log(user);
+                    ldapSetup().then(function(strategy){
+                        passport.use(strategy);
+                        passport.initialize();
+                    }).then(() => {
 
-                            let nickName_array = (user.displayName).split(" ");
+                        passport.authenticate('ldapauth', function(err, user, info){
 
-                            let token = jwt.sign(
-                                {
-                                    id: '',
-                                    claim: {
-                                        employeeNumber: user.employeeNumber,
-                                        nickName: nickName_array[0],
-                                        displayName: user.displayName,
-                                        title: user.title,
-                                        department: user.department,
-                                        username: user.sAMAccountName
-                                    }
-                                }, 
-                                jwt_privkey,
-                                {algorithm: 'RS256'}
-                            );
-                            
-                            console.log(token);
-                            res.cookie('ldap_cookie', token);
-                            res.status(200).send();
-                        }
+                            if(err){
+                                res.send({err: err})
+                            } else if(!user){
+                                res.send({err: info.message});
+                            } else {
+                                console.log(user);
+    
+                                let nickName_array = (user.displayName).split(" ");
+    
+                                let token = jwt.sign(
+                                    {
+                                        id: user.employeeNumber,
+                                        claim: {
+                                            employeeNumber: user.employeeNumber,
+                                            nickName: nickName_array[0],
+                                            displayName: user.displayName,
+                                            title: user.title,
+                                            department: user.department,
+                                            username: user.sAMAccountName
+                                        }
+                                    }, 
+                                    jwt_privkey,
+                                    {algorithm: 'RS256'}
+                                );
+                                
+                                console.log(token);
+                                res.cookie('ldap_cookie', token);
+                                res.status(200).send();
+                            }
+    
+                        });
 
-                    }));
-                    
+                    });
                     
                 } else {
                     res.send({err: 'incomplete fields.'});
