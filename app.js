@@ -10,6 +10,7 @@ const apiLDAP = require('./controllers/apiLDAP');
 const app = express();
 const port = process.env.PORT || 8080;
 
+app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(helmet());
 app.use(bodyParser.json());
