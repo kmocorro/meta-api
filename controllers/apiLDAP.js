@@ -34,7 +34,7 @@ module.exports = function(app){
                         credentialsLookup: function(){
                             return { 
                                 username: login_data.username,
-                                password: login_data.pass
+                                password: login_data.password
                             }
                         }
                     }
