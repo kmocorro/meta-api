@@ -13,12 +13,11 @@ module.exports = function(app){
          
 
         let fields = req.body;
-        console.log(fields);
     
         passport.use(setupLDAP());
 
         passport.initialize();
-        
+
         passport.authenticate('ldapauth', (err, user, info) => {
             if(err){
                 res.json({"err": err})
@@ -30,7 +29,7 @@ module.exports = function(app){
 
                 console.log(token);
 
-                return res.status(200).send({
+                return res.status(200).json({
                     "token": token
                 });
             }
