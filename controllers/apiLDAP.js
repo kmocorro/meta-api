@@ -11,7 +11,6 @@ module.exports = function(app){
 
     app.post('/api/login', (req, res) => {
          
-
         let fields = req.body;
     
         passport.use(setupLDAP());
@@ -25,36 +24,37 @@ module.exports = function(app){
                 res.json({"err": info.message});
             } else {
 
-                let token = generateJWT();
+                let token = generateJWT(user);
 
-                let jsonToken = JSON.stringify({token: token})
+                let jsonToken = {token: token};
                 
                 res.status(200).json(jsonToken);
-                console.log(jsonToken);
+                req.token = token;
+                next();
             }
 
-            // generateJWT - 
-            function generateJWT(){
-                let nickName_array = (user.displayName).split(" ");
+        })(req, res, next);
 
-                let token = jwt.sign(
-                    {
-                        id: user.employeeID,
-                        claim: {
-                            employeeNumber: user.employeeNumber,
-                            nickName: nickName_array[0],
-                            displayName: user.displayName,
-                            title: user.title,
-                            department: user.department,
-                            username: user.sAMAccountName
-                        }
-                    }, 
-                    jwt_secret.key
-                );
-                return token;
-            }
+        // generateJWT - 
+        function generateJWT(user){
+            let nickName_array = (user.displayName).split(" ");
 
-        })(req, res);
+            let token = jwt.sign(
+                {
+                    id: user.employeeID,
+                    claim: {
+                        employeeNumber: user.employeeNumber,
+                        nickName: nickName_array[0],
+                        displayName: user.displayName,
+                        title: user.title,
+                        department: user.department,
+                        username: user.sAMAccountName
+                    }
+                }, 
+                jwt_secret.key
+            );
+            return token;
+        }
 
         // setupLDAP - 
         function setupLDAP(){
@@ -76,9 +76,6 @@ module.exports = function(app){
 
             return strategy;
         }
-        
-        
 
     });
-
 }
