@@ -28,7 +28,7 @@ module.exports = function(app){
 
                 let jsonToken = {token: token};
                 
-                res.status(200).json(jsonToken);
+                res.status(200).json(JSON.stringify(jsonToken));
             }
 
         })(req, res);
