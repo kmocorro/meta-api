@@ -29,7 +29,8 @@ module.exports = function(app){
 
                 let jsonToken = JSON.stringify({token: token})
                 
-                res.status(200).send(jsonToken);
+                res.status(200).json(jsonToken);
+                console.log(jsonToken);
             }
 
             // generateJWT - 
