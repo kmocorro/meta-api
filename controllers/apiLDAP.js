@@ -29,11 +29,9 @@ module.exports = function(app){
                 let jsonToken = {token: token};
                 
                 res.status(200).json(jsonToken);
-                req.token = token;
-                next();
             }
 
-        })(req, res, next);
+        })(req, res);
 
         // generateJWT - 
         function generateJWT(user){
