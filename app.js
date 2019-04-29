@@ -14,7 +14,7 @@ const port = process.env.PORT || 8080;
 app.use(cookieParser());
 app.use(helmet());
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({credentials: true}));
 app.use(morgan('combined'));
 
 apiLDAP(app);
