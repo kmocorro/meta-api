@@ -27,10 +27,9 @@ module.exports = function(app){
                 let token = generateJWT(user);
                 let jsonToken = {token: token};
                 
-                res.cookie('auth_jwt', token).then(() => {
-                    return res.redirect('/');
-                }); // auth_jwt - authenticated user jsonwebtoken
+                res.cookie('auth_jwt', token); // auth_jwt - authenticated user jsonwebtoken
                 //res.status(200).json(JSON.stringify(jsonToken));
+                res.redirect('/');
             }
         })(req, res);
 
