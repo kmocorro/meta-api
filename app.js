@@ -12,7 +12,13 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 app.use(cookieParser());
-app.use(cors({credentials: true}));
+app.use(cors(
+    { 
+        credentials: true,
+        origin: 'http://localhost:3000'
+    })
+);
+
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
