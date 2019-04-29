@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const corsOrigins = require('./config').corsOrigins;
 
 const apiLDAP = require('./controllers/apiLDAP');
 const apiController = require('./controllers/apiController');
@@ -15,7 +16,7 @@ app.use(cookieParser());
 app.use(cors(
     { 
         credentials: true,
-        origin: ['http://localhost:3000', 'http://localhost:5000']
+        origin: [corsOrigins.dev, corsOrigins.prod]
     })
 );
 
