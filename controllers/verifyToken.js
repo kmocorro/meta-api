@@ -2,10 +2,10 @@ let jwt = require('jsonwebtoken');
 let config = require('../config').jwt_secret;
 
 function verifyToken(req, res, next){
-    let token = req.cookies.auth_jwt;
+    //let token = req.cookies.auth_jwt;
+    let token = req.body;
 
-    console.log(req.cookies);
-    console.log(req.headers.cookie);
+    console.log(req.body);
 
     if(!token){
         console.log('error: no token');
