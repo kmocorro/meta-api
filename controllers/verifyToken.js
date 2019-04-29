@@ -5,6 +5,7 @@ function verifyToken(req, res, next){
     let token = req.cookies.auth_jwt;
 
     console.log(req.cookies);
+    console.log(req.headers.cookie);
 
     if(!token){
         console.log('error: no token');
