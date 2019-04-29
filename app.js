@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
 
 const apiLDAP = require('./controllers/apiLDAP');
+const apiController = require('./controllers/apiController');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(morgan('combined'));
 
 apiLDAP(app);
+apiController(app);
 
 app.listen(port, () => {
     console.log('listening to port ' + port);

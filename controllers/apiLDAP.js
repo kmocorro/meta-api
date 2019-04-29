@@ -25,12 +25,12 @@ module.exports = function(app){
             } else {
 
                 let token = generateJWT(user);
-
-                let jsonToken = {"token": token};
+                let jsonToken = {token: token};
                 
-                res.status(200).json(jsonToken);
+                res.cookie('auth_jwt', token); // auth_jwt - authenticated user jsonwebtoken
+                res.status(200).json(JSON.stringify(jsonToken));
+                res.redirect('/');
             }
-
         })(req, res);
 
         // generateJWT - 
