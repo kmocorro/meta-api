@@ -11,8 +11,8 @@ const apiController = require('./controllers/apiController');
 const app = express();
 const port = process.env.PORT || 8080;
 
-app.use(cors({credentials: true}));
 app.use(cookieParser());
+app.use(cors({credentials: true}));
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(morgan('combined'));
