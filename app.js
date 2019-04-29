@@ -17,8 +17,6 @@ app.use(bodyParser.json());
 app.use(cors());
 app.use(morgan('combined'));
 
-app.use('/', express.static(__dirname + '/public'));
-
 apiLDAP(app);
 apiController(app);
 
