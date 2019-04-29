@@ -14,7 +14,7 @@ function verifyToken(req, res, next){
                 console.log('error: ', err);
             } else {
                 req.userID = decoded.id;
-                req.claim = decocded.claim;
+                req.claim = decoded.claim;
                 next();
             }
         });
