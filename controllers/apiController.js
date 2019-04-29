@@ -2,7 +2,10 @@ let verifyToken = require('./verifyToken');
 
 module.exports = function(app){
 
-    app.get('/', verifyToken, (req, res) => {
+    app.get('/', (req, res) => {
+        
+        console.log(req.body);
+
         res.send('this is home you have been redirected!');
     });
 
