@@ -57,16 +57,16 @@ module.exports = function(app){
 
                 let workbook = XLSX.readFile(excelFile.path);
                 
-                let RBT0_Worksheet = XLSX.utils.sheet_add_json(workbook.Sheets['RBT0'], {header: 'A'});
+                let RBT0_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['RBT0'], {header: 'A'});
                 let RBT0_clean = [];
 
-                let FOURPB_Metal_Worksheet = XLSX.utils.sheet_add_json(workbook.Sheets['4PB-Metal'], {header: 'A'});
+                let FOURPB_Metal_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['4PB-Metal'], {header: 'A'});
                 let FOURPB_Metal_clean = [];
 
-                let RTUV_HiUV_Worksheet = XLSX.utils.sheet_add_json(workbook.Sheets['RTUV-HiUV'], {header: 'A'});
+                let RTUV_HiUV_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['RTUV-HiUV'], {header: 'A'});
                 let RTUV_HiUV_clean = [];
 
-                let ACL72_Worksheet = XLSX.utils.sheet_add_json(workbook.Sheets['ACL72'], {header: 'A'});
+                let ACL72_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['ACL72'], {header: 'A'});
                 let ACL72_clean = [];
 
                 // RBT0 Uploader
