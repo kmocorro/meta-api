@@ -203,6 +203,7 @@ module.exports = function(app){
                         ]);
 
                         return rmpUploadHistory(upload_details);
+                        
                     },  (err) => {
                         console.log(err);
                     });
@@ -470,6 +471,8 @@ module.exports = function(app){
                         
                     });
                 }
+
+                res.status(200).send('ok');
                 
             }
                 
