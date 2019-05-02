@@ -44,10 +44,10 @@ module.exports = function(app){
                 
                 let excelFile = {
                     date_upload: new Date(),
-                    path: file.path,
-                    name: file.name,
-                    type: file.type,
-                    data_modified: file.lastModifiedDate
+                    path: file.file.path,
+                    name: file.file.name,
+                    type: file.file.type,
+                    data_modified: file.file.lastModifiedDate
                 }
                 
 
