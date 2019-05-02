@@ -50,11 +50,6 @@ module.exports = function(app){
                     data_modified: file.file.lastModifiedDate
                 }
                 
-
-
-
-                console.log(file);
-
                 let workbook = XLSX.readFile(excelFile.path);
                 
                 let RBT0_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['RBT0'], {header: 'A'});
@@ -102,8 +97,7 @@ module.exports = function(app){
                     }
 
                     insertRBT0(RBT0_clean).then((resultID) => {
-                        console.log(resultID);
-                        
+                       
                         let upload_details = []
 
                         upload_details.push([
@@ -119,7 +113,7 @@ module.exports = function(app){
 
                 }
 
-                /*
+                
 
                 // FOURPB_Metal Uploader
                 if(FOURPB_Metal_Worksheet){
@@ -148,11 +142,13 @@ module.exports = function(app){
                     insertFOURPB_Metal(FOURPB_Metal_clean).then((resultID) => {
                         console.log(resultID);
                         
-                        let upload_details = [
+                        let upload_details = []
+
+                        upload_details.push([
                             excelFile.date_upload,
                             'FOURPB_Metal',
                             user_details.username,
-                        ]
+                        ]);
 
                         return rmpUploadHistory(upload_details);
                     },  (err) => {
@@ -161,6 +157,7 @@ module.exports = function(app){
 
                 }
 
+                /*
                 // RTUV_HiUV Uploader
                 if(RTUV_HiUV_Worksheet){
 
@@ -198,11 +195,13 @@ module.exports = function(app){
                     insertRTUV_HiUV(RTUV_HiUV_clean).then((resultID) => {
                         console.log(resultID);
                         
-                        let upload_details = [
+                        let upload_details = []
+
+                        upload_details.push([
                             excelFile.date_upload,
                             'RTUV_HiUV',
                             user_details.username,
-                        ]
+                        ]);
 
                         return rmpUploadHistory(upload_details);
                     },  (err) => {
@@ -346,11 +345,13 @@ module.exports = function(app){
                     insertACL72(ACL72_clean).then((resultID) => {
                         console.log(resultID);
                         
-                        let upload_details = [
+                        let upload_details = []
+
+                        upload_details.push([
                             excelFile.date_upload,
                             'ACL72',
                             user_details.username,
-                        ]
+                        ]);
 
                         return rmpUploadHistory(upload_details);
 
