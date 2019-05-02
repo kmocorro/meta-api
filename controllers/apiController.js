@@ -117,6 +117,8 @@ module.exports = function(app){
 
                 }
 
+                /*
+                
                 // FOURPB_Metal Uploader
                 if(FOURPB_Metal_Worksheet){
 
@@ -354,6 +356,8 @@ module.exports = function(app){
                         console.log(err);
                     });
                 }
+
+                */
 
                 function insertRBT0(RBT0_clean){
                     return new Promise((resolve, reject) => {
