@@ -140,7 +140,7 @@ module.exports = function(app){
                     }
 
                     insertFOURPB_Metal(FOURPB_Metal_clean).then((resultID) => {
-                        console.log(resultID);
+                        //console.log(resultID);
                         
                         let upload_details = []
 
@@ -157,7 +157,6 @@ module.exports = function(app){
 
                 }
 
-                /*
                 // RTUV_HiUV Uploader
                 if(RTUV_HiUV_Worksheet){
 
@@ -209,6 +208,9 @@ module.exports = function(app){
                     });
 
                 }
+
+
+                /*
 
                 // ACL72 Uploader
                 if(ACL72_Worksheet){
