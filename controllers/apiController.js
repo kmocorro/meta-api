@@ -1,7 +1,7 @@
 let verifyToken = require('./verifyToken');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
-let mysql = require('../config').poolLocal;
+let mysql = require('../config').pool;
 
 module.exports = function(app){
 
