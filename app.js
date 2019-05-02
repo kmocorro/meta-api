@@ -8,6 +8,7 @@ const corsOrigins = require('./config').corsOrigins;
 
 const apiLDAP = require('./controllers/apiLDAP');
 const apiController = require('./controllers/apiController');
+const graphQL = require('./graphql/graphQL');
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -26,6 +27,7 @@ app.use(morgan('combined'));
 
 apiLDAP(app);
 apiController(app);
+graphQL(app);
 
 app.listen(port, () => {
     console.log('listening to port ' + port);
