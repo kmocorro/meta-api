@@ -104,11 +104,13 @@ module.exports = function(app){
                     insertRBT0(RBT0_clean).then((resultID) => {
                         console.log(resultID);
                         
-                        let upload_details = [
+                        let upload_details = []
+
+                        upload_details.push([
                             excelFile.date_upload,
                             'RBT0',
                             user_details.username,
-                        ]
+                        ]);
 
                         return rmpUploadHistory(upload_details);
                     },  (err) => {
@@ -118,7 +120,7 @@ module.exports = function(app){
                 }
 
                 /*
-                
+
                 // FOURPB_Metal Uploader
                 if(FOURPB_Metal_Worksheet){
 
