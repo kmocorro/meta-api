@@ -361,7 +361,7 @@ module.exports = function(app){
                             if(err){return reject(err)};
                             
                             connection.query({
-                                sql: 'INSERT INTO rbt0_data (upload_date, year, workweek, batch, day, line, remarks, lot_id, tag, coupon_id, start_voltage, end_voltage, bin, severity, jv, jv_change, min_t_dc, max_t_dc, ave_t_dc, disposition)',
+                                sql: 'INSERT INTO rbt0_data (upload_date, year, workweek, batch, day, line, remarks, lot_id, tag, coupon_id, start_voltage, end_voltage, bin, severity, jv, jv_change, min_t_dc, max_t_dc, ave_t_dc, disposition) VALUES ?',
                                 values: [RBT0_clean]
                             },  (err, results) => {
                                 if(err){return reject(err)};
@@ -382,7 +382,7 @@ module.exports = function(app){
                             if(err){return reject(err)};
 
                             connection.query({
-                                sql: 'INSERT into fourpb_metal_data (upload_date, year, workweek, batch, day, line, bin, coupon_id, cell_location, force_breakage, disposition, remarks)',
+                                sql: 'INSERT into fourpb_metal_data (upload_date, year, workweek, batch, day, line, bin, coupon_id, cell_location, force_breakage, disposition, remarks) VALUES ?',
                                 values: [FOURPB_Metal_clean]
                             },  (err, results) => {
                                 if(err){return reject(err)};
@@ -403,7 +403,7 @@ module.exports = function(app){
                             if(err){return reject(err)};
 
                             connection.query({
-                                sql: 'INSERT INTO rtuv_hiuv_data (upload_date, year, workweek, batch, day, line, remarks, timestamp, username, location, sampling_day, bin, cell_technology, sample_id, num_of_measured_spots, cut_off, pl_degradation, num_of_inverted_spots, disposition, dvoc_hiuv3, dvoc_hiuv7, dvoc_hiuv14',
+                                sql: 'INSERT INTO rtuv_hiuv_data (upload_date, year, workweek, batch, day, line, remarks, timestamp, username, location, sampling_day, bin, cell_technology, sample_id, num_of_measured_spots, cut_off, pl_degradation, num_of_inverted_spots, disposition, dvoc_hiuv3, dvoc_hiuv7, dvoc_hiuv14) VALUES ?',
                                 values: [RTUV_HiUV_clean]
                             },  (err, results) => {
                                 if(err){return reject(err)};
@@ -424,7 +424,7 @@ module.exports = function(app){
                             if(err){return reject(err)};
 
                             connection.query({
-                                sql: 'INSERT INTO acl72_data (upload_date, test_stage, year, workweek, batch, day, line, bin, remarks, id_data, user_id, batch_id, sample_id, measurement_date, isc_a, voc_v, imp_a, vmp_v, pmp_w, ff_percent, efficiency_percent, rsh_ohm, rs_ohm, jsc_acm2, voc_vcell, jmp_acm2, vmp_vcell, pmp_wcm2, cell_efficiency_percent, rsh_ohmcm2, rs_ohmcm2, iload_a, vload_v, ffload_percent, pload_w, effload_percent,rsload_ohm, jload_acm2, vload_vcell, pload_wcm2, cell_effload_percent, rsload_ohmcm2, rs_modulation_ohmcm2, measured_temperature, total_test_time, pjmp_acm2, pvmp_vcell, ppmp_wcm2, pff_percent, pefficiency_percent, n_at_1_sun, n_at_110_suns, jo1_acm2, jo2_acm2, jo_facm2, est_bulk_lifetime, brr_hz, lifetime_at_vmp, doping_cm3, measured_resistivity_ohmcm, lifetime_fit_r2, max_intensity_suns, intensity_flash_cutoff_suns, v_at_isc_v, dvdt, v_pad_0_v, v_pad_1_v, v_pad_2_v, v_pad_3_v, v_pad_4_v, pmpe, resistivity_ohmcm, sample_type, thickness_cm, cell_area_cm2, total_area_cm2, num_of_cells_per_string, num_of_strings, temperature_c, intensity_suns, analysis_type, nominal_load_voltage_mvcell, rs_modulation_target_ohmcm2, reference_constant_vsun, voltage_temperature_coefficient_mvc, temperature_offset_c, power_per_sun_wm2, conductivity_modulation_ohmcm2v, auger_coefficent, auger_method, band_gap_narrowing, fit_method, carrier_density_center_point_cm3, percent_fit, lower_bond_cm3, upper_bond_cm3, rsh_lifetime_correction, rsh_measurement_method, sunsvoc_rsh_voltage_v, do_dark_break_measurement, temperature_measurement_method, number_of_drsh_points, drsh_output_vlimit_v, current_transfer, voltage_transfer, temperature_transfer, final_bin, bin_index, tester_id, do_doping_measurement, doping_sample_time, doping_measurement_length, measurement_type, comments, calibration, dbreak_v, dbreak_a, dark_break_interpolated, measurement_date_time_string, software_version, recipe_filename)',
+                                sql: 'INSERT INTO acl72_data (upload_date, test_stage, year, workweek, batch, day, line, bin, remarks, id_data, user_id, batch_id, sample_id, measurement_date, isc_a, voc_v, imp_a, vmp_v, pmp_w, ff_percent, efficiency_percent, rsh_ohm, rs_ohm, jsc_acm2, voc_vcell, jmp_acm2, vmp_vcell, pmp_wcm2, cell_efficiency_percent, rsh_ohmcm2, rs_ohmcm2, iload_a, vload_v, ffload_percent, pload_w, effload_percent,rsload_ohm, jload_acm2, vload_vcell, pload_wcm2, cell_effload_percent, rsload_ohmcm2, rs_modulation_ohmcm2, measured_temperature, total_test_time, pjmp_acm2, pvmp_vcell, ppmp_wcm2, pff_percent, pefficiency_percent, n_at_1_sun, n_at_110_suns, jo1_acm2, jo2_acm2, jo_facm2, est_bulk_lifetime, brr_hz, lifetime_at_vmp, doping_cm3, measured_resistivity_ohmcm, lifetime_fit_r2, max_intensity_suns, intensity_flash_cutoff_suns, v_at_isc_v, dvdt, v_pad_0_v, v_pad_1_v, v_pad_2_v, v_pad_3_v, v_pad_4_v, pmpe, resistivity_ohmcm, sample_type, thickness_cm, cell_area_cm2, total_area_cm2, num_of_cells_per_string, num_of_strings, temperature_c, intensity_suns, analysis_type, nominal_load_voltage_mvcell, rs_modulation_target_ohmcm2, reference_constant_vsun, voltage_temperature_coefficient_mvc, temperature_offset_c, power_per_sun_wm2, conductivity_modulation_ohmcm2v, auger_coefficent, auger_method, band_gap_narrowing, fit_method, carrier_density_center_point_cm3, percent_fit, lower_bond_cm3, upper_bond_cm3, rsh_lifetime_correction, rsh_measurement_method, sunsvoc_rsh_voltage_v, do_dark_break_measurement, temperature_measurement_method, number_of_drsh_points, drsh_output_vlimit_v, current_transfer, voltage_transfer, temperature_transfer, final_bin, bin_index, tester_id, do_doping_measurement, doping_sample_time, doping_measurement_length, measurement_type, comments, calibration, dbreak_v, dbreak_a, dark_break_interpolated, measurement_date_time_string, software_version, recipe_filename) VALUES ?',
                                 values: [ACL72_clean]
                             },  (err, results) => {
                                 if(err){return reject(err)};
@@ -446,7 +446,7 @@ module.exports = function(app){
                             if(err){return reject(err)};
                             
                             connection.query({
-                                sql: 'INSERT INTO rmp_upload_history (upload_date, worksheet_name, username)',
+                                sql: 'INSERT INTO rmp_upload_history (upload_date, worksheet_name, username) VALUES ?',
                                 values: [upload_details]
                             },  (err, results) => {
                                 if(err){return reject(err)};
