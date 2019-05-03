@@ -561,7 +561,6 @@ module.exports = function(app){
                                                         
                                                     }
 
-
                                                     return rmpUploadHistory(upload_details).then(() => {
                                                         
                                                         let upload_status = {
