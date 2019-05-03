@@ -74,29 +74,29 @@ module.exports = function(app){
                 if(RBT0_Worksheet){
 
                     for(let i=1; i<RBT0_Worksheet.length; i++){ // cleaner
-                        if(RBT0_Worksheet[i].A){
+                        if(RBT0_Worksheet[i].A || RBT0_Worksheet[i].B || RBT0_Worksheet[i].C){
                             RBT0_clean.push(
                                 [   
-                                    excelFile.date_upload,
-                                    RBT0_Worksheet[i].A,
-                                    RBT0_Worksheet[i].B,
-                                    RBT0_Worksheet[i].C,
-                                    RBT0_Worksheet[i].D,
-                                    RBT0_Worksheet[i].E,
-                                    RBT0_Worksheet[i].F,
-                                    RBT0_Worksheet[i].G,
-                                    RBT0_Worksheet[i].H,
-                                    RBT0_Worksheet[i].I,
-                                    RBT0_Worksheet[i].J,
-                                    RBT0_Worksheet[i].K,
-                                    RBT0_Worksheet[i].L,
-                                    RBT0_Worksheet[i].M,
-                                    RBT0_Worksheet[i].N,
-                                    RBT0_Worksheet[i].O,
-                                    RBT0_Worksheet[i].P,
-                                    RBT0_Worksheet[i].Q,
-                                    RBT0_Worksheet[i].R,
-                                    RBT0_Worksheet[i].S,
+                                    excelFile.date_upload || null,
+                                    RBT0_Worksheet[i].A || null,
+                                    RBT0_Worksheet[i].B || null,
+                                    RBT0_Worksheet[i].C || null,
+                                    RBT0_Worksheet[i].D || null,
+                                    RBT0_Worksheet[i].E || null,
+                                    RBT0_Worksheet[i].F || null,
+                                    RBT0_Worksheet[i].G || null,
+                                    RBT0_Worksheet[i].H || null,
+                                    RBT0_Worksheet[i].I || null,
+                                    RBT0_Worksheet[i].J || null,
+                                    RBT0_Worksheet[i].K || null,
+                                    RBT0_Worksheet[i].L || null,
+                                    RBT0_Worksheet[i].M || null,
+                                    RBT0_Worksheet[i].N || null,
+                                    RBT0_Worksheet[i].O || null,
+                                    RBT0_Worksheet[i].P || null,
+                                    RBT0_Worksheet[i].Q || null,
+                                    RBT0_Worksheet[i].R || null,
+                                    RBT0_Worksheet[i].S || null,
                                 ]
                             )
                         }
@@ -108,21 +108,21 @@ module.exports = function(app){
                 if(FOURPB_Metal_Worksheet){
 
                     for(let i=1; i<FOURPB_Metal_Worksheet.length; i++){
-                        if(FOURPB_Metal_Worksheet[i].A){
+                        if(FOURPB_Metal_Worksheet[i].A || FOURPB_Metal_Worksheet[i].B || FOURPB_Metal_Worksheet[i].C){
                             FOURPB_Metal_clean.push(
                                 [
                                     excelFile.date_upload,
-                                    FOURPB_Metal_Worksheet[i].A,
-                                    FOURPB_Metal_Worksheet[i].B,
-                                    FOURPB_Metal_Worksheet[i].C,
-                                    FOURPB_Metal_Worksheet[i].D,
-                                    FOURPB_Metal_Worksheet[i].E,
-                                    FOURPB_Metal_Worksheet[i].F,
-                                    FOURPB_Metal_Worksheet[i].G,
-                                    FOURPB_Metal_Worksheet[i].H,
-                                    FOURPB_Metal_Worksheet[i].I,
-                                    FOURPB_Metal_Worksheet[i].J,
-                                    FOURPB_Metal_Worksheet[i].K,
+                                    FOURPB_Metal_Worksheet[i].A || null,
+                                    FOURPB_Metal_Worksheet[i].B || null,
+                                    FOURPB_Metal_Worksheet[i].C || null,
+                                    FOURPB_Metal_Worksheet[i].D || null,
+                                    FOURPB_Metal_Worksheet[i].E || null,
+                                    FOURPB_Metal_Worksheet[i].F || null,
+                                    FOURPB_Metal_Worksheet[i].G || null,
+                                    FOURPB_Metal_Worksheet[i].H || null,
+                                    FOURPB_Metal_Worksheet[i].I || null,
+                                    FOURPB_Metal_Worksheet[i].J || null,
+                                    FOURPB_Metal_Worksheet[i].K || null,
                                 ]
                             )
                         }
@@ -134,31 +134,31 @@ module.exports = function(app){
                 if(RTUV_HiUV_Worksheet){
 
                     for(let i=1; i<RTUV_HiUV_Worksheet.length; i++){
-                        if(RTUV_HiUV_Worksheet[i].A){
+                        if(RTUV_HiUV_Worksheet[i].A || RTUV_HiUV_Worksheet[i].B || RTUV_HiUV_Worksheet[i].C){
                             RTUV_HiUV_clean.push(
                                 [
                                     excelFile.date_upload,
-                                    RTUV_HiUV_Worksheet[i].A,
-                                    RTUV_HiUV_Worksheet[i].B,
-                                    RTUV_HiUV_Worksheet[i].C,
-                                    RTUV_HiUV_Worksheet[i].D,
-                                    RTUV_HiUV_Worksheet[i].E,
-                                    RTUV_HiUV_Worksheet[i].F,
-                                    RTUV_HiUV_Worksheet[i].G,
-                                    RTUV_HiUV_Worksheet[i].H,
-                                    RTUV_HiUV_Worksheet[i].I,
-                                    RTUV_HiUV_Worksheet[i].J,
-                                    RTUV_HiUV_Worksheet[i].K,
-                                    RTUV_HiUV_Worksheet[i].L,
-                                    RTUV_HiUV_Worksheet[i].M,
-                                    RTUV_HiUV_Worksheet[i].N,
-                                    RTUV_HiUV_Worksheet[i].O,
-                                    RTUV_HiUV_Worksheet[i].P,
-                                    RTUV_HiUV_Worksheet[i].Q,
-                                    RTUV_HiUV_Worksheet[i].R,
-                                    RTUV_HiUV_Worksheet[i].S,
-                                    RTUV_HiUV_Worksheet[i].T,
-                                    RTUV_HiUV_Worksheet[i].U,
+                                    RTUV_HiUV_Worksheet[i].A || null,
+                                    RTUV_HiUV_Worksheet[i].B || null,
+                                    RTUV_HiUV_Worksheet[i].C || null,
+                                    RTUV_HiUV_Worksheet[i].D || null,
+                                    RTUV_HiUV_Worksheet[i].E || null,
+                                    RTUV_HiUV_Worksheet[i].F || null,
+                                    RTUV_HiUV_Worksheet[i].G || null,
+                                    RTUV_HiUV_Worksheet[i].H || null,
+                                    RTUV_HiUV_Worksheet[i].I || null,
+                                    RTUV_HiUV_Worksheet[i].J || null,
+                                    RTUV_HiUV_Worksheet[i].K || null,
+                                    RTUV_HiUV_Worksheet[i].L || null,
+                                    RTUV_HiUV_Worksheet[i].M || null,
+                                    RTUV_HiUV_Worksheet[i].N || null,
+                                    RTUV_HiUV_Worksheet[i].O || null,
+                                    RTUV_HiUV_Worksheet[i].P || null,
+                                    RTUV_HiUV_Worksheet[i].Q || null,
+                                    RTUV_HiUV_Worksheet[i].R || null,
+                                    RTUV_HiUV_Worksheet[i].S || null,
+                                    RTUV_HiUV_Worksheet[i].T || null,
+                                    RTUV_HiUV_Worksheet[i].U || null,
                                 ]
                             )
                         }
@@ -169,7 +169,7 @@ module.exports = function(app){
                 // ACL72_Pre Uploader
                 if(ACL72_Pre_Worksheet){
                     for(let i=1; i<ACL72_Pre_Worksheet.length;i++){
-                        if(ACL72_Pre_Worksheet[i].A){
+                        if(ACL72_Pre_Worksheet[i].A || ACL72_Pre_Worksheet[i].B || ACL72_Pre_Worksheet[i].C){
                             ACL72_Pre_clean.push(
                                 [
                                 excelFile.date_upload || null,
@@ -302,7 +302,7 @@ module.exports = function(app){
                 // ACL72_Post Uploader
                 if(ACL72_Post_Worksheet){
                     for(let i=1; i<ACL72_Post_Worksheet.length;i++){
-                        if(ACL72_Post_Worksheet[i].A){
+                        if(ACL72_Post_Worksheet[i].A || ACL72_Post_Worksheet[i].B || ACL72_Post_Worksheet[i].C){
                             ACL72_Post_clean.push(
                                 [
                                     excelFile.date_upload,
@@ -432,17 +432,25 @@ module.exports = function(app){
                     }
                 }
 
-                return insertRBT0(RBT0_clean).then(() => {
+                return insertRBT0(RBT0_clean).then((fileStatus) => {
                        
                     let upload_details = []
 
-                    upload_details.push([
-                        excelFile.date_upload,
-                        'RBT0',
-                        user_details.username,
-                    ]);
+                    if(fileStatus){
+                        upload_details.push([
+                            excelFile.date_upload,
+                            'RBT0',
+                            user_details.username,
+                        ]);
 
-                    worksheetsOk.push(['RBT0']);
+                        worksheetsOk.push(['RBT0']);
+
+                    } else {
+
+                        worksheetsOk.push(['RBT0 - Empty. Proceeding...']);
+                        
+                    }
+
 
                     return rmpUploadHistory(upload_details).then(() => {
                         return insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
@@ -586,21 +594,29 @@ module.exports = function(app){
 
                 function insertRBT0(RBT0_clean){
                     return new Promise((resolve, reject) => {
-                        mysql.getConnection((err, connection) => {
-                            if(err){return reject(err)};
-                            
-                            connection.query({
-                                sql: 'INSERT INTO rbt0_data (upload_date, year, workweek, batch, day, line, remarks, lot_id, tag, coupon_id, start_voltage, end_voltage, bin, severity, jv, jv_change, min_t_dc, max_t_dc, ave_t_dc, disposition) VALUES ?',
-                                values: [RBT0_clean]
-                            },  (err, results) => {
+
+                        let fileStatus = false;
+
+                        if(RBT0_clean){
+                            mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
-
-                                resolve(results.insertID);
+                                
+                                connection.query({
+                                    sql: 'INSERT INTO rbt0_data (upload_date, year, workweek, batch, day, line, remarks, lot_id, tag, coupon_id, start_voltage, end_voltage, bin, severity, jv, jv_change, min_t_dc, max_t_dc, ave_t_dc, disposition) VALUES ?',
+                                    values: [RBT0_clean]
+                                },  (err, results) => {
+                                    if(err){return reject(err)};
+    
+                                    resolve(results.insertID);
+                                });
+    
+                                connection.release();
+    
                             });
-
-                            connection.release();
-
-                        });
+                        } else {
+                            resolve(fileStatus);
+                        }
+                        
 
                     });
                 }
