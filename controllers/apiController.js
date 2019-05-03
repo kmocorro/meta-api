@@ -444,8 +444,8 @@ module.exports = function(app){
 
                     worksheetsOk.push(['RBT0']);
 
-                    return rmpUploadHistory(upload_details).then(() => {
-                        return insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
+                    rmpUploadHistory(upload_details).then(() => {
+                        insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
                             
                             let upload_details = []
     
@@ -457,8 +457,8 @@ module.exports = function(app){
 
                             worksheetsOk.push(['FOURPB_Metal']);
     
-                            return rmpUploadHistory(upload_details).then(() => {
-                                return insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
+                            rmpUploadHistory(upload_details).then(() => {
+                                insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
                                     
                                     let upload_details = []
             
@@ -470,8 +470,8 @@ module.exports = function(app){
 
                                     worksheetsOk.push(['RTUV_HiUV']);
             
-                                    return rmpUploadHistory(upload_details).then(() => {
-                                        return insertACL72_Pre(ACL72_Pre_clean).then(() => {
+                                    rmpUploadHistory(upload_details).then(() => {
+                                        insertACL72_Pre(ACL72_Pre_clean).then(() => {
                                             
                                             let upload_details = []
                     
@@ -483,8 +483,8 @@ module.exports = function(app){
 
                                             worksheetsOk.push(['ACL72_Pre']);
                     
-                                            return rmpUploadHistory(upload_details).then(() => {
-                                                return insertACL72_Post(ACL72_Post_clean).then(() => {
+                                            rmpUploadHistory(upload_details).then(() => {
+                                                insertACL72_Post(ACL72_Post_clean).then(() => {
                                                     
                                                     let upload_details = []
                             
@@ -496,7 +496,7 @@ module.exports = function(app){
 
                                                     worksheetsOk.push(['ACL72_Post']);
                             
-                                                    return rmpUploadHistory(upload_details).then(() => {
+                                                    rmpUploadHistory(upload_details).then(() => {
                                                         
                                                         let upload_status = {
                                                             OK: worksheetsOk,
