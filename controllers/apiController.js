@@ -630,42 +630,60 @@ module.exports = function(app){
 
                 function insertFOURPB_Metal(FOURPB_Metal_clean){
                     return new Promise((resolve, reject) => {
-                        mysql.getConnection((err, connection) => {
-                            if(err){return reject(err)};
 
-                            connection.query({
-                                sql: 'INSERT into fourpb_metal_data (upload_date, year, workweek, batch, day, line, bin, coupon_id, cell_location, force_breakage, disposition, remarks) VALUES ?',
-                                values: [FOURPB_Metal_clean]
-                            },  (err, results) => {
+                        let fileStatus = false;
+
+                        if(FOURPB_Metal_clean.length > 0){
+                            
+                            mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
-
-                                resolve(results.insertID);
+    
+                                connection.query({
+                                    sql: 'INSERT into fourpb_metal_data (upload_date, year, workweek, batch, day, line, bin, coupon_id, cell_location, force_breakage, disposition, remarks) VALUES ?',
+                                    values: [FOURPB_Metal_clean]
+                                },  (err, results) => {
+                                    if(err){return reject(err)};
+    
+                                    resolve(results.insertID);
+                                });
+    
+                                connection.release();
+    
                             });
 
-                            connection.release();
-
-                        });
+                        } else {
+                            resolve(fileStatus);
+                        }
 
                     });
                 }
 
                 function insertRTUV_HiUV(RTUV_HiUV_clean){
                     return new Promise((resolve, reject) => {
-                        mysql.getConnection((err, connection) => {
-                            if(err){return reject(err)};
 
-                            connection.query({
-                                sql: 'INSERT INTO rtuv_hiuv_data (upload_date, year, workweek, batch, day, line, remarks, timestamp, username, location, sampling_day, bin, cell_technology, sample_id, num_of_measured_spots, cut_off, pl_degradation, num_of_inverted_spots, disposition, dvoc_hiuv3, dvoc_hiuv7, dvoc_hiuv14) VALUES ?',
-                                values: [RTUV_HiUV_clean]
-                            },  (err, results) => {
+                        let fileStatus = false;
+
+                        if(RTUV_HiUV_clean.length > 0){
+                            
+                            mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
-
-                                resolve(results.insertID);
+    
+                                connection.query({
+                                    sql: 'INSERT INTO rtuv_hiuv_data (upload_date, year, workweek, batch, day, line, remarks, timestamp, username, location, sampling_day, bin, cell_technology, sample_id, num_of_measured_spots, cut_off, pl_degradation, num_of_inverted_spots, disposition, dvoc_hiuv3, dvoc_hiuv7, dvoc_hiuv14) VALUES ?',
+                                    values: [RTUV_HiUV_clean]
+                                },  (err, results) => {
+                                    if(err){return reject(err)};
+    
+                                    resolve(results.insertID);
+                                });
+    
+                                connection.release();
+    
                             });
 
-                            connection.release();
-
-                        });
+                        } else {
+                            resolve(fileStatus);
+                        }
 
                     });
                 }
