@@ -512,8 +512,15 @@ module.exports = function(app){
                             
                                                 }, (err) => {
                                                     console.log(err.code);
-                                                    return worksheetsErr.push(['ACL72_Post - ' + err.code ]);
-                                                });
+                                                    worksheetsErr.push(['ACL72_Post - ' + err.code ]);
+
+                                                    let upload_status = {
+                                                        OK: worksheetsOk,
+                                                        ERR: worksheetsErr
+                                                    }
+
+                                                    return res.status(200).json(upload_status);
+                                                })
 
                                             },  (err) => {
                                                 console.log(err);
@@ -521,7 +528,14 @@ module.exports = function(app){
                     
                                         }, (err) => {
                                             console.log(err);
-                                            return worksheetsErr.push(['ACL72_Pre - ' + err ]);
+                                            worksheetsErr.push(['ACL72_Pre - ' + err ]);
+
+                                            let upload_status = {
+                                                OK: worksheetsOk,
+                                                ERR: worksheetsErr
+                                            }
+
+                                            return res.status(200).json(upload_status);
                                         });
 
                                     },  (err) => {
@@ -530,7 +544,13 @@ module.exports = function(app){
                                     
                                 },  (err) => {
                                     console.log(err);
-                                    return worksheetsErr.push(['RTUV_HiUV - ' + err ]);
+                                    worksheetsErr.push(['RTUV_HiUV - ' + err ]);
+                                    let upload_status = {
+                                        OK: worksheetsOk,
+                                        ERR: worksheetsErr
+                                    }
+
+                                    return res.status(200).json(upload_status);
                                 });
 
                             },  (err) => {
@@ -538,7 +558,13 @@ module.exports = function(app){
                             });
                         },  (err) => {
                             console.log(err);
-                            return worksheetsErr.push(['FOURPB_Metal - ' + err ]);
+                            worksheetsErr.push(['FOURPB_Metal - ' + err ]);
+                            let upload_status = {
+                                OK: worksheetsOk,
+                                ERR: worksheetsErr
+                            }
+
+                            return res.status(200).json(upload_status);
                         });
                         
                     },  (err) => {
@@ -547,7 +573,14 @@ module.exports = function(app){
 
                 },  (err) => {
                     console.log(err);
-                    return worksheetsErr.push(['RBT0 - ' + err ]);
+                    worksheetsErr.push(['RBT0 - ' + err ]);
+
+                    let upload_status = {
+                        OK: worksheetsOk,
+                        ERR: worksheetsErr
+                    }
+
+                    return res.status(200).json(upload_status);
                 });
 
 
