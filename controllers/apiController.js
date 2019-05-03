@@ -512,8 +512,8 @@ module.exports = function(app){
                                                     });
                             
                                                 }, (err) => {
-                                                    worksheetsErr.push(['ACL72_Post - ' + err ]);
-                                                    console.log(err);
+                                                    worksheetsErr.push(['ACL72_Post - ' + err.code ]);
+                                                    console.log(err.code);
                                                     return;
                                                 });
 
