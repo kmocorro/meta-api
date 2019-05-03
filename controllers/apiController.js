@@ -27,6 +27,17 @@ module.exports = function(app){
         
     });
 
+    app.get('/uploader/rmp', verifyToken, (req, res) => {
+
+        let user_details = {
+            username: req.claim.username,
+            title: req.claim.title
+        }
+
+        res.status(200).json(user_details);
+
+    });
+
     // rmp uploader
     app.post('/api/uploader/rmp', verifyToken, (req, res) => {
 
