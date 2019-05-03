@@ -654,7 +654,6 @@ module.exports = function(app){
                     return new Promise((resolve, reject) => {
 
                         let fileStatus = false;
-                        console.log(RBT0_clean.length);
 
                         if(RBT0_clean.length > 0){
                             mysql.getConnection((err, connection) => {
@@ -698,7 +697,9 @@ module.exports = function(app){
                                 },  (err, results) => {
                                     if(err){return reject(err)};
     
-                                    resolve(results.insertID);
+                                    fileStatus = true;
+    
+                                    resolve(fileStatus);
                                 });
     
                                 connection.release();
@@ -728,7 +729,9 @@ module.exports = function(app){
                                 },  (err, results) => {
                                     if(err){return reject(err)};
     
-                                    resolve(results.insertID);
+                                    fileStatus = true;
+    
+                                    resolve(fileStatus);
                                 });
     
                                 connection.release();
@@ -758,7 +761,9 @@ module.exports = function(app){
                                 },  (err, results) => {
                                     if(err){return reject(err)};
     
-                                    resolve(results.insertID);
+                                    fileStatus = true;
+    
+                                    resolve(fileStatus);
                                 });
     
                                 connection.release();
@@ -788,7 +793,9 @@ module.exports = function(app){
                                 },  (err, results) => {
                                     if(err){return reject(err)};
     
-                                    resolve(results.insertID);
+                                    fileStatus = true;
+    
+                                    resolve(fileStatus);
                                 });
     
                                 connection.release();
