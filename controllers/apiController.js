@@ -512,7 +512,7 @@ module.exports = function(app){
                                                     });
                             
                                                 }, (err) => {
-                                                    worksheetsErr.push('ACL72_Post - ' + err );
+                                                    worksheetsErr.push(['ACL72_Post - ' + err ]);
                                                     return;
                                                 });
 
@@ -522,7 +522,7 @@ module.exports = function(app){
                                             });
                     
                                         }, (err) => {
-                                            worksheetsErr.push('ACL72_Pre - ' + err );
+                                            worksheetsErr.push(['ACL72_Pre - ' + err ]);
                                             return;
                                         });
 
@@ -532,7 +532,7 @@ module.exports = function(app){
                                     });
                                     
                                 },  (err) => {
-                                    worksheetsErr.push('RTUV_HiUV - ' + err );
+                                    worksheetsErr.push(['RTUV_HiUV - ' + err ]);
                                     return;
                                 });
 
@@ -541,7 +541,7 @@ module.exports = function(app){
                                 return;
                             });
                         },  (err) => {
-                            worksheetsErr.push('FOURPB_Metal - ' + err );
+                            worksheetsErr.push(['FOURPB_Metal - ' + err ]);
                             return;
                         });
                         
@@ -551,7 +551,7 @@ module.exports = function(app){
                     });
 
                 },  (err) => {
-                    worksheetsErr.push('RBT0 - ' + err );
+                    worksheetsErr.push(['RBT0 - ' + err ]);
                     return;
                 });
 
