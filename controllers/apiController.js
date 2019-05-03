@@ -654,6 +654,7 @@ module.exports = function(app){
                     return new Promise((resolve, reject) => {
 
                         let fileStatus = false;
+                        console.log(RBT0_clean);
 
                         if(RBT0_clean.length > 0){
                             mysql.getConnection((err, connection) => {
