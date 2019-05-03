@@ -507,42 +507,52 @@ module.exports = function(app){
 
                                                     },  (err) => {
                                                         console.log(err);
+                                                        return;
                                                         
                                                     });
                             
                                                 }, (err) => {
                                                     worksheetsErr.push('ACL72_Post - ' + err );
+                                                    return;
                                                 });
 
                                             },  (err) => {
                                                 console.log(err);
+                                                return;
                                             });
                     
                                         }, (err) => {
                                             worksheetsErr.push('ACL72_Pre - ' + err );
+                                            return;
                                         });
 
                                     },  (err) => {
                                         console.log(err);
+                                        return;
                                     });
                                     
                                 },  (err) => {
                                     worksheetsErr.push('RTUV_HiUV - ' + err );
+                                    return;
                                 });
 
                             },  (err) => {
                                 console.log(err);
+                                return;
                             });
                         },  (err) => {
                             worksheetsErr.push('FOURPB_Metal - ' + err );
+                            return;
                         });
                         
                     },  (err) => {
                         console.log(err);
+                        return;
                     });
 
                 },  (err) => {
                     worksheetsErr.push('RBT0 - ' + err );
+                    return;
                 });
 
 
