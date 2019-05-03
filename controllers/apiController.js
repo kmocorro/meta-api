@@ -67,484 +67,496 @@ module.exports = function(app){
                 let ACL72_Post_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['ACL72_Post'], {header: 'A'});
                 let ACL72_Post_clean = [];
 
-                let worksheets_uploaded = [];
 
-
-                // RBT0 Uploader
-                if(RBT0_Worksheet){
-
-                    for(let i=1; i<RBT0_Worksheet.length; i++){ // cleaner
-                        if(RBT0_Worksheet[i].A){
-                            RBT0_clean.push(
-                                [   
+                function Main_RMP_Uploader(){
+                    return new Promise((resolve, reject) => {
+                        
+                        let handleSuccess = [];
+                        let handleError = [];
+                        
+                        // RBT0 Uploader
+                        if(RBT0_Worksheet){
+        
+                            for(let i=1; i<RBT0_Worksheet.length; i++){ // cleaner
+                                if(RBT0_Worksheet[i].A){
+                                    RBT0_clean.push(
+                                        [   
+                                            excelFile.date_upload,
+                                            RBT0_Worksheet[i].A,
+                                            RBT0_Worksheet[i].B,
+                                            RBT0_Worksheet[i].C,
+                                            RBT0_Worksheet[i].D,
+                                            RBT0_Worksheet[i].E,
+                                            RBT0_Worksheet[i].F,
+                                            RBT0_Worksheet[i].G,
+                                            RBT0_Worksheet[i].H,
+                                            RBT0_Worksheet[i].I,
+                                            RBT0_Worksheet[i].J,
+                                            RBT0_Worksheet[i].K,
+                                            RBT0_Worksheet[i].L,
+                                            RBT0_Worksheet[i].M,
+                                            RBT0_Worksheet[i].N,
+                                            RBT0_Worksheet[i].O,
+                                            RBT0_Worksheet[i].P,
+                                            RBT0_Worksheet[i].Q,
+                                            RBT0_Worksheet[i].R,
+                                            RBT0_Worksheet[i].S,
+                                        ]
+                                    )
+                                }
+                            }
+        
+                            insertRBT0(RBT0_clean).then(() => {
+                               
+                                let upload_details = []
+        
+                                upload_details.push([
                                     excelFile.date_upload,
-                                    RBT0_Worksheet[i].A,
-                                    RBT0_Worksheet[i].B,
-                                    RBT0_Worksheet[i].C,
-                                    RBT0_Worksheet[i].D,
-                                    RBT0_Worksheet[i].E,
-                                    RBT0_Worksheet[i].F,
-                                    RBT0_Worksheet[i].G,
-                                    RBT0_Worksheet[i].H,
-                                    RBT0_Worksheet[i].I,
-                                    RBT0_Worksheet[i].J,
-                                    RBT0_Worksheet[i].K,
-                                    RBT0_Worksheet[i].L,
-                                    RBT0_Worksheet[i].M,
-                                    RBT0_Worksheet[i].N,
-                                    RBT0_Worksheet[i].O,
-                                    RBT0_Worksheet[i].P,
-                                    RBT0_Worksheet[i].Q,
-                                    RBT0_Worksheet[i].R,
-                                    RBT0_Worksheet[i].S,
-                                ]
-                            )
+                                    'RBT0',
+                                    user_details.username,
+                                ]);
+        
+                                return rmpUploadHistory(upload_details).then(() => {
+                                    handleSuccess.push(
+                                        ['RBTO']
+                                    );
+                                },  (err) => {
+                                    handleError.push([err]);
+                                });
+        
+                            },  (err) => {
+                                handleError.push([err]);
+                            });
+        
                         }
-                    }
-
-                    insertRBT0(RBT0_clean).then(() => {
-                       
-                        let upload_details = []
-
-                        upload_details.push([
-                            excelFile.date_upload,
-                            'RBT0',
-                            user_details.username,
-                        ]);
-
-                        return rmpUploadHistory(upload_details).then(() => {
-                            worksheets_uploaded.push(
-                                ['RBTO']
-                            );
-                        },  (err) => {
-                            console.log(err);
-                        });
-
-                    },  (err) => {
-                        console.log(err);
-                    });
-
-                }
-
-                // FOURPB_Metal Uploader
-                if(FOURPB_Metal_Worksheet){
-
-                    for(let i=1; i<FOURPB_Metal_Worksheet.length; i++){
-                        if(FOURPB_Metal_Worksheet[i].A){
-                            FOURPB_Metal_clean.push(
-                                [
+        
+                        // FOURPB_Metal Uploader
+                        if(FOURPB_Metal_Worksheet){
+        
+                            for(let i=1; i<FOURPB_Metal_Worksheet.length; i++){
+                                if(FOURPB_Metal_Worksheet[i].A){
+                                    FOURPB_Metal_clean.push(
+                                        [
+                                            excelFile.date_upload,
+                                            FOURPB_Metal_Worksheet[i].A,
+                                            FOURPB_Metal_Worksheet[i].B,
+                                            FOURPB_Metal_Worksheet[i].C,
+                                            FOURPB_Metal_Worksheet[i].D,
+                                            FOURPB_Metal_Worksheet[i].E,
+                                            FOURPB_Metal_Worksheet[i].F,
+                                            FOURPB_Metal_Worksheet[i].G,
+                                            FOURPB_Metal_Worksheet[i].H,
+                                            FOURPB_Metal_Worksheet[i].I,
+                                            FOURPB_Metal_Worksheet[i].J,
+                                            FOURPB_Metal_Worksheet[i].K,
+                                        ]
+                                    )
+                                }
+                            }
+        
+                            insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
+                                //console.log(resultID);
+                                
+                                let upload_details = []
+        
+                                upload_details.push([
                                     excelFile.date_upload,
-                                    FOURPB_Metal_Worksheet[i].A,
-                                    FOURPB_Metal_Worksheet[i].B,
-                                    FOURPB_Metal_Worksheet[i].C,
-                                    FOURPB_Metal_Worksheet[i].D,
-                                    FOURPB_Metal_Worksheet[i].E,
-                                    FOURPB_Metal_Worksheet[i].F,
-                                    FOURPB_Metal_Worksheet[i].G,
-                                    FOURPB_Metal_Worksheet[i].H,
-                                    FOURPB_Metal_Worksheet[i].I,
-                                    FOURPB_Metal_Worksheet[i].J,
-                                    FOURPB_Metal_Worksheet[i].K,
-                                ]
-                            )
+                                    'FOURPB_Metal',
+                                    user_details.username,
+                                ]);
+        
+                                return rmpUploadHistory(upload_details).then(() => {
+                                    handleSuccess.push(
+                                        ['FOURPB_Metal']
+                                    );
+                                },  (err) => {
+                                    handleError.push([err]);
+                                });
+                            },  (err) => {
+                                handleError.push([err]);
+                            });
+        
                         }
-                    }
-
-                    insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
-                        //console.log(resultID);
-                        
-                        let upload_details = []
-
-                        upload_details.push([
-                            excelFile.date_upload,
-                            'FOURPB_Metal',
-                            user_details.username,
-                        ]);
-
-                        return rmpUploadHistory(upload_details).then(() => {
-                            worksheets_uploaded.push(
-                                ['FOURPB_Metal']
-                            );
-                        },  (err) => {
-                            console.log(err);
-                        });
-                    },  (err) => {
-                        console.log(err);
-                    });
-
-                }
-
-                // RTUV_HiUV Uploader
-                if(RTUV_HiUV_Worksheet){
-
-                    for(let i=1; i<RTUV_HiUV_Worksheet.length; i++){
-                        if(RTUV_HiUV_Worksheet[i].A){
-                            RTUV_HiUV_clean.push(
-                                [
+        
+                        // RTUV_HiUV Uploader
+                        if(RTUV_HiUV_Worksheet){
+        
+                            for(let i=1; i<RTUV_HiUV_Worksheet.length; i++){
+                                if(RTUV_HiUV_Worksheet[i].A){
+                                    RTUV_HiUV_clean.push(
+                                        [
+                                            excelFile.date_upload,
+                                            RTUV_HiUV_Worksheet[i].A,
+                                            RTUV_HiUV_Worksheet[i].B,
+                                            RTUV_HiUV_Worksheet[i].C,
+                                            RTUV_HiUV_Worksheet[i].D,
+                                            RTUV_HiUV_Worksheet[i].E,
+                                            RTUV_HiUV_Worksheet[i].F,
+                                            RTUV_HiUV_Worksheet[i].G,
+                                            RTUV_HiUV_Worksheet[i].H,
+                                            RTUV_HiUV_Worksheet[i].I,
+                                            RTUV_HiUV_Worksheet[i].J,
+                                            RTUV_HiUV_Worksheet[i].K,
+                                            RTUV_HiUV_Worksheet[i].L,
+                                            RTUV_HiUV_Worksheet[i].M,
+                                            RTUV_HiUV_Worksheet[i].N,
+                                            RTUV_HiUV_Worksheet[i].O,
+                                            RTUV_HiUV_Worksheet[i].P,
+                                            RTUV_HiUV_Worksheet[i].Q,
+                                            RTUV_HiUV_Worksheet[i].R,
+                                            RTUV_HiUV_Worksheet[i].S,
+                                            RTUV_HiUV_Worksheet[i].T,
+                                            RTUV_HiUV_Worksheet[i].U,
+                                        ]
+                                    )
+                                }
+                            }
+        
+                            insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
+                                //console.log(resultID);
+                                
+                                let upload_details = []
+        
+                                upload_details.push([
                                     excelFile.date_upload,
-                                    RTUV_HiUV_Worksheet[i].A,
-                                    RTUV_HiUV_Worksheet[i].B,
-                                    RTUV_HiUV_Worksheet[i].C,
-                                    RTUV_HiUV_Worksheet[i].D,
-                                    RTUV_HiUV_Worksheet[i].E,
-                                    RTUV_HiUV_Worksheet[i].F,
-                                    RTUV_HiUV_Worksheet[i].G,
-                                    RTUV_HiUV_Worksheet[i].H,
-                                    RTUV_HiUV_Worksheet[i].I,
-                                    RTUV_HiUV_Worksheet[i].J,
-                                    RTUV_HiUV_Worksheet[i].K,
-                                    RTUV_HiUV_Worksheet[i].L,
-                                    RTUV_HiUV_Worksheet[i].M,
-                                    RTUV_HiUV_Worksheet[i].N,
-                                    RTUV_HiUV_Worksheet[i].O,
-                                    RTUV_HiUV_Worksheet[i].P,
-                                    RTUV_HiUV_Worksheet[i].Q,
-                                    RTUV_HiUV_Worksheet[i].R,
-                                    RTUV_HiUV_Worksheet[i].S,
-                                    RTUV_HiUV_Worksheet[i].T,
-                                    RTUV_HiUV_Worksheet[i].U,
-                                ]
-                            )
+                                    'RTUV_HiUV',
+                                    user_details.username,
+                                ]);
+        
+                                return rmpUploadHistory(upload_details).then(() => {
+                                    handleSuccess.push(
+                                        ['RTUV_HiUV']
+                                    );
+                                },  (err) => {
+                                    handleError.push([err]);
+                                });
+                                
+                            },  (err) => {
+                                handleError.push([err]);
+                            });
+        
                         }
-                    }
-
-                    insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
-                        //console.log(resultID);
                         
-                        let upload_details = []
-
-                        upload_details.push([
-                            excelFile.date_upload,
-                            'RTUV_HiUV',
-                            user_details.username,
-                        ]);
-
-                        return rmpUploadHistory(upload_details).then(() => {
-                            worksheets_uploaded.push(
-                                ['RTUV_HiUV']
-                            );
-                        },  (err) => {
-                            console.log(err);
-                        });
-                        
-                    },  (err) => {
-                        console.log(err);
-                    });
-
-                }
-                
-                // ACL72_Pre Uploader
-                if(ACL72_Pre_Worksheet){
-                    for(let i=1; i<ACL72_Pre_Worksheet.length;i++){
-                        if(ACL72_Pre_Worksheet[i].A){
-                            ACL72_Pre_clean.push(
-                                [
-                                excelFile.date_upload || null,
-                                ACL72_Pre_Worksheet[i].A || null,
-                                ACL72_Pre_Worksheet[i].B || null,
-                                ACL72_Pre_Worksheet[i].C || null,
-                                ACL72_Pre_Worksheet[i].D || null,
-                                ACL72_Pre_Worksheet[i].E || null,
-                                ACL72_Pre_Worksheet[i].F || null,
-                                ACL72_Pre_Worksheet[i].G || null,
-                                ACL72_Pre_Worksheet[i].H || null,
-                                ACL72_Pre_Worksheet[i].I || null,
-                                ACL72_Pre_Worksheet[i].J || null,
-                                ACL72_Pre_Worksheet[i].K || null,
-                                ACL72_Pre_Worksheet[i].L || null,
-                                new Date((ACL72_Pre_Worksheet[i].M - (25567 + 1))*86400*1000) || null, // im doing this because excel serialized the date
-                                ACL72_Pre_Worksheet[i].N || null,
-                                ACL72_Pre_Worksheet[i].O || null,
-                                ACL72_Pre_Worksheet[i].P || null,
-                                ACL72_Pre_Worksheet[i].Q || null,
-                                ACL72_Pre_Worksheet[i].R || null,
-                                ACL72_Pre_Worksheet[i].S || null,
-                                ACL72_Pre_Worksheet[i].T || null,
-                                ACL72_Pre_Worksheet[i].U || null,
-                                ACL72_Pre_Worksheet[i].V || null,
-                                ACL72_Pre_Worksheet[i].W || null,
-                                ACL72_Pre_Worksheet[i].X || null,
-                                ACL72_Pre_Worksheet[i].Y || null,
-                                ACL72_Pre_Worksheet[i].Z || null,
-                                ACL72_Pre_Worksheet[i].AA || null,
-                                ACL72_Pre_Worksheet[i].AB || null,
-                                ACL72_Pre_Worksheet[i].AC || null,
-                                ACL72_Pre_Worksheet[i].AD || null,
-                                ACL72_Pre_Worksheet[i].AE || null,
-                                ACL72_Pre_Worksheet[i].AF || null,
-                                ACL72_Pre_Worksheet[i].AG || null,
-                                ACL72_Pre_Worksheet[i].AH || null,
-                                ACL72_Pre_Worksheet[i].AI || null,
-                                ACL72_Pre_Worksheet[i].AJ || null,
-                                ACL72_Pre_Worksheet[i].AK || null,
-                                ACL72_Pre_Worksheet[i].AL || null,
-                                ACL72_Pre_Worksheet[i].AM || null,
-                                ACL72_Pre_Worksheet[i].AN || null,
-                                ACL72_Pre_Worksheet[i].AO || null,
-                                ACL72_Pre_Worksheet[i].AP || null,
-                                ACL72_Pre_Worksheet[i].AQ || null,
-                                ACL72_Pre_Worksheet[i].AR || null,
-                                ACL72_Pre_Worksheet[i].AS || null,
-                                ACL72_Pre_Worksheet[i].AT || null,
-                                ACL72_Pre_Worksheet[i].AU || null,
-                                ACL72_Pre_Worksheet[i].AV || null,
-                                ACL72_Pre_Worksheet[i].AW || null,
-                                ACL72_Pre_Worksheet[i].AX || null,
-                                ACL72_Pre_Worksheet[i].AY || null,
-                                ACL72_Pre_Worksheet[i].AZ || null,
-                                ACL72_Pre_Worksheet[i].BA || null,
-                                ACL72_Pre_Worksheet[i].BB || null,
-                                ACL72_Pre_Worksheet[i].BC || null,
-                                ACL72_Pre_Worksheet[i].BD || null,
-                                ACL72_Pre_Worksheet[i].BE || null,
-                                ACL72_Pre_Worksheet[i].BF || null,
-                                ACL72_Pre_Worksheet[i].BG || null,
-                                ACL72_Pre_Worksheet[i].BH || null,
-                                ACL72_Pre_Worksheet[i].BI || null,
-                                ACL72_Pre_Worksheet[i].BJ || null,
-                                ACL72_Pre_Worksheet[i].BK || null,
-                                ACL72_Pre_Worksheet[i].BL || null,
-                                ACL72_Pre_Worksheet[i].BM || null,
-                                ACL72_Pre_Worksheet[i].BN || null,
-                                ACL72_Pre_Worksheet[i].BO || null,
-                                ACL72_Pre_Worksheet[i].BP || null,
-                                ACL72_Pre_Worksheet[i].BQ || null,
-                                ACL72_Pre_Worksheet[i].BR || null,
-                                ACL72_Pre_Worksheet[i].BS || null,
-                                ACL72_Pre_Worksheet[i].BT || null,
-                                ACL72_Pre_Worksheet[i].BU || null,
-                                ACL72_Pre_Worksheet[i].BV || null,
-                                ACL72_Pre_Worksheet[i].BW || null,
-                                ACL72_Pre_Worksheet[i].BX || null,
-                                ACL72_Pre_Worksheet[i].BY || null,
-                                ACL72_Pre_Worksheet[i].BZ || null,
-                                ACL72_Pre_Worksheet[i].CA || null,
-                                ACL72_Pre_Worksheet[i].CB || null,
-                                ACL72_Pre_Worksheet[i].CC || null,
-                                ACL72_Pre_Worksheet[i].CD || null,
-                                ACL72_Pre_Worksheet[i].CE || null,
-                                ACL72_Pre_Worksheet[i].CF || null,
-                                ACL72_Pre_Worksheet[i].CG || null,
-                                ACL72_Pre_Worksheet[i].CH || null,
-                                ACL72_Pre_Worksheet[i].CI || null,
-                                ACL72_Pre_Worksheet[i].CJ || null,
-                                ACL72_Pre_Worksheet[i].CK || null,
-                                ACL72_Pre_Worksheet[i].CL || null,
-                                ACL72_Pre_Worksheet[i].CM || null,
-                                ACL72_Pre_Worksheet[i].CN || null,
-                                ACL72_Pre_Worksheet[i].CO || null,
-                                ACL72_Pre_Worksheet[i].CP || null,
-                                ACL72_Pre_Worksheet[i].CQ || null,
-                                ACL72_Pre_Worksheet[i].CR || null,
-                                ACL72_Pre_Worksheet[i].CS || null,
-                                ACL72_Pre_Worksheet[i].CT || null,
-                                ACL72_Pre_Worksheet[i].CU || null,
-                                ACL72_Pre_Worksheet[i].CV || null,
-                                ACL72_Pre_Worksheet[i].CW || null,
-                                ACL72_Pre_Worksheet[i].CX || null,
-                                ACL72_Pre_Worksheet[i].CY || null,
-                                ACL72_Pre_Worksheet[i].CZ || null,
-                                ACL72_Pre_Worksheet[i].DA || null,
-                                ACL72_Pre_Worksheet[i].DB || null,
-                                ACL72_Pre_Worksheet[i].DC || null,
-                                ACL72_Pre_Worksheet[i].DD || null,
-                                ACL72_Pre_Worksheet[i].DE || null,
-                                ACL72_Pre_Worksheet[i].DF || null,
-                                ACL72_Pre_Worksheet[i].DG || null,
-                                ACL72_Pre_Worksheet[i].DH || null,
-                                ACL72_Pre_Worksheet[i].DI || null,
-                                ACL72_Pre_Worksheet[i].DJ || null,
-                                ACL72_Pre_Worksheet[i].DK || null,
-                                ACL72_Pre_Worksheet[i].DL || null,
-                                ACL72_Pre_Worksheet[i].DM || null,
-                                new Date((ACL72_Pre_Worksheet[i].DN - (25567 + 1))*86400*1000) || null, // im doing this because excel serialized the date
-                                ACL72_Pre_Worksheet[i].DO || null,
-                                ACL72_Pre_Worksheet[i].DP || null,
-                                ]
-                            )
-                        }
-                    }
-
-                    insertACL72_Pre(ACL72_Pre_clean).then(() => {
-                        //console.log(resultID);
-                        
-                        let upload_details = []
-
-                        upload_details.push([
-                            excelFile.date_upload,
-                            'ACL72_Pre',
-                            user_details.username,
-                        ]);
-
-                        return rmpUploadHistory(upload_details).then(() => {
-                            worksheets_uploaded.push(
-                                ['ACL72_Pre']
-                            );
-                        },  (err) => {
-                            console.log(err);
-                        });
-
-                    }, (err) => {
-                        console.log(err);
-                    });
-                }
-                
-                // ACL72_Post Uploader
-                if(ACL72_Post_Worksheet){
-                    for(let i=1; i<ACL72_Post_Worksheet.length;i++){
-                        if(ACL72_Post_Worksheet[i].A){
-                            ACL72_Post_clean.push(
-                                [
+                        // ACL72_Pre Uploader
+                        if(ACL72_Pre_Worksheet){
+                            for(let i=1; i<ACL72_Pre_Worksheet.length;i++){
+                                if(ACL72_Pre_Worksheet[i].A){
+                                    ACL72_Pre_clean.push(
+                                        [
+                                        excelFile.date_upload || null,
+                                        ACL72_Pre_Worksheet[i].A || null,
+                                        ACL72_Pre_Worksheet[i].B || null,
+                                        ACL72_Pre_Worksheet[i].C || null,
+                                        ACL72_Pre_Worksheet[i].D || null,
+                                        ACL72_Pre_Worksheet[i].E || null,
+                                        ACL72_Pre_Worksheet[i].F || null,
+                                        ACL72_Pre_Worksheet[i].G || null,
+                                        ACL72_Pre_Worksheet[i].H || null,
+                                        ACL72_Pre_Worksheet[i].I || null,
+                                        ACL72_Pre_Worksheet[i].J || null,
+                                        ACL72_Pre_Worksheet[i].K || null,
+                                        ACL72_Pre_Worksheet[i].L || null,
+                                        new Date((ACL72_Pre_Worksheet[i].M - (25567 + 1))*86400*1000) || null, // im doing this because excel serialized the date
+                                        ACL72_Pre_Worksheet[i].N || null,
+                                        ACL72_Pre_Worksheet[i].O || null,
+                                        ACL72_Pre_Worksheet[i].P || null,
+                                        ACL72_Pre_Worksheet[i].Q || null,
+                                        ACL72_Pre_Worksheet[i].R || null,
+                                        ACL72_Pre_Worksheet[i].S || null,
+                                        ACL72_Pre_Worksheet[i].T || null,
+                                        ACL72_Pre_Worksheet[i].U || null,
+                                        ACL72_Pre_Worksheet[i].V || null,
+                                        ACL72_Pre_Worksheet[i].W || null,
+                                        ACL72_Pre_Worksheet[i].X || null,
+                                        ACL72_Pre_Worksheet[i].Y || null,
+                                        ACL72_Pre_Worksheet[i].Z || null,
+                                        ACL72_Pre_Worksheet[i].AA || null,
+                                        ACL72_Pre_Worksheet[i].AB || null,
+                                        ACL72_Pre_Worksheet[i].AC || null,
+                                        ACL72_Pre_Worksheet[i].AD || null,
+                                        ACL72_Pre_Worksheet[i].AE || null,
+                                        ACL72_Pre_Worksheet[i].AF || null,
+                                        ACL72_Pre_Worksheet[i].AG || null,
+                                        ACL72_Pre_Worksheet[i].AH || null,
+                                        ACL72_Pre_Worksheet[i].AI || null,
+                                        ACL72_Pre_Worksheet[i].AJ || null,
+                                        ACL72_Pre_Worksheet[i].AK || null,
+                                        ACL72_Pre_Worksheet[i].AL || null,
+                                        ACL72_Pre_Worksheet[i].AM || null,
+                                        ACL72_Pre_Worksheet[i].AN || null,
+                                        ACL72_Pre_Worksheet[i].AO || null,
+                                        ACL72_Pre_Worksheet[i].AP || null,
+                                        ACL72_Pre_Worksheet[i].AQ || null,
+                                        ACL72_Pre_Worksheet[i].AR || null,
+                                        ACL72_Pre_Worksheet[i].AS || null,
+                                        ACL72_Pre_Worksheet[i].AT || null,
+                                        ACL72_Pre_Worksheet[i].AU || null,
+                                        ACL72_Pre_Worksheet[i].AV || null,
+                                        ACL72_Pre_Worksheet[i].AW || null,
+                                        ACL72_Pre_Worksheet[i].AX || null,
+                                        ACL72_Pre_Worksheet[i].AY || null,
+                                        ACL72_Pre_Worksheet[i].AZ || null,
+                                        ACL72_Pre_Worksheet[i].BA || null,
+                                        ACL72_Pre_Worksheet[i].BB || null,
+                                        ACL72_Pre_Worksheet[i].BC || null,
+                                        ACL72_Pre_Worksheet[i].BD || null,
+                                        ACL72_Pre_Worksheet[i].BE || null,
+                                        ACL72_Pre_Worksheet[i].BF || null,
+                                        ACL72_Pre_Worksheet[i].BG || null,
+                                        ACL72_Pre_Worksheet[i].BH || null,
+                                        ACL72_Pre_Worksheet[i].BI || null,
+                                        ACL72_Pre_Worksheet[i].BJ || null,
+                                        ACL72_Pre_Worksheet[i].BK || null,
+                                        ACL72_Pre_Worksheet[i].BL || null,
+                                        ACL72_Pre_Worksheet[i].BM || null,
+                                        ACL72_Pre_Worksheet[i].BN || null,
+                                        ACL72_Pre_Worksheet[i].BO || null,
+                                        ACL72_Pre_Worksheet[i].BP || null,
+                                        ACL72_Pre_Worksheet[i].BQ || null,
+                                        ACL72_Pre_Worksheet[i].BR || null,
+                                        ACL72_Pre_Worksheet[i].BS || null,
+                                        ACL72_Pre_Worksheet[i].BT || null,
+                                        ACL72_Pre_Worksheet[i].BU || null,
+                                        ACL72_Pre_Worksheet[i].BV || null,
+                                        ACL72_Pre_Worksheet[i].BW || null,
+                                        ACL72_Pre_Worksheet[i].BX || null,
+                                        ACL72_Pre_Worksheet[i].BY || null,
+                                        ACL72_Pre_Worksheet[i].BZ || null,
+                                        ACL72_Pre_Worksheet[i].CA || null,
+                                        ACL72_Pre_Worksheet[i].CB || null,
+                                        ACL72_Pre_Worksheet[i].CC || null,
+                                        ACL72_Pre_Worksheet[i].CD || null,
+                                        ACL72_Pre_Worksheet[i].CE || null,
+                                        ACL72_Pre_Worksheet[i].CF || null,
+                                        ACL72_Pre_Worksheet[i].CG || null,
+                                        ACL72_Pre_Worksheet[i].CH || null,
+                                        ACL72_Pre_Worksheet[i].CI || null,
+                                        ACL72_Pre_Worksheet[i].CJ || null,
+                                        ACL72_Pre_Worksheet[i].CK || null,
+                                        ACL72_Pre_Worksheet[i].CL || null,
+                                        ACL72_Pre_Worksheet[i].CM || null,
+                                        ACL72_Pre_Worksheet[i].CN || null,
+                                        ACL72_Pre_Worksheet[i].CO || null,
+                                        ACL72_Pre_Worksheet[i].CP || null,
+                                        ACL72_Pre_Worksheet[i].CQ || null,
+                                        ACL72_Pre_Worksheet[i].CR || null,
+                                        ACL72_Pre_Worksheet[i].CS || null,
+                                        ACL72_Pre_Worksheet[i].CT || null,
+                                        ACL72_Pre_Worksheet[i].CU || null,
+                                        ACL72_Pre_Worksheet[i].CV || null,
+                                        ACL72_Pre_Worksheet[i].CW || null,
+                                        ACL72_Pre_Worksheet[i].CX || null,
+                                        ACL72_Pre_Worksheet[i].CY || null,
+                                        ACL72_Pre_Worksheet[i].CZ || null,
+                                        ACL72_Pre_Worksheet[i].DA || null,
+                                        ACL72_Pre_Worksheet[i].DB || null,
+                                        ACL72_Pre_Worksheet[i].DC || null,
+                                        ACL72_Pre_Worksheet[i].DD || null,
+                                        ACL72_Pre_Worksheet[i].DE || null,
+                                        ACL72_Pre_Worksheet[i].DF || null,
+                                        ACL72_Pre_Worksheet[i].DG || null,
+                                        ACL72_Pre_Worksheet[i].DH || null,
+                                        ACL72_Pre_Worksheet[i].DI || null,
+                                        ACL72_Pre_Worksheet[i].DJ || null,
+                                        ACL72_Pre_Worksheet[i].DK || null,
+                                        ACL72_Pre_Worksheet[i].DL || null,
+                                        ACL72_Pre_Worksheet[i].DM || null,
+                                        new Date((ACL72_Pre_Worksheet[i].DN - (25567 + 1))*86400*1000) || null, // im doing this because excel serialized the date
+                                        ACL72_Pre_Worksheet[i].DO || null,
+                                        ACL72_Pre_Worksheet[i].DP || null,
+                                        ]
+                                    )
+                                }
+                            }
+        
+                            insertACL72_Pre(ACL72_Pre_clean).then(() => {
+                                //console.log(resultID);
+                                
+                                let upload_details = []
+        
+                                upload_details.push([
                                     excelFile.date_upload,
-                                    ACL72_Post_Worksheet[i].A,
-                                    ACL72_Post_Worksheet[i].B,
-                                    ACL72_Post_Worksheet[i].C,
-                                    ACL72_Post_Worksheet[i].D,
-                                    ACL72_Post_Worksheet[i].E,
-                                    ACL72_Post_Worksheet[i].F,
-                                    ACL72_Post_Worksheet[i].G,
-                                    ACL72_Post_Worksheet[i].H,
-                                    ACL72_Post_Worksheet[i].I,
-                                    ACL72_Post_Worksheet[i].J,
-                                    ACL72_Post_Worksheet[i].K,
-                                    ACL72_Post_Worksheet[i].L,
-                                    new Date((ACL72_Post_Worksheet[i].M, - (25567 + 1))*86400*1000), // im doing this because excel serialized the date
-                                    ACL72_Post_Worksheet[i].N,
-                                    ACL72_Post_Worksheet[i].O,
-                                    ACL72_Post_Worksheet[i].P,
-                                    ACL72_Post_Worksheet[i].Q,
-                                    ACL72_Post_Worksheet[i].R,
-                                    ACL72_Post_Worksheet[i].S,
-                                    ACL72_Post_Worksheet[i].T,
-                                    ACL72_Post_Worksheet[i].U,
-                                    ACL72_Post_Worksheet[i].V,
-                                    ACL72_Post_Worksheet[i].W,
-                                    ACL72_Post_Worksheet[i].X,
-                                    ACL72_Post_Worksheet[i].Y,
-                                    ACL72_Post_Worksheet[i].Z,
-                                    ACL72_Post_Worksheet[i].AA,
-                                    ACL72_Post_Worksheet[i].AB,
-                                    ACL72_Post_Worksheet[i].AC,
-                                    ACL72_Post_Worksheet[i].AD,
-                                    ACL72_Post_Worksheet[i].AE,
-                                    ACL72_Post_Worksheet[i].AF,
-                                    ACL72_Post_Worksheet[i].AG,
-                                    ACL72_Post_Worksheet[i].AH,
-                                    ACL72_Post_Worksheet[i].AI,
-                                    ACL72_Post_Worksheet[i].AJ,
-                                    ACL72_Post_Worksheet[i].AK,
-                                    ACL72_Post_Worksheet[i].AL,
-                                    ACL72_Post_Worksheet[i].AM,
-                                    ACL72_Post_Worksheet[i].AN,
-                                    ACL72_Post_Worksheet[i].AO,
-                                    ACL72_Post_Worksheet[i].AP,
-                                    ACL72_Post_Worksheet[i].AQ,
-                                    ACL72_Post_Worksheet[i].AR,
-                                    ACL72_Post_Worksheet[i].AS,
-                                    ACL72_Post_Worksheet[i].AT,
-                                    ACL72_Post_Worksheet[i].AU,
-                                    ACL72_Post_Worksheet[i].AV,
-                                    ACL72_Post_Worksheet[i].AW,
-                                    ACL72_Post_Worksheet[i].AX,
-                                    ACL72_Post_Worksheet[i].AY,
-                                    ACL72_Post_Worksheet[i].AZ,
-                                    ACL72_Post_Worksheet[i].BA,
-                                    ACL72_Post_Worksheet[i].BB,
-                                    ACL72_Post_Worksheet[i].BC,
-                                    ACL72_Post_Worksheet[i].BD,
-                                    ACL72_Post_Worksheet[i].BE,
-                                    ACL72_Post_Worksheet[i].BF,
-                                    ACL72_Post_Worksheet[i].BG,
-                                    ACL72_Post_Worksheet[i].BH,
-                                    ACL72_Post_Worksheet[i].BI,
-                                    ACL72_Post_Worksheet[i].BJ,
-                                    ACL72_Post_Worksheet[i].BK,
-                                    ACL72_Post_Worksheet[i].BL,
-                                    ACL72_Post_Worksheet[i].BM,
-                                    ACL72_Post_Worksheet[i].BN,
-                                    ACL72_Post_Worksheet[i].BO,
-                                    ACL72_Post_Worksheet[i].BP,
-                                    ACL72_Post_Worksheet[i].BQ,
-                                    ACL72_Post_Worksheet[i].BR,
-                                    ACL72_Post_Worksheet[i].BS,
-                                    ACL72_Post_Worksheet[i].BT,
-                                    ACL72_Post_Worksheet[i].BU,
-                                    ACL72_Post_Worksheet[i].BV,
-                                    ACL72_Post_Worksheet[i].BW,
-                                    ACL72_Post_Worksheet[i].BX,
-                                    ACL72_Post_Worksheet[i].BY,
-                                    ACL72_Post_Worksheet[i].BZ,
-                                    ACL72_Post_Worksheet[i].CA,
-                                    ACL72_Post_Worksheet[i].CB,
-                                    ACL72_Post_Worksheet[i].CC,
-                                    ACL72_Post_Worksheet[i].CD,
-                                    ACL72_Post_Worksheet[i].CE,
-                                    ACL72_Post_Worksheet[i].CF,
-                                    ACL72_Post_Worksheet[i].CG,
-                                    ACL72_Post_Worksheet[i].CH,
-                                    ACL72_Post_Worksheet[i].CI,
-                                    ACL72_Post_Worksheet[i].CJ,
-                                    ACL72_Post_Worksheet[i].CK,
-                                    ACL72_Post_Worksheet[i].CL,
-                                    ACL72_Post_Worksheet[i].CM,
-                                    ACL72_Post_Worksheet[i].CN,
-                                    ACL72_Post_Worksheet[i].CO,
-                                    ACL72_Post_Worksheet[i].CP,
-                                    ACL72_Post_Worksheet[i].CQ,
-                                    ACL72_Post_Worksheet[i].CR,
-                                    ACL72_Post_Worksheet[i].CS,
-                                    ACL72_Post_Worksheet[i].CT,
-                                    ACL72_Post_Worksheet[i].CU,
-                                    ACL72_Post_Worksheet[i].CV,
-                                    ACL72_Post_Worksheet[i].CW,
-                                    ACL72_Post_Worksheet[i].CX,
-                                    ACL72_Post_Worksheet[i].CY,
-                                    ACL72_Post_Worksheet[i].CZ,
-                                    ACL72_Post_Worksheet[i].DA,
-                                    ACL72_Post_Worksheet[i].DB,
-                                    ACL72_Post_Worksheet[i].DC,
-                                    ACL72_Post_Worksheet[i].DD,
-                                    ACL72_Post_Worksheet[i].DE,
-                                    ACL72_Post_Worksheet[i].DF,
-                                    ACL72_Post_Worksheet[i].DG,
-                                    ACL72_Post_Worksheet[i].DH,
-                                    ACL72_Post_Worksheet[i].DI,
-                                    ACL72_Post_Worksheet[i].DJ,
-                                    ACL72_Post_Worksheet[i].DK,
-                                    ACL72_Post_Worksheet[i].DL,
-                                    ACL72_Post_Worksheet[i].DM,
-                                    new Date((ACL72_Post_Worksheet[i].DN, - (25567 + 1))*86400*1000), // im doing this because excel serialized the date
-                                    ACL72_Post_Worksheet[i].DO,
-                                    ACL72_Post_Worksheet[i].DP,
-                                ]
-                            )
+                                    'ACL72_Pre',
+                                    user_details.username,
+                                ]);
+        
+                                return rmpUploadHistory(upload_details).then(() => {
+                                    handleSuccess.push(
+                                        ['ACL72_Pre']
+                                    );
+                                },  (err) => {
+                                    handleError.push([err]);
+                                });
+        
+                            }, (err) => {
+                                handleError.push([err]);
+                            });
                         }
-                    }
-
-                    insertACL72_Post(ACL72_Post_clean).then(() => {
-                        //console.log(resultID);
                         
-                        let upload_details = []
+                        // ACL72_Post Uploader
+                        if(ACL72_Post_Worksheet){
+                            for(let i=1; i<ACL72_Post_Worksheet.length;i++){
+                                if(ACL72_Post_Worksheet[i].A){
+                                    ACL72_Post_clean.push(
+                                        [
+                                            excelFile.date_upload,
+                                            ACL72_Post_Worksheet[i].A,
+                                            ACL72_Post_Worksheet[i].B,
+                                            ACL72_Post_Worksheet[i].C,
+                                            ACL72_Post_Worksheet[i].D,
+                                            ACL72_Post_Worksheet[i].E,
+                                            ACL72_Post_Worksheet[i].F,
+                                            ACL72_Post_Worksheet[i].G,
+                                            ACL72_Post_Worksheet[i].H,
+                                            ACL72_Post_Worksheet[i].I,
+                                            ACL72_Post_Worksheet[i].J,
+                                            ACL72_Post_Worksheet[i].K,
+                                            ACL72_Post_Worksheet[i].L,
+                                            new Date((ACL72_Post_Worksheet[i].M, - (25567 + 1))*86400*1000), // im doing this because excel serialized the date
+                                            ACL72_Post_Worksheet[i].N,
+                                            ACL72_Post_Worksheet[i].O,
+                                            ACL72_Post_Worksheet[i].P,
+                                            ACL72_Post_Worksheet[i].Q,
+                                            ACL72_Post_Worksheet[i].R,
+                                            ACL72_Post_Worksheet[i].S,
+                                            ACL72_Post_Worksheet[i].T,
+                                            ACL72_Post_Worksheet[i].U,
+                                            ACL72_Post_Worksheet[i].V,
+                                            ACL72_Post_Worksheet[i].W,
+                                            ACL72_Post_Worksheet[i].X,
+                                            ACL72_Post_Worksheet[i].Y,
+                                            ACL72_Post_Worksheet[i].Z,
+                                            ACL72_Post_Worksheet[i].AA,
+                                            ACL72_Post_Worksheet[i].AB,
+                                            ACL72_Post_Worksheet[i].AC,
+                                            ACL72_Post_Worksheet[i].AD,
+                                            ACL72_Post_Worksheet[i].AE,
+                                            ACL72_Post_Worksheet[i].AF,
+                                            ACL72_Post_Worksheet[i].AG,
+                                            ACL72_Post_Worksheet[i].AH,
+                                            ACL72_Post_Worksheet[i].AI,
+                                            ACL72_Post_Worksheet[i].AJ,
+                                            ACL72_Post_Worksheet[i].AK,
+                                            ACL72_Post_Worksheet[i].AL,
+                                            ACL72_Post_Worksheet[i].AM,
+                                            ACL72_Post_Worksheet[i].AN,
+                                            ACL72_Post_Worksheet[i].AO,
+                                            ACL72_Post_Worksheet[i].AP,
+                                            ACL72_Post_Worksheet[i].AQ,
+                                            ACL72_Post_Worksheet[i].AR,
+                                            ACL72_Post_Worksheet[i].AS,
+                                            ACL72_Post_Worksheet[i].AT,
+                                            ACL72_Post_Worksheet[i].AU,
+                                            ACL72_Post_Worksheet[i].AV,
+                                            ACL72_Post_Worksheet[i].AW,
+                                            ACL72_Post_Worksheet[i].AX,
+                                            ACL72_Post_Worksheet[i].AY,
+                                            ACL72_Post_Worksheet[i].AZ,
+                                            ACL72_Post_Worksheet[i].BA,
+                                            ACL72_Post_Worksheet[i].BB,
+                                            ACL72_Post_Worksheet[i].BC,
+                                            ACL72_Post_Worksheet[i].BD,
+                                            ACL72_Post_Worksheet[i].BE,
+                                            ACL72_Post_Worksheet[i].BF,
+                                            ACL72_Post_Worksheet[i].BG,
+                                            ACL72_Post_Worksheet[i].BH,
+                                            ACL72_Post_Worksheet[i].BI,
+                                            ACL72_Post_Worksheet[i].BJ,
+                                            ACL72_Post_Worksheet[i].BK,
+                                            ACL72_Post_Worksheet[i].BL,
+                                            ACL72_Post_Worksheet[i].BM,
+                                            ACL72_Post_Worksheet[i].BN,
+                                            ACL72_Post_Worksheet[i].BO,
+                                            ACL72_Post_Worksheet[i].BP,
+                                            ACL72_Post_Worksheet[i].BQ,
+                                            ACL72_Post_Worksheet[i].BR,
+                                            ACL72_Post_Worksheet[i].BS,
+                                            ACL72_Post_Worksheet[i].BT,
+                                            ACL72_Post_Worksheet[i].BU,
+                                            ACL72_Post_Worksheet[i].BV,
+                                            ACL72_Post_Worksheet[i].BW,
+                                            ACL72_Post_Worksheet[i].BX,
+                                            ACL72_Post_Worksheet[i].BY,
+                                            ACL72_Post_Worksheet[i].BZ,
+                                            ACL72_Post_Worksheet[i].CA,
+                                            ACL72_Post_Worksheet[i].CB,
+                                            ACL72_Post_Worksheet[i].CC,
+                                            ACL72_Post_Worksheet[i].CD,
+                                            ACL72_Post_Worksheet[i].CE,
+                                            ACL72_Post_Worksheet[i].CF,
+                                            ACL72_Post_Worksheet[i].CG,
+                                            ACL72_Post_Worksheet[i].CH,
+                                            ACL72_Post_Worksheet[i].CI,
+                                            ACL72_Post_Worksheet[i].CJ,
+                                            ACL72_Post_Worksheet[i].CK,
+                                            ACL72_Post_Worksheet[i].CL,
+                                            ACL72_Post_Worksheet[i].CM,
+                                            ACL72_Post_Worksheet[i].CN,
+                                            ACL72_Post_Worksheet[i].CO,
+                                            ACL72_Post_Worksheet[i].CP,
+                                            ACL72_Post_Worksheet[i].CQ,
+                                            ACL72_Post_Worksheet[i].CR,
+                                            ACL72_Post_Worksheet[i].CS,
+                                            ACL72_Post_Worksheet[i].CT,
+                                            ACL72_Post_Worksheet[i].CU,
+                                            ACL72_Post_Worksheet[i].CV,
+                                            ACL72_Post_Worksheet[i].CW,
+                                            ACL72_Post_Worksheet[i].CX,
+                                            ACL72_Post_Worksheet[i].CY,
+                                            ACL72_Post_Worksheet[i].CZ,
+                                            ACL72_Post_Worksheet[i].DA,
+                                            ACL72_Post_Worksheet[i].DB,
+                                            ACL72_Post_Worksheet[i].DC,
+                                            ACL72_Post_Worksheet[i].DD,
+                                            ACL72_Post_Worksheet[i].DE,
+                                            ACL72_Post_Worksheet[i].DF,
+                                            ACL72_Post_Worksheet[i].DG,
+                                            ACL72_Post_Worksheet[i].DH,
+                                            ACL72_Post_Worksheet[i].DI,
+                                            ACL72_Post_Worksheet[i].DJ,
+                                            ACL72_Post_Worksheet[i].DK,
+                                            ACL72_Post_Worksheet[i].DL,
+                                            ACL72_Post_Worksheet[i].DM,
+                                            new Date((ACL72_Post_Worksheet[i].DN, - (25567 + 1))*86400*1000), // im doing this because excel serialized the date
+                                            ACL72_Post_Worksheet[i].DO,
+                                            ACL72_Post_Worksheet[i].DP,
+                                        ]
+                                    )
+                                }
+                            }
+        
+                            insertACL72_Post(ACL72_Post_clean).then(() => {
+                                //console.log(resultID);
+                                
+                                let upload_details = []
+        
+                                upload_details.push([
+                                    excelFile.date_upload,
+                                    'ACL72_Post',
+                                    user_details.username,
+                                ]);
+        
+                                return rmpUploadHistory(upload_details).then(() => {
+                                    handleSuccess.push(
+                                        ['ACL72_Post']
+                                    );
+                                },  (err) => {
+                                    handleError.push([err]);
+                                });
+        
+                            }, (err) => {
+                                handleError.push([err]);
+                            });
+                        }
 
-                        upload_details.push([
-                            excelFile.date_upload,
-                            'ACL72_Post',
-                            user_details.username,
-                        ]);
+                        if(handleSuccess.length === 4){
+                            resolve(handleSuccess);
+                        } else {
+                            reject(handleError);
+                        }
 
-                        return rmpUploadHistory(upload_details).then(() => {
-                            worksheets_uploaded.push(
-                                ['ACL72_Post']
-                            );
-                        },  (err) => {
-                            console.log(err);
-                        });
-
-                    }, (err) => {
-                        console.log(err);
                     });
                 }
-
 
                 function insertRBT0(RBT0_clean){
                     return new Promise((resolve, reject) => {
@@ -674,11 +686,23 @@ module.exports = function(app){
                     });
                 }
 
-                let woksheetsOK = {
-                    worksheets: worksheets_uploaded
-                }
 
-                res.status(200).json(woksheetsOK);
+                Main_RMP_Uploader().then((success) => {
+
+                    let woksheets_status = {
+                        worksheets: success
+                    }
+
+                    res.status(200).json(woksheets_status);
+
+                },  (failed) => {
+
+                    let woksheets_status = {
+                        worksheets: failed
+                    }
+                    
+                    res.status(200).json(woksheets_status);
+                });
                 
             }
                 
