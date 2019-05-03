@@ -513,6 +513,7 @@ module.exports = function(app){
                             
                                                 }, (err) => {
                                                     worksheetsErr.push(['ACL72_Post - ' + err ]);
+                                                    console.log(err);
                                                     return;
                                                 });
 
@@ -523,6 +524,7 @@ module.exports = function(app){
                     
                                         }, (err) => {
                                             worksheetsErr.push(['ACL72_Pre - ' + err ]);
+                                            console.log(err);
                                             return;
                                         });
 
@@ -533,6 +535,7 @@ module.exports = function(app){
                                     
                                 },  (err) => {
                                     worksheetsErr.push(['RTUV_HiUV - ' + err ]);
+                                    console.log(err);
                                     return;
                                 });
 
@@ -542,6 +545,7 @@ module.exports = function(app){
                             });
                         },  (err) => {
                             worksheetsErr.push(['FOURPB_Metal - ' + err ]);
+                            console.log(err);
                             return;
                         });
                         
@@ -552,6 +556,7 @@ module.exports = function(app){
 
                 },  (err) => {
                     worksheetsErr.push(['RBT0 - ' + err ]);
+                    console.log(err);
                     return;
                 });
 
