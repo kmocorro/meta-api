@@ -506,43 +506,43 @@ module.exports = function(app){
                                                         res.status(200).json(upload_status);
 
                                                     },  (err) => {
-                                                        worksheetsErr.push('ACL72_Post - ' + err );
+                                                        console.log(err);
                                                         
                                                     });
                             
                                                 }, (err) => {
-                                                    console.log(err);
+                                                    worksheetsErr.push('ACL72_Post - ' + err );
                                                 });
 
                                             },  (err) => {
-                                                worksheetsErr.push('ACL72_Pre - ' + err );
+                                                console.log(err);
                                             });
                     
                                         }, (err) => {
-                                            console.log(err);
+                                            worksheetsErr.push('ACL72_Pre - ' + err );
                                         });
 
                                     },  (err) => {
-                                        worksheetsErr.push('RTUV_HiUV - ' + err );
+                                        console.log(err);
                                     });
                                     
                                 },  (err) => {
-                                    console.log(err);
+                                    worksheetsErr.push('RTUV_HiUV - ' + err );
                                 });
 
                             },  (err) => {
-                                worksheetsErr.push('FOURPB_Metal - ' + err );
+                                console.log(err);
                             });
                         },  (err) => {
-                            console.log(err);
+                            worksheetsErr.push('FOURPB_Metal - ' + err );
                         });
                         
                     },  (err) => {
-                        worksheetsErr.push('RBT0 - ' + err );
+                        console.log(err);
                     });
 
                 },  (err) => {
-                    console.log(err);
+                    worksheetsErr.push('RBT0 - ' + err );
                 });
 
 
