@@ -654,7 +654,7 @@ module.exports = function(app){
                     return new Promise((resolve, reject) => {
 
                         let fileStatus = false;
-                        console.log(RBT0_clean);
+                        console.log(RBT0_clean.length);
 
                         if(RBT0_clean.length > 0){
                             mysql.getConnection((err, connection) => {
@@ -665,8 +665,10 @@ module.exports = function(app){
                                     values: [RBT0_clean]
                                 },  (err, results) => {
                                     if(err){return reject(err)};
+
+                                    fileStatus = true;
     
-                                    resolve(results.insertID);
+                                    resolve(fileStatus);
                                 });
     
                                 connection.release();
