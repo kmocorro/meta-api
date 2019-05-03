@@ -503,7 +503,7 @@ module.exports = function(app){
                                                             ERR: worksheetsErr
                                                         }
 
-                                                        return res.status(200).json(upload_status);
+                                                        return res.status(200).json(JSON.stringify(upload_status));
 
                                                     },  (err) => {
                                                         console.log(err);
@@ -519,7 +519,7 @@ module.exports = function(app){
                                                         ERR: worksheetsErr
                                                     }
 
-                                                    return res.status(200).json(upload_status);
+                                                    return res.status(200).json(JSON.stringify(upload_status));
                                                 })
 
                                             },  (err) => {
@@ -535,7 +535,7 @@ module.exports = function(app){
                                                 ERR: worksheetsErr
                                             }
 
-                                            return res.status(200).json(upload_status);
+                                            return res.status(200).json(JSON.stringify(upload_status));
                                         });
 
                                     },  (err) => {
@@ -550,7 +550,7 @@ module.exports = function(app){
                                         ERR: worksheetsErr
                                     }
 
-                                    return res.status(200).json(upload_status);
+                                    return res.status(200).json(JSON.stringify(upload_status));
                                 });
 
                             },  (err) => {
@@ -564,7 +564,7 @@ module.exports = function(app){
                                 ERR: worksheetsErr
                             }
 
-                            return res.status(200).json(upload_status);
+                            return res.status(200).json(JSON.stringify(upload_status));
                         });
                         
                     },  (err) => {
@@ -580,7 +580,7 @@ module.exports = function(app){
                         ERR: worksheetsErr
                     }
 
-                    return res.status(200).json(upload_status);
+                    return res.status(200).json(JSON.stringify(upload_status));
                 });
 
 
