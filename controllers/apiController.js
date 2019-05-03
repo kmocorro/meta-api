@@ -436,7 +436,6 @@ module.exports = function(app){
                        
                     let upload_details = [];
 
-
                     if(fileStatus){
                         worksheetsOk.push(['RBT0']);
 
@@ -458,59 +457,111 @@ module.exports = function(app){
                         
                     }
 
-
                     return rmpUploadHistory(upload_details).then(() => {
-                        return insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
+                        return insertFOURPB_Metal(FOURPB_Metal_clean).then((fileStatus) => {
                             
-                            let upload_details = []
-    
-                            upload_details.push([
-                                excelFile.date_upload,
-                                'FOURPB_Metal',
-                                user_details.username,
-                            ]);
+                            let upload_details = [];
 
-                            worksheetsOk.push(['FOURPB_Metal']);
+                            if(fileStatus){
+                                worksheetsOk.push(['FOURPB_Metal']);
+        
+                                upload_details.push([
+                                    excelFile.date_upload,
+                                    'FOURPB_Metal',
+                                    user_details.username,
+                                ]);
+        
+                            } else {
+        
+                                worksheetsOk.push(['FOURPB_Metal - Empty. Proceeding...']);
+        
+                                upload_details.push([
+                                    excelFile.date_upload,
+                                    'FOURPB_Metal - Empty - No data to be uploaded.',
+                                    user_details.username,
+                                ]);
+                                
+                            }
     
                             return rmpUploadHistory(upload_details).then(() => {
-                                return insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
+                                return insertRTUV_HiUV(RTUV_HiUV_clean).then((fileStatus) => {
                                     
-                                    let upload_details = []
-            
-                                    upload_details.push([
-                                        excelFile.date_upload,
-                                        'RTUV_HiUV',
-                                        user_details.username,
-                                    ]);
+                                    let upload_details = [];
 
-                                    worksheetsOk.push(['RTUV_HiUV']);
+                                    if(fileStatus){
+                                        worksheetsOk.push(['RTUV_HiUV']);
+                
+                                        upload_details.push([
+                                            excelFile.date_upload,
+                                            'RTUV_HiUV',
+                                            user_details.username,
+                                        ]);
+                
+                                    } else {
+                
+                                        worksheetsOk.push(['RTUV_HiUV - Empty. Proceeding...']);
+                
+                                        upload_details.push([
+                                            excelFile.date_upload,
+                                            'RTUV_HiUV - Empty - No data to be uploaded.',
+                                            user_details.username,
+                                        ]);
+                                        
+                                    }
             
                                     return rmpUploadHistory(upload_details).then(() => {
-                                        return insertACL72_Pre(ACL72_Pre_clean).then(() => {
+                                        return insertACL72_Pre(ACL72_Pre_clean).then((fileStatus) => {
                                             
-                                            let upload_details = []
-                    
-                                            upload_details.push([
-                                                excelFile.date_upload,
-                                                'ACL72_Pre',
-                                                user_details.username,
-                                            ]);
+                                            let upload_details = [];
 
-                                            worksheetsOk.push(['ACL72_Pre']);
+                                            if(fileStatus){
+                                                worksheetsOk.push(['ACL72_Pre']);
+                        
+                                                upload_details.push([
+                                                    excelFile.date_upload,
+                                                    'ACL72_Pre',
+                                                    user_details.username,
+                                                ]);
+                        
+                                            } else {
+                        
+                                                worksheetsOk.push(['ACL72_Pre - Empty. Proceeding...']);
+                        
+                                                upload_details.push([
+                                                    excelFile.date_upload,
+                                                    'ACL72_Pre - Empty - No data to be uploaded.',
+                                                    user_details.username,
+                                                ]);
+                                                
+                                            }
                     
                                             return rmpUploadHistory(upload_details).then(() => {
-                                                return insertACL72_Post(ACL72_Post_clean).then(() => {
+                                                return insertACL72_Post(ACL72_Post_clean).then((fileStatus) => {
                                                     
-                                                    let upload_details = []
-                            
-                                                    upload_details.push([
-                                                        excelFile.date_upload,
-                                                        'ACL72_Post',
-                                                        user_details.username,
-                                                    ]);
+                                                    let upload_details = [];
 
-                                                    worksheetsOk.push(['ACL72_Post']);
-                            
+                                                    if(fileStatus){
+                                                        worksheetsOk.push(['ACL72_Post']);
+                                
+                                                        upload_details.push([
+                                                            excelFile.date_upload,
+                                                            'ACL72_Post',
+                                                            user_details.username,
+                                                        ]);
+                                
+                                                    } else {
+                                
+                                                        worksheetsOk.push(['ACL72_Post - Empty. Proceeding...']);
+                                
+                                                        upload_details.push([
+                                                            excelFile.date_upload,
+                                                            'ACL72_Post - Empty - No data to be uploaded.',
+                                                            user_details.username,
+                                                        ]);
+                                                        
+                                                    }
+
+
                                                     return rmpUploadHistory(upload_details).then(() => {
                                                         
                                                         let upload_status = {
@@ -604,7 +655,7 @@ module.exports = function(app){
 
                         let fileStatus = false;
 
-                        if(RBT0_clean.lenghth > 0){
+                        if(RBT0_clean.length > 0){
                             mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
                                 
@@ -664,7 +715,7 @@ module.exports = function(app){
                         let fileStatus = false;
 
                         if(RTUV_HiUV_clean.length > 0){
-                            
+
                             mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
     
@@ -690,42 +741,60 @@ module.exports = function(app){
 
                 function insertACL72_Pre(ACL72_Pre_clean){
                     return new Promise((resolve, reject) => {
-                        mysql.getConnection((err, connection) => {
-                            if(err){return reject(err)};
 
-                            connection.query({
-                                sql: 'INSERT INTO acl72_pre_data (upload_date, year, workweek, batch, day, line, bin, test_id, cell_id, remarks, user_id, batch_id, sample_id, measurement_date, isc_a, voc_v, imp_a, vmp_v, pmp_w, ff_percent, efficiency_percent, rsh_ohm, rs_ohm, jsc_acm2, voc_vcell, jmp_acm2, vmp_vcell, pmp_wcm2, cell_efficiency_percent, rsh_ohmcm2, rs_ohmcm2, iload_a, vload_v, ffload_percent, pload_w, effload_percent,rsload_ohm, jload_acm2, vload_vcell, pload_wcm2, cell_effload_percent, rsload_ohmcm2, rs_modulation_ohmcm2, measured_temperature, total_test_time, pjmp_acm2, pvmp_vcell, ppmp_wcm2, pff_percent, pefficiency_percent, n_at_1_sun, n_at_110_suns, jo1_acm2, jo2_acm2, jo_facm2, est_bulk_lifetime, brr_hz, lifetime_at_vmp, doping_cm3, measured_resistivity_ohmcm, lifetime_fit_r2, max_intensity_suns, intensity_flash_cutoff_suns, v_at_isc_v, dvdt, v_pad_0_v, v_pad_1_v, v_pad_2_v, v_pad_3_v, v_pad_4_v, pmpe, resistivity_ohmcm, sample_type, thickness_cm, cell_area_cm2, total_area_cm2, num_of_cells_per_string, num_of_strings, temperature_c, intensity_suns, analysis_type, nominal_load_voltage_mvcell, rs_modulation_target_ohmcm2, reference_constant_vsun, voltage_temperature_coefficient_mvc, temperature_offset_c, power_per_sun_wm2, conductivity_modulation_ohmcm2v, auger_coefficent, auger_method, band_gap_narrowing, fit_method, carrier_density_center_point_cm3, percent_fit, lower_bond_cm3, upper_bond_cm3, rsh_lifetime_correction, rsh_measurement_method, sunsvoc_rsh_voltage_v, do_dark_break_measurement, temperature_measurement_method, number_of_drsh_points, drsh_output_vlimit_v, current_transfer, voltage_transfer, temperature_transfer, final_bin, bin_index, tester_id, do_doping_measurement, doping_sample_time, doping_measurement_length, measurement_type, comments, calibration, dbreak_v, dbreak_a, dark_break_interpolated, measurement_date_time_string, software_version, recipe_filename) VALUES ?',
-                                values: [ACL72_Pre_clean]
-                            },  (err, results) => {
+                        let fileStatus = false;
+
+                        if(ACL72_Pre_clean.length){
+
+                            mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
-
-                                resolve(results.insertID);
+    
+                                connection.query({
+                                    sql: 'INSERT INTO acl72_pre_data (upload_date, year, workweek, batch, day, line, bin, test_id, cell_id, remarks, user_id, batch_id, sample_id, measurement_date, isc_a, voc_v, imp_a, vmp_v, pmp_w, ff_percent, efficiency_percent, rsh_ohm, rs_ohm, jsc_acm2, voc_vcell, jmp_acm2, vmp_vcell, pmp_wcm2, cell_efficiency_percent, rsh_ohmcm2, rs_ohmcm2, iload_a, vload_v, ffload_percent, pload_w, effload_percent,rsload_ohm, jload_acm2, vload_vcell, pload_wcm2, cell_effload_percent, rsload_ohmcm2, rs_modulation_ohmcm2, measured_temperature, total_test_time, pjmp_acm2, pvmp_vcell, ppmp_wcm2, pff_percent, pefficiency_percent, n_at_1_sun, n_at_110_suns, jo1_acm2, jo2_acm2, jo_facm2, est_bulk_lifetime, brr_hz, lifetime_at_vmp, doping_cm3, measured_resistivity_ohmcm, lifetime_fit_r2, max_intensity_suns, intensity_flash_cutoff_suns, v_at_isc_v, dvdt, v_pad_0_v, v_pad_1_v, v_pad_2_v, v_pad_3_v, v_pad_4_v, pmpe, resistivity_ohmcm, sample_type, thickness_cm, cell_area_cm2, total_area_cm2, num_of_cells_per_string, num_of_strings, temperature_c, intensity_suns, analysis_type, nominal_load_voltage_mvcell, rs_modulation_target_ohmcm2, reference_constant_vsun, voltage_temperature_coefficient_mvc, temperature_offset_c, power_per_sun_wm2, conductivity_modulation_ohmcm2v, auger_coefficent, auger_method, band_gap_narrowing, fit_method, carrier_density_center_point_cm3, percent_fit, lower_bond_cm3, upper_bond_cm3, rsh_lifetime_correction, rsh_measurement_method, sunsvoc_rsh_voltage_v, do_dark_break_measurement, temperature_measurement_method, number_of_drsh_points, drsh_output_vlimit_v, current_transfer, voltage_transfer, temperature_transfer, final_bin, bin_index, tester_id, do_doping_measurement, doping_sample_time, doping_measurement_length, measurement_type, comments, calibration, dbreak_v, dbreak_a, dark_break_interpolated, measurement_date_time_string, software_version, recipe_filename) VALUES ?',
+                                    values: [ACL72_Pre_clean]
+                                },  (err, results) => {
+                                    if(err){return reject(err)};
+    
+                                    resolve(results.insertID);
+                                });
+    
+                                connection.release();
+    
                             });
 
-                            connection.release();
-
-                        });
+                        } else {
+                            resolve(fileStatus);
+                        }
 
                     });
                 }
 
                 function insertACL72_Post(ACL72_Post_clean){
                     return new Promise((resolve, reject) => {
-                        mysql.getConnection((err, connection) => {
-                            if(err){return reject(err)};
 
-                            connection.query({
-                                sql: 'INSERT INTO acl72_post_data (upload_date, year, workweek, batch, day, line, bin, test_id, cell_id, remarks, user_id, batch_id, sample_id, measurement_date, isc_a, voc_v, imp_a, vmp_v, pmp_w, ff_percent, efficiency_percent, rsh_ohm, rs_ohm, jsc_acm2, voc_vcell, jmp_acm2, vmp_vcell, pmp_wcm2, cell_efficiency_percent, rsh_ohmcm2, rs_ohmcm2, iload_a, vload_v, ffload_percent, pload_w, effload_percent,rsload_ohm, jload_acm2, vload_vcell, pload_wcm2, cell_effload_percent, rsload_ohmcm2, rs_modulation_ohmcm2, measured_temperature, total_test_time, pjmp_acm2, pvmp_vcell, ppmp_wcm2, pff_percent, pefficiency_percent, n_at_1_sun, n_at_110_suns, jo1_acm2, jo2_acm2, jo_facm2, est_bulk_lifetime, brr_hz, lifetime_at_vmp, doping_cm3, measured_resistivity_ohmcm, lifetime_fit_r2, max_intensity_suns, intensity_flash_cutoff_suns, v_at_isc_v, dvdt, v_pad_0_v, v_pad_1_v, v_pad_2_v, v_pad_3_v, v_pad_4_v, pmpe, resistivity_ohmcm, sample_type, thickness_cm, cell_area_cm2, total_area_cm2, num_of_cells_per_string, num_of_strings, temperature_c, intensity_suns, analysis_type, nominal_load_voltage_mvcell, rs_modulation_target_ohmcm2, reference_constant_vsun, voltage_temperature_coefficient_mvc, temperature_offset_c, power_per_sun_wm2, conductivity_modulation_ohmcm2v, auger_coefficent, auger_method, band_gap_narrowing, fit_method, carrier_density_center_point_cm3, percent_fit, lower_bond_cm3, upper_bond_cm3, rsh_lifetime_correction, rsh_measurement_method, sunsvoc_rsh_voltage_v, do_dark_break_measurement, temperature_measurement_method, number_of_drsh_points, drsh_output_vlimit_v, current_transfer, voltage_transfer, temperature_transfer, final_bin, bin_index, tester_id, do_doping_measurement, doping_sample_time, doping_measurement_length, measurement_type, comments, calibration, dbreak_v, dbreak_a, dark_break_interpolated, measurement_date_time_string, software_version, recipe_filename) VALUES ?',
-                                values: [ACL72_Post_clean]
-                            },  (err, results) => {
+                        let fileStatus = false;
+
+                        if(ACL72_Post_clean){
+
+                            mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
-
-                                resolve(results.insertID);
+    
+                                connection.query({
+                                    sql: 'INSERT INTO acl72_post_data (upload_date, year, workweek, batch, day, line, bin, test_id, cell_id, remarks, user_id, batch_id, sample_id, measurement_date, isc_a, voc_v, imp_a, vmp_v, pmp_w, ff_percent, efficiency_percent, rsh_ohm, rs_ohm, jsc_acm2, voc_vcell, jmp_acm2, vmp_vcell, pmp_wcm2, cell_efficiency_percent, rsh_ohmcm2, rs_ohmcm2, iload_a, vload_v, ffload_percent, pload_w, effload_percent,rsload_ohm, jload_acm2, vload_vcell, pload_wcm2, cell_effload_percent, rsload_ohmcm2, rs_modulation_ohmcm2, measured_temperature, total_test_time, pjmp_acm2, pvmp_vcell, ppmp_wcm2, pff_percent, pefficiency_percent, n_at_1_sun, n_at_110_suns, jo1_acm2, jo2_acm2, jo_facm2, est_bulk_lifetime, brr_hz, lifetime_at_vmp, doping_cm3, measured_resistivity_ohmcm, lifetime_fit_r2, max_intensity_suns, intensity_flash_cutoff_suns, v_at_isc_v, dvdt, v_pad_0_v, v_pad_1_v, v_pad_2_v, v_pad_3_v, v_pad_4_v, pmpe, resistivity_ohmcm, sample_type, thickness_cm, cell_area_cm2, total_area_cm2, num_of_cells_per_string, num_of_strings, temperature_c, intensity_suns, analysis_type, nominal_load_voltage_mvcell, rs_modulation_target_ohmcm2, reference_constant_vsun, voltage_temperature_coefficient_mvc, temperature_offset_c, power_per_sun_wm2, conductivity_modulation_ohmcm2v, auger_coefficent, auger_method, band_gap_narrowing, fit_method, carrier_density_center_point_cm3, percent_fit, lower_bond_cm3, upper_bond_cm3, rsh_lifetime_correction, rsh_measurement_method, sunsvoc_rsh_voltage_v, do_dark_break_measurement, temperature_measurement_method, number_of_drsh_points, drsh_output_vlimit_v, current_transfer, voltage_transfer, temperature_transfer, final_bin, bin_index, tester_id, do_doping_measurement, doping_sample_time, doping_measurement_length, measurement_type, comments, calibration, dbreak_v, dbreak_a, dark_break_interpolated, measurement_date_time_string, software_version, recipe_filename) VALUES ?',
+                                    values: [ACL72_Post_clean]
+                                },  (err, results) => {
+                                    if(err){return reject(err)};
+    
+                                    resolve(results.insertID);
+                                });
+    
+                                connection.release();
+    
                             });
 
-                            connection.release();
-
-                        });
+                        } else {
+                            resolve(fileStatus);
+                        }
 
                     });
                 }
