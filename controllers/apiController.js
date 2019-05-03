@@ -597,7 +597,7 @@ module.exports = function(app){
 
                         let fileStatus = false;
 
-                        if(RBT0_clean){
+                        if(RBT0_clean.lenghth > 0){
                             mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
                                 
