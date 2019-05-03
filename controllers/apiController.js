@@ -432,7 +432,7 @@ module.exports = function(app){
                     }
                 }
 
-                insertRBT0(RBT0_clean).then(() => {
+                return insertRBT0(RBT0_clean).then(() => {
                        
                     let upload_details = []
 
@@ -444,8 +444,8 @@ module.exports = function(app){
 
                     worksheetsOk.push(['RBT0']);
 
-                    rmpUploadHistory(upload_details).then(() => {
-                        insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
+                    return rmpUploadHistory(upload_details).then(() => {
+                        return insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
                             
                             let upload_details = []
     
@@ -457,8 +457,8 @@ module.exports = function(app){
 
                             worksheetsOk.push(['FOURPB_Metal']);
     
-                            rmpUploadHistory(upload_details).then(() => {
-                                insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
+                            return rmpUploadHistory(upload_details).then(() => {
+                                return insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
                                     
                                     let upload_details = []
             
@@ -470,8 +470,8 @@ module.exports = function(app){
 
                                     worksheetsOk.push(['RTUV_HiUV']);
             
-                                    rmpUploadHistory(upload_details).then(() => {
-                                        insertACL72_Pre(ACL72_Pre_clean).then(() => {
+                                    return rmpUploadHistory(upload_details).then(() => {
+                                        return insertACL72_Pre(ACL72_Pre_clean).then(() => {
                                             
                                             let upload_details = []
                     
@@ -483,8 +483,8 @@ module.exports = function(app){
 
                                             worksheetsOk.push(['ACL72_Pre']);
                     
-                                            rmpUploadHistory(upload_details).then(() => {
-                                                insertACL72_Post(ACL72_Post_clean).then(() => {
+                                            return rmpUploadHistory(upload_details).then(() => {
+                                                return insertACL72_Post(ACL72_Post_clean).then(() => {
                                                     
                                                     let upload_details = []
                             
@@ -496,14 +496,14 @@ module.exports = function(app){
 
                                                     worksheetsOk.push(['ACL72_Post']);
                             
-                                                    rmpUploadHistory(upload_details).then(() => {
+                                                    return rmpUploadHistory(upload_details).then(() => {
                                                         
                                                         let upload_status = {
                                                             OK: worksheetsOk,
                                                             ERR: worksheetsErr
                                                         }
 
-                                                        res.status(200).json(upload_status);
+                                                        return res.status(200).json(upload_status);
 
                                                     },  (err) => {
                                                         console.log(err);
