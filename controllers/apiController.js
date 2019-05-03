@@ -507,57 +507,47 @@ module.exports = function(app){
 
                                                     },  (err) => {
                                                         console.log(err);
-                                                        return;
                                                         
                                                     });
                             
                                                 }, (err) => {
-                                                    worksheetsErr.push(['ACL72_Post - ' + err.code ]);
                                                     console.log(err.code);
-                                                    return;
+                                                    return worksheetsErr.push(['ACL72_Post - ' + err.code ]);
                                                 });
 
                                             },  (err) => {
                                                 console.log(err);
-                                                return;
                                             });
                     
                                         }, (err) => {
-                                            worksheetsErr.push(['ACL72_Pre - ' + err ]);
                                             console.log(err);
-                                            return;
+                                            return worksheetsErr.push(['ACL72_Pre - ' + err ]);
                                         });
 
                                     },  (err) => {
                                         console.log(err);
-                                        return;
                                     });
                                     
                                 },  (err) => {
-                                    worksheetsErr.push(['RTUV_HiUV - ' + err ]);
                                     console.log(err);
-                                    return;
+                                    return worksheetsErr.push(['RTUV_HiUV - ' + err ]);
                                 });
 
                             },  (err) => {
                                 console.log(err);
-                                return;
                             });
                         },  (err) => {
-                            worksheetsErr.push(['FOURPB_Metal - ' + err ]);
                             console.log(err);
-                            return;
+                            return worksheetsErr.push(['FOURPB_Metal - ' + err ]);
                         });
                         
                     },  (err) => {
                         console.log(err);
-                        return;
                     });
 
                 },  (err) => {
-                    worksheetsErr.push(['RBT0 - ' + err ]);
                     console.log(err);
-                    return;
+                    return worksheetsErr.push(['RBT0 - ' + err ]);
                 });
 
 
