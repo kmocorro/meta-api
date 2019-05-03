@@ -781,7 +781,7 @@ module.exports = function(app){
 
                         let fileStatus = false;
 
-                        if(ACL72_Post_clean){
+                        if(ACL72_Post_clean.length){
 
                             mysql.getConnection((err, connection) => {
                                 if(err){return reject(err)};
