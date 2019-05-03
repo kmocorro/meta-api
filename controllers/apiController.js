@@ -527,8 +527,8 @@ module.exports = function(app){
                                             });
                     
                                         }, (err) => {
-                                            console.log(err);
-                                            worksheetsErr.push(['ACL72_Pre - ' + err ]);
+                                            console.log(err.code);
+                                            worksheetsErr.push(['ACL72_Pre - ' + err.code ]);
 
                                             let upload_status = {
                                                 OK: worksheetsOk,
@@ -543,8 +543,8 @@ module.exports = function(app){
                                     });
                                     
                                 },  (err) => {
-                                    console.log(err);
-                                    worksheetsErr.push(['RTUV_HiUV - ' + err ]);
+                                    console.log(err.code);
+                                    worksheetsErr.push(['RTUV_HiUV - ' + err.code ]);
                                     let upload_status = {
                                         OK: worksheetsOk,
                                         ERR: worksheetsErr
@@ -557,8 +557,8 @@ module.exports = function(app){
                                 console.log(err);
                             });
                         },  (err) => {
-                            console.log(err);
-                            worksheetsErr.push(['FOURPB_Metal - ' + err ]);
+                            console.log(err.code);
+                            worksheetsErr.push(['FOURPB_Metal - ' + err.code ]);
                             let upload_status = {
                                 OK: worksheetsOk,
                                 ERR: worksheetsErr
@@ -572,8 +572,8 @@ module.exports = function(app){
                     });
 
                 },  (err) => {
-                    console.log(err);
-                    worksheetsErr.push(['RBT0 - ' + err ]);
+                    console.log(err.code);
+                    worksheetsErr.push(['RBT0 - ' + err.code ]);
 
                     let upload_status = {
                         OK: worksheetsOk,
