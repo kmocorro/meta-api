@@ -67,6 +67,9 @@ module.exports = function(app){
                 let ACL72_Post_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['ACL72_Post'], {header: 'A'});
                 let ACL72_Post_clean = [];
 
+                let worksheets_uploaded = [];
+
+
                 // RBT0 Uploader
                 if(RBT0_Worksheet){
 
@@ -109,14 +112,19 @@ module.exports = function(app){
                             user_details.username,
                         ]);
 
-                        return rmpUploadHistory(upload_details);
+                        return rmpUploadHistory(upload_details).then(() => {
+                            worksheets_uploaded.push(
+                                ['RBTO']
+                            );
+                        },  (err) => {
+                            console.log(err);
+                        });
+
                     },  (err) => {
                         console.log(err);
                     });
 
                 }
-
-                
 
                 // FOURPB_Metal Uploader
                 if(FOURPB_Metal_Worksheet){
@@ -153,7 +161,13 @@ module.exports = function(app){
                             user_details.username,
                         ]);
 
-                        return rmpUploadHistory(upload_details);
+                        return rmpUploadHistory(upload_details).then(() => {
+                            worksheets_uploaded.push(
+                                ['FOURPB_Metal']
+                            );
+                        },  (err) => {
+                            console.log(err);
+                        });
                     },  (err) => {
                         console.log(err);
                     });
@@ -205,7 +219,13 @@ module.exports = function(app){
                             user_details.username,
                         ]);
 
-                        return rmpUploadHistory(upload_details);
+                        return rmpUploadHistory(upload_details).then(() => {
+                            worksheets_uploaded.push(
+                                ['RTUV_HiUV']
+                            );
+                        },  (err) => {
+                            console.log(err);
+                        });
                         
                     },  (err) => {
                         console.log(err);
@@ -356,7 +376,13 @@ module.exports = function(app){
                             user_details.username,
                         ]);
 
-                        return rmpUploadHistory(upload_details);
+                        return rmpUploadHistory(upload_details).then(() => {
+                            worksheets_uploaded.push(
+                                ['ACL72_Pre']
+                            );
+                        },  (err) => {
+                            console.log(err);
+                        });
 
                     }, (err) => {
                         console.log(err);
@@ -506,7 +532,13 @@ module.exports = function(app){
                             user_details.username,
                         ]);
 
-                        return rmpUploadHistory(upload_details);
+                        return rmpUploadHistory(upload_details).then(() => {
+                            worksheets_uploaded.push(
+                                ['ACL72_Post']
+                            );
+                        },  (err) => {
+                            console.log(err);
+                        });
 
                     }, (err) => {
                         console.log(err);
@@ -642,7 +674,11 @@ module.exports = function(app){
                     });
                 }
 
-                res.status(200).send('ok');
+                let woksheetsOK = {
+                    worksheets: worksheets_uploaded
+                }
+
+                res.status(200).json(woksheetsOK);
                 
             }
                 
