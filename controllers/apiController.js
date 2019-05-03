@@ -67,7 +67,8 @@ module.exports = function(app){
                 let ACL72_Post_Worksheet = XLSX.utils.sheet_to_json(workbook.Sheets['ACL72_Post'], {header: 'A'});
                 let ACL72_Post_clean = [];
 
-                let worksheets_uploaded = [];
+                let worksheetsOk = [];
+                let worksheetsErr = [];
 
                 // RBT0 Uploader
                 if(RBT0_Worksheet){
@@ -441,6 +442,8 @@ module.exports = function(app){
                         user_details.username,
                     ]);
 
+                    worksheetsOk.push(['RBT0']);
+
                     return rmpUploadHistory(upload_details).then(() => {
                         return insertFOURPB_Metal(FOURPB_Metal_clean).then(() => {
                             
@@ -451,6 +454,8 @@ module.exports = function(app){
                                 'FOURPB_Metal',
                                 user_details.username,
                             ]);
+
+                            worksheetsOk.push(['FOURPB_Metal']);
     
                             return rmpUploadHistory(upload_details).then(() => {
                                 return insertRTUV_HiUV(RTUV_HiUV_clean).then(() => {
@@ -462,6 +467,8 @@ module.exports = function(app){
                                         'RTUV_HiUV',
                                         user_details.username,
                                     ]);
+
+                                    worksheetsOk.push(['RTUV_HiUV']);
             
                                     return rmpUploadHistory(upload_details).then(() => {
                                         return insertACL72_Pre(ACL72_Pre_clean).then(() => {
@@ -473,6 +480,8 @@ module.exports = function(app){
                                                 'ACL72_Pre',
                                                 user_details.username,
                                             ]);
+
+                                            worksheetsOk.push(['ACL72_Pre']);
                     
                                             return rmpUploadHistory(upload_details).then(() => {
                                                 return insertACL72_Post(ACL72_Post_clean).then(() => {
@@ -484,17 +493,21 @@ module.exports = function(app){
                                                         'ACL72_Post',
                                                         user_details.username,
                                                     ]);
+
+                                                    worksheetsOk.push(['ACL72_Post']);
                             
                                                     return rmpUploadHistory(upload_details).then(() => {
                                                         
-                                                        let woksheetsOK = {
-                                                            worksheets: ['HELLO WORLD']
+                                                        let upload_status = {
+                                                            OK: worksheetsOk,
+                                                            ERR: worksheetsErr
                                                         }
 
-                                                        res.status(200).json(woksheetsOK);
+                                                        res.status(200).json(upload_status);
 
                                                     },  (err) => {
-                                                        console.log(err);
+                                                        worksheetsErr.push('ACL72_Post - ' + err );
+                                                        
                                                     });
                             
                                                 }, (err) => {
@@ -502,7 +515,7 @@ module.exports = function(app){
                                                 });
 
                                             },  (err) => {
-                                                console.log(err);
+                                                worksheetsErr.push('ACL72_Pre - ' + err );
                                             });
                     
                                         }, (err) => {
@@ -510,7 +523,7 @@ module.exports = function(app){
                                         });
 
                                     },  (err) => {
-                                        console.log(err);
+                                        worksheetsErr.push('RTUV_HiUV - ' + err );
                                     });
                                     
                                 },  (err) => {
@@ -518,14 +531,14 @@ module.exports = function(app){
                                 });
 
                             },  (err) => {
-                                console.log(err);
+                                worksheetsErr.push('FOURPB_Metal - ' + err );
                             });
                         },  (err) => {
                             console.log(err);
                         });
                         
                     },  (err) => {
-                        console.log(err);
+                        worksheetsErr.push('RBT0 - ' + err );
                     });
 
                 },  (err) => {
