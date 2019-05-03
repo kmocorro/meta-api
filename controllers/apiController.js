@@ -434,20 +434,27 @@ module.exports = function(app){
 
                 return insertRBT0(RBT0_clean).then((fileStatus) => {
                        
-                    let upload_details = []
+                    let upload_details = [];
+
 
                     if(fileStatus){
+                        worksheetsOk.push(['RBT0']);
+
                         upload_details.push([
                             excelFile.date_upload,
                             'RBT0',
                             user_details.username,
                         ]);
 
-                        worksheetsOk.push(['RBT0']);
-
                     } else {
 
                         worksheetsOk.push(['RBT0 - Empty. Proceeding...']);
+
+                        upload_details.push([
+                            excelFile.date_upload,
+                            'RBT0 - Empty - No data to be uploaded.',
+                            user_details.username,
+                        ]);
                         
                     }
 
