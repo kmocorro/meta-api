@@ -5,23 +5,22 @@ let mysql = require('../config').pool;
 
 module.exports = function(app){
 
-    app.get('/', verifyToken, (req, res) => {
+    app.get('/', (req, res) => {
     
         if(req.userID && req.claim){
 
-            let meta_meta = {
+            let metaDashboard = {
                 title: 'meta/fab4',
-                author: 'kevin mocorro',
-                prototypeList: [
-                    {id: 1, name: 'COA'},
-                    {id: 2, name: 'BRS'},
-                    {id: 3, name: 'RMP'},
-                    {id: 4, name: 'Engineering Activity'},
-                    {id: 5, name: 'Survey App'},
+                author: 'kevinmocorro',
+                dashboard: [
+                    {id: 1, name: 'Median Efficiency', value: 25.08},
+                    {id: 2, name: 'Bin NE', value: 65.5},
+                    {id: 3, name: 'Cosmetics', value: 92.0},
+                    {id: 4, name: 'Cycletime', value: 1.72}
                 ]
             }
 
-            res.status(200).json(meta_meta);
+            res.status(200).json(metaDashboard);
         }
         
         
