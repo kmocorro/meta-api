@@ -665,7 +665,7 @@ module.exports = function(app){
                                 if(err){return reject(err)};
                                 
                                 connection.query({
-                                    sql: 'INSERT INTO rbt0_data (upload_date, year, workweek, batch, day, line, remarks, lot_id, tag, coupon_id, start_voltage, end_voltage, bin, severity, jv, jv_change, min_t_dc, max_t_dc, ave_t_dc, disposition) VALUES ?',
+                                    sql: 'INSERT INTO rbt0_data (upload_date, year, workweek, batch, day, line, bin, remarks, lot_id, tag, coupon_id, start_voltage, end_voltage,  severity, jv, jv_change, min_t_dc, max_t_dc, ave_t_dc, disposition) VALUES ?',
                                     values: [RBT0_clean]
                                 },  (err, results) => {
                                     if(err){return reject(err)};
