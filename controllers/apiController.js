@@ -6,23 +6,19 @@ let mysql = require('../config').pool;
 module.exports = function(app){
 
     app.get('/', (req, res) => {
-    
-        if(req.userID && req.claim){
-
-            let metaDashboard = {
-                title: 'meta/fab4',
-                author: 'kevinmocorro',
-                dashboard: [
-                    {id: 1, name: 'Median Efficiency', value: 25.08},
-                    {id: 2, name: 'Bin NE', value: 65.5},
-                    {id: 3, name: 'Cosmetics', value: 92.0},
-                    {id: 4, name: 'Cycletime', value: 1.72}
-                ]
-            }
-
-            res.status(200).json(metaDashboard);
-        }
         
+        let metaDashboard = {
+            title: 'meta/fab4',
+            author: 'kevinmocorro',
+            dashboard: [
+                {id: 1, name: 'Median Efficiency', value: 25.08},
+                {id: 2, name: 'Bin NE', value: 65.5},
+                {id: 3, name: 'Cosmetics', value: 92.0},
+                {id: 4, name: 'Cycletime', value: 1.72}
+            ]
+        }
+
+        res.status(200).json(metaDashboard);
         
     });
 
