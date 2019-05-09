@@ -5,20 +5,32 @@ let mysql = require('../config').pool;
 
 module.exports = function(app){
 
-    app.get('/', (req, res) => {
+    app.get('api/dashboard/', verifyToken, (req, res) => {
 
-        let metaDashboard = {
-            title: 'meta/fab4',
-            author: 'kevinmocorro',
-            dashboard: [
-                {id: 1, name: 'Median Efficiency', value: 25.58},
-                {id: 2, name: 'Bin NE', value: 65.5},
-                {id: 3, name: 'Cosmetics', value: 92.0},
-                {id: 4, name: 'Cycletime', value: 1.72}
-            ]
+        if(req.useID && req.claim){
+            let metaDashboard = {
+                code: 1,
+                title: 'meta/fab4',
+                author: 'kevinmocorro',
+                claim: req.claim,
+                dashboard: [
+                    {id: 1, name: 'Median Efficiency', value: 25.58},
+                    {id: 2, name: 'Bin NE', value: 65.5},
+                    {id: 3, name: 'Cosmetics', value: 92.0},
+                    {id: 4, name: 'Cycletime', value: 1.72}
+                ]
+            }
+    
+            res.status(200).json(metaDashboard);
+        } else {
+            let unauthorized = {
+                code: 0,
+                message: 'Unauthorized'
+            }
+
+            res.status(200).json(unauthorized);
         }
-
-        res.status(200).json(metaDashboard);
+        
         
     });
 
