@@ -5,7 +5,12 @@ function verifyToken(req, res, next){
     let token = req.cookies.auth_jwt;
 
     if(!token){
-        console.log('error: no token');
+        let unauthorized = {
+            code: 0,
+            message: 'Unauthorized'
+        }
+
+        res.status(200).json(unauthorized);
     } else {
         jwt.verify(token, config.key, (err, decoded) => {
             if(err){
