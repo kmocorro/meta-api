@@ -5,7 +5,7 @@ let mysql = require('../config').pool;
 
 module.exports = function(app){
 
-    app.get('api/dashboard/', verifyToken, (req, res) => {
+    app.get('api/dashboard', verifyToken, (req, res) => {
 
         if(req.useID && req.claim){
             let metaDashboard = {
