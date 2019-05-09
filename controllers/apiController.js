@@ -7,7 +7,7 @@ module.exports = function(app){
 
     app.get('/api/dashboard', verifyToken, (req, res) => {
 
-        if(req.useID && req.claim){
+        if(req.userID && req.claim){
             let metaDashboard = {
                 code: 1,
                 title: 'meta/fab4',
