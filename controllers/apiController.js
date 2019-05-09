@@ -25,7 +25,7 @@ module.exports = function(app){
         } else {
             let unauthorized = {
                 code: 0,
-                message: 'Unauthorized'
+                message: 'Unauthorized...'
             }
 
             res.status(200).json(unauthorized);
