@@ -61,6 +61,8 @@ module.exports = function(app){
                                 }
 
                                 resolve(rmp_history);
+                            } else {
+                                resolve(rmp_history);
                             }
 
                         })
@@ -92,7 +94,7 @@ module.exports = function(app){
                             rmp_logs: []
                         }
                     }
-                    
+
                     res.status(200).json(rmpHistoryLogs);
                 }
                 
