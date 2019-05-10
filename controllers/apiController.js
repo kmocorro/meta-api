@@ -9,9 +9,7 @@ module.exports = function(app){
     app.get('/api/dashboard/:token', verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
-            
-            console.log(req.claim);
-
+        
             let metaDashboard = {
                 code: 1,
                 title: 'meta/fab4',
@@ -32,14 +30,16 @@ module.exports = function(app){
         
     });
 
-    app.get('/uploader/rmp', verifyToken, (req, res) => {
+    app.get('/uploader/rmp', verifyTokenParams, (req, res) => {
 
-        let user_details = {
-            username: req.claim.username,
-            title: req.claim.title
+        let rmpHistoryLogs = {
+            code: 1,
+            title: 'meta/fab4',
+            author: 'kevinmocorro',
+            claim: req.claim
         }
 
-        res.status(200).json(user_details);
+        res.status(200).json(rmpHistoryLogs);
 
     });
 
