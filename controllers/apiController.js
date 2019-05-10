@@ -3,6 +3,7 @@ let verifyTokenParams = require('./verifyTokenParams');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
+let moment = require('moment');
 
 module.exports = function(app){
 
@@ -53,7 +54,7 @@ module.exports = function(app){
 
                                 for(let i=0; i < results.length; i++){
                                     rmp_history.push({
-                                        upload_date: results[i].upload_date,
+                                        upload_date: moment(results[i].upload_date).calendar('lll'),
                                         worksheet_name: results[i].worksheet_name,
                                         username: results[i].username
                                     });
