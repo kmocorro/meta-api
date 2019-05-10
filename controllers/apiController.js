@@ -30,16 +30,19 @@ module.exports = function(app){
         
     });
 
-    app.get('/uploader/rmp', verifyTokenParams, (req, res) => {
+    app.get('/api/rmp/:token', verifyTokenParams, (req, res) => {
 
-        let rmpHistoryLogs = {
-            code: 1,
-            title: 'meta/fab4',
-            author: 'kevinmocorro',
-            claim: req.claim
+        if(req.userID && req.claim){
+            
+            let rmpHistoryLogs = {
+                code: 1,
+                title: 'meta/fab4',
+                author: 'kevinmocorro',
+                claim: req.claim
+            }
+    
+            res.status(200).json(rmpHistoryLogs);
         }
-
-        res.status(200).json(rmpHistoryLogs);
 
     });
 
