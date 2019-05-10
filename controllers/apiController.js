@@ -37,16 +37,51 @@ module.exports = function(app){
 
         if(req.userID && req.claim){
 
-            let rmpHistoryLogs = { 
-                rmp: {
-                    code: 1,
-                    title: 'meta/fab4',
-                    author: 'kevinmocorro',
-                    claim: req.claim
-                }
+            let rmp_history = [];
+
+            function rmphistoryQuery(){
+                return new Promise((resolve, reject) => {
+                    mysql.getConnection((err, connection) => {
+                        if(err){return reject(err)};
+
+                        connection.query({
+                            sql: 'SELECT * FROM rmp_upload_history ORDER BY id DESC'
+                        },  (err, results) => {
+                            if(err){return reject(err)};
+
+                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
+
+                                for(let i=0; i < results.length; i++){
+                                    rmp_history.push({
+                                        upload_date: results[i].upload_date,
+                                        worksheet_name: results[i].worksheet_name,
+                                        username: results[i].username
+                                    });
+                                }
+
+                                resolve(rmp_history);
+                            }
+
+                        })
+                    });
+                });
             }
-    
-            res.status(200).json(rmpHistoryLogs);
+
+            return rmphistoryQuery().then((rmp_data) => {
+                let rmpHistoryLogs = { 
+                    rmp: {
+                        code: 1,
+                        title: 'meta/fab4',
+                        author: 'kevinmocorro',
+                        claim: req.claim,
+                        rmp_logs: rmp_data
+                    }
+                }
+
+                res.status(200).json(rmpHistoryLogs);
+                
+            });
+
         }
 
     });
