@@ -54,7 +54,7 @@ module.exports = function(app){
 
                                 for(let i=0; i < results.length; i++){
                                     rmp_history.push({
-                                        upload_date: moment(results[i].upload_date).calendar('lll'),
+                                        upload_date: moment(results[i].upload_date).calendar(),
                                         worksheet_name: results[i].worksheet_name,
                                         username: results[i].username
                                     });
