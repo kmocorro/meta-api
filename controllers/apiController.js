@@ -1,28 +1,34 @@
 let verifyToken = require('./verifyToken');
+let verifyTokenParams = require('./verifyTokenParams');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
 
 module.exports = function(app){
 
-    app.get('/api/dashboard/:token', (req, res) => {
+    app.get('/api/dashboard/:token', verifyTokenParams, (req, res) => {
 
-        console.log(req.params.token);
+        if(req.userID && req.claim){
+            
+            console.log(req.claim);
 
-        let metaDashboard = {
-            code: 1,
-            title: 'meta/fab4',
-            author: 'kevinmocorro',
-            claim: req.claim,
-            dashboard: [
-                {id: 1, name: 'Median Efficiency', value: 25.58},
-                {id: 2, name: 'Bin NE', value: 65.5},
-                {id: 3, name: 'Cosmetics', value: 92.0},
-                {id: 4, name: 'Cycletime', value: 1.72}
-            ]
+            let metaDashboard = {
+                code: 1,
+                title: 'meta/fab4',
+                author: 'kevinmocorro',
+                claim: req.claim,
+                dashboard: [
+                    {id: 1, name: 'Median Efficiency', value: 25.58},
+                    {id: 2, name: 'Bin NE', value: 65.5},
+                    {id: 3, name: 'Cosmetics', value: 92.0},
+                    {id: 4, name: 'Cycletime', value: 1.72}
+                ]
+            }
+    
+            res.status(200).json(metaDashboard);
         }
 
-        res.status(200).json(metaDashboard);
+        
         
     });
 
