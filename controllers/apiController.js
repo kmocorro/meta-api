@@ -7,6 +7,7 @@ module.exports = function(app){
 
     app.get('/api/dashboard', (req, res) => {
         console.log(req.headers);
+        console.log(req.cookies);
 
         let metaDashboard = {
             code: 1,
