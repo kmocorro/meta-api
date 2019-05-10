@@ -7,7 +7,7 @@ module.exports = function(app){
 
     app.get('/api/dashboard/:token', (req, res) => {
 
-        console.log(req.param.token);
+        console.log(req.params.token);
 
         let metaDashboard = {
             code: 1,
