@@ -69,17 +69,33 @@ module.exports = function(app){
             }
 
             return rmphistoryQuery().then((rmp_data) => {
-                let rmpHistoryLogs = { 
-                    rmp: {
-                        code: 1,
-                        title: 'meta/fab4',
-                        author: 'kevinmocorro',
-                        claim: req.claim,
-                        rmp_logs: rmp_data
+                
+                if(rmp_data){
+                    let rmpHistoryLogs = { 
+                        rmp: {
+                            code: 1,
+                            title: 'meta/fab4',
+                            author: 'kevinmocorro',
+                            claim: req.claim,
+                            rmp_logs: rmp_data
+                        }
                     }
+    
+                    res.status(200).json(rmpHistoryLogs);
+                } else {
+                    let rmpHistoryLogs = { 
+                        rmp: {
+                            code: 1,
+                            title: 'meta/fab4',
+                            author: 'kevinmocorro',
+                            claim: req.claim,
+                            rmp_logs: []
+                        }
+                    }
+                    
+                    res.status(200).json(rmpHistoryLogs);
                 }
-
-                res.status(200).json(rmpHistoryLogs);
+                
                 
             });
 
