@@ -44,6 +44,8 @@ module.exports = function(app){
             username: req.claim.username,
             title: req.claim.title
         }
+
+        console.log(user_details);
         form.maxFileSize = 10 * 1024 * 1024 // 10mb max :P
 
         form.parse(req, (err, fields, file) => {
