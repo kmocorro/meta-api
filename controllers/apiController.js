@@ -6,6 +6,7 @@ let mysql = require('../config').pool;
 module.exports = function(app){
 
     app.get('/api/dashboard', (req, res) => {
+        console.log(req.headers);
 
         let metaDashboard = {
             code: 1,
