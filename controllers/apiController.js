@@ -10,17 +10,20 @@ module.exports = function(app){
 
         if(req.userID && req.claim){
         
-            let metaDashboard = {
-                code: 1,
-                title: 'meta/fab4',
-                author: 'kevinmocorro',
-                claim: req.claim,
-                dashboard: [
-                    {id: 1, name: 'Median Efficiency', value: 25.58},
-                    {id: 2, name: 'Bin NE', value: 65.5},
-                    {id: 3, name: 'Cosmetics', value: 92.0},
-                    {id: 4, name: 'Cycletime', value: 1.72}
-                ]
+            let metaDashboard = { 
+                dashboard: {
+                    code: 1,
+                    title: 'meta/fab4',
+                    author: 'kevinmocorro',
+                    claim: req.claim,
+                    dash: [
+                        {id: 1, name: 'Median Efficiency', value: 25.58},
+                        {id: 2, name: 'Bin NE', value: 65.5},
+                        {id: 3, name: 'Cosmetics', value: 92.0},
+                        {id: 4, name: 'Cycletime', value: 1.72}
+                    ]
+                }
+                
             }
     
             res.status(200).json(metaDashboard);
@@ -33,12 +36,14 @@ module.exports = function(app){
     app.get('/api/rmp/:token', verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
-            
-            let rmpHistoryLogs = {
-                code: 1,
-                title: 'meta/fab4',
-                author: 'kevinmocorro',
-                claim: req.claim
+
+            let rmpHistoryLogs = { 
+                rmp: {
+                    code: 1,
+                    title: 'meta/fab4',
+                    author: 'kevinmocorro',
+                    claim: req.claim
+                }
             }
     
             res.status(200).json(rmpHistoryLogs);
