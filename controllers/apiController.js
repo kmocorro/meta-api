@@ -7,6 +7,7 @@ module.exports = function(app){
 
     app.post('/api/dashboard', (req, res) => {
         console.log(req.headers);
+        console.log(req.cookies);
         console.log(req.cookies.auth_jwt);
         console.log(req.cookies.ldap_token);
 
