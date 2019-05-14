@@ -10,30 +10,125 @@ module.exports = function(app){
     app.get('/api/dashboard/:token', verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
-        
-            let metaDashboard = { 
-                dashboard: {
-                    code: 1,
-                    title: 'meta/fab4',
-                    author: 'kevinmocorro',
-                    claim: req.claim,
-                    dash: [
-                        {id: 1, name: 'Median Efficiency', value: 25.58},
-                        {id: 2, name: 'Bin NE', value: 65.5},
-                        {id: 3, name: 'Cosmetics', value: 92.0},
-                        {id: 4, name: 'Cycletime', value: 1.72}
-                    ]
-                }
-                
+            
+            function cycletime_today(){
+                return new Promise((resolve, reject) => {
+                    mysql.getConnection((err, connection) => {
+                        if(err){return reject(err)};
+
+                        connection.query({
+                            sql: 'SELECT * FROM meta_dashboard_cycletime WHERE upload_date = CURDATE()'
+                        },  (err, results) => {
+                            if(err){return reject(err)};
+
+                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
+
+                                let cycletime = {
+                                    new : {
+                                        id: results[0].id,
+                                        data_date: results[0].data_date,
+                                        upload_date: results[0].upload_date,
+                                        total_ave: results[0].total_ave,
+                                        value: ((results[0].total_ave)/24).toFixed(2)
+                                    }
+                                }
+
+                                resolve(cycletime);
+
+                            } else {
+
+                                let cycletime = {
+                                    new : {
+                                        id: 0,
+                                        data_date: 0,
+                                        upload_date: 0,
+                                        total_ave: 0,
+                                    }
+                                }
+
+                                resolve(cycletime);
+                            }
+
+                        });
+                    });
+                });
             }
-    
-            res.status(200).json(metaDashboard);
+
+            function cycletime_yesterday(){
+                return new Promise((resolve, reject) => {
+                    mysql.getConnection((err, connection) => {
+                        if(err){return reject(err)};
+
+                        connection.query({
+                            sql: 'SELECT * FROM meta_dashboard_cycletime WHERE upload_date = CURDATE() - INTERVAL 1 DAY'
+                        },  (err, results) => {
+                            if(err){return reject(err)};
+
+                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
+
+                                let cycletime = {
+                                    old : {
+                                        id: results[0].id,
+                                        data_date: results[0].data_date,
+                                        upload_date: results[0].upload_date,
+                                        total_ave: results[0].total_ave,
+                                        value: ((results[0].total_ave)/24).toFixed(2)
+                                    }
+                                }
+
+                                resolve(cycletime);
+
+                            } else {
+
+                                let cycletime = {
+                                    old : {
+                                        id: 0,
+                                        data_date: 0,
+                                        upload_date: 0,
+                                        total_ave: 0,
+                                    }
+                                }
+
+                                resolve(cycletime);
+                            }
+
+                        });
+                    });
+                });
+            }
+
+            cycletime_today().then((cycletime_today) => {
+                return cycletime_yesterday().then((cycletime_yesterday) => {
+
+                    let metaDashboard = { 
+                        dashboard: {
+                            code: 1,
+                            title: 'meta/fab4',
+                            author: 'kevinmocorro',
+                            claim: req.claim,
+                            dash: [
+                                {id: 1, name: 'Median Efficiency', value: 25.58, old_value: 24.50},
+                                {id: 2, name: 'Bin NE', value: 65.5, old_value: 60.2},
+                                {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
+                                {id: 4, name: 'Cycletime', value: cycletime_today.new.value, old_value: cycletime_yesterday.old.value}
+                            ]
+                        }
+                        
+                    }
+
+                    console.log(metaDashboard);
+            
+                    res.status(200).json(metaDashboard);
+
+                }, (err) => (console.log(err)));
+            }, (err) => (console.log(err)));
+        
+            
         }
 
-        
-        
     });
 
+    // RMP Upload History
     app.get('/api/rmp/:token', verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
