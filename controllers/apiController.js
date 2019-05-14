@@ -50,6 +50,8 @@ module.exports = function(app){
                             }
 
                         });
+
+                        connection.release();
                     });
                 });
             }
@@ -93,6 +95,8 @@ module.exports = function(app){
                             }
 
                         });
+
+                        connection.release();
                     });
                 });
             }
