@@ -17,7 +17,7 @@ module.exports = function(app){
                         if(err){return reject(err)};
 
                         connection.query({
-                            sql: 'SET time_zone = "+08:00"; SELECT * FROM meta_dashboard_cycletime WHERE upload_date = CURDATE();'
+                            sql: 'SELECT * FROM meta_dashboard_cycletime WHERE upload_date = CURDATE();'
                         },  (err, results) => {
                             if(err){return reject(err)};
 
@@ -62,7 +62,7 @@ module.exports = function(app){
                         if(err){return reject(err)};
 
                         connection.query({
-                            sql: 'SET time_zone = "+08:00"; SELECT * FROM meta_dashboard_cycletime WHERE upload_date = CURDATE() - INTERVAL 1 DAY;'
+                            sql: 'SELECT * FROM meta_dashboard_cycletime WHERE upload_date = CURDATE() - INTERVAL 1 DAY;'
                         },  (err, results) => {
                             if(err){return reject(err)};
 
