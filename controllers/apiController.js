@@ -101,29 +101,67 @@ module.exports = function(app){
                 });
             }
 
+            function cycletime_trend(){
+                return new Promise((resolve, reject) => {
+                    mysql.getConnection((err, connection) => {
+                        if(err){return reject(err)};
+
+                        let cyc_trend_arr = [];
+
+                        connection.query({
+                            sql: 'SELECT * FROM meta_dashboard_cycletime ORDER BY id DESC LIMIT 7'
+                        },  (err, results) => {
+                            if(err){return reject(err)};
+
+                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
+
+                                for(let i=0; i<results.length; i++){
+                                    cyc_trend_arr.push({
+                                        label: results[i].data_date,
+                                        data: results[i].data_date
+                                    });
+                                }
+
+                                resolve(cyc_trend_arr);
+
+                            } else {
+
+                                resolve(cyc_trend_arr);
+                            }
+
+                        });
+
+                        connection.release();
+                    });
+                });
+            }
+
             cycletime_today().then((cycletime_today) => {
                 return cycletime_yesterday().then((cycletime_yesterday) => {
+                    return cycletime_trend().then((cycletime_trend) => {
 
-                    let metaDashboard = { 
-                        dashboard: {
-                            code: 1,
-                            title: 'meta/fab4',
-                            author: 'kevinmocorro',
-                            claim: req.claim,
-                            dash: [
-                                {id: 1, name: 'Median Efficiency', value: 25.58, old_value: 24.50},
-                                {id: 2, name: 'Bin NE', value: 65.5, old_value: 60.2},
-                                {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
-                                {id: 4, name: 'Cycletime', value: cycletime_today.new.value, old_value: cycletime_yesterday.old.value}
-                            ]
+                        let metaDashboard = { 
+                            dashboard: {
+                                code: 1,
+                                title: 'meta/fab4',
+                                author: 'kevinmocorro',
+                                claim: req.claim,
+                                dash: [
+                                    {id: 1, name: 'Median Efficiency', value: 25.58, old_value: 24.50},
+                                    {id: 2, name: 'Bin NE', value: 65.5, old_value: 60.2},
+                                    {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
+                                    {id: 4, name: 'Cycletime', value: cycletime_today.new.value, old_value: cycletime_yesterday.old.value}
+                                ],
+                                cycletime_trend: cycletime_trend
+                            }
+                            
                         }
-                        
-                    }
-
-                    console.log(metaDashboard);
-            
-                    res.status(200).json(metaDashboard);
-
+    
+                        console.log(metaDashboard);
+                
+                        res.status(200).json(metaDashboard);
+    
+                    }, (err) => (console.log(err)));
                 }, (err) => (console.log(err)));
             }, (err) => (console.log(err)));
         
