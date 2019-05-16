@@ -117,8 +117,8 @@ module.exports = function(app){
 
                                 for(let i=0; i<results.length; i++){
                                     cyc_trend_arr.push({
-                                        label: results[i].data_date,
-                                        data: ((results[0].total_ave)/24).toFixed(2)
+                                        label: moment(results[i].data_date).format('ll'),
+                                        data: ((results[i].total_ave)/24).toFixed(2)
                                     });
                                 }
 
