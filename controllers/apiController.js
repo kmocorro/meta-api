@@ -152,7 +152,7 @@ module.exports = function(app){
                                     {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
                                     {id: 4, name: 'Cycletime', value: cycletime_today.new.value, old_value: cycletime_yesterday.old.value}
                                 ],
-                                cycletime_trend: cycletime_trend
+                                cycletime_trend: cycletime_trend.reverse()
                             }
                             
                         }
