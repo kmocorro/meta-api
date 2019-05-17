@@ -242,7 +242,8 @@ module.exports = function(app){
 
     });
 
-    // rmp uploader
+    // rmp uploader -- DEPRECATED -TRANSFERED TO 8081
+    /*
     app.post('/api/uploader/rmp', verifyToken, (req, res) => {
 
         let form = new formidable.IncomingForm();
@@ -1053,5 +1054,5 @@ module.exports = function(app){
         });
 
     });
-
+    */
 }
