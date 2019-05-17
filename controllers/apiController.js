@@ -194,7 +194,7 @@ module.exports = function(app){
                             {id: 1, name: 'Median Efficiency', value: 25.58, old_value: 24.50},
                             {id: 2, name: 'Bin NE', value: 65.5, old_value: 60.2},
                             {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
-                            {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_yesterday.day.old.value}
+                            {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_dashboard.day.old.value}
                         ],
                         cycletime_trend: cycletime_dashboard.trend.reverse()
                     }
