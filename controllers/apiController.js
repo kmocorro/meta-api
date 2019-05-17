@@ -109,7 +109,7 @@ module.exports = function(app){
                         let cyc_trend_arr = [];
 
                         connection.query({
-                            sql: 'SELECT * FROM meta_dashboard_cycletime ORDER BY id DESC LIMIT 7'
+                            sql: 'SELECT * FROM meta_dashboard_cycletime ORDER BY id DESC LIMIT 14'
                         },  (err, results) => {
                             if(err){return reject(err)};
 
