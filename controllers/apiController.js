@@ -10,96 +10,6 @@ module.exports = function(app){
     app.get('/api/dashboard/:token', verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
-            
-            function cycletime_today(){
-                return new Promise((resolve, reject) => {
-                    mysql.getConnection((err, connection) => {
-                        if(err){return reject(err)};
-
-                        connection.query({
-                            sql: 'SELECT * FROM meta_dashboard_cycletime ORDER BY id DESC LIMIT 1'
-                        },  (err, results) => {
-                            if(err){return reject(err)};
-
-                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
-
-                                let cycletime = {
-                                    new : {
-                                        id: results[0].id,
-                                        data_date: results[0].data_date,
-                                        upload_date: results[0].upload_date,
-                                        total_ave: results[0].total_ave,
-                                        value: ((results[0].total_ave)/24).toFixed(2)
-                                    }
-                                }
-
-                                resolve(cycletime);
-
-                            } else {
-
-                                let cycletime = {
-                                    new : {
-                                        id: 0,
-                                        data_date: 0,
-                                        upload_date: 0,
-                                        total_ave: 0,
-                                    }
-                                }
-
-                                resolve(cycletime);
-                            }
-
-                        });
-
-                        connection.release();
-                    });
-                });
-            }
-
-            function cycletime_yesterday(){
-                return new Promise((resolve, reject) => {
-                    mysql.getConnection((err, connection) => {
-                        if(err){return reject(err)};
-
-                        connection.query({
-                            sql: 'SELECT * FROM meta_dashboard_cycletime ORDER BY id DESC LIMIT 1,1'
-                        },  (err, results) => {
-                            if(err){return reject(err)};
-
-                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
-
-                                let cycletime = {
-                                    old : {
-                                        id: results[0].id,
-                                        data_date: results[0].data_date,
-                                        upload_date: results[0].upload_date,
-                                        total_ave: results[0].total_ave,
-                                        value: ((results[0].total_ave)/24).toFixed(2)
-                                    }
-                                }
-
-                                resolve(cycletime);
-
-                            } else {
-
-                                let cycletime = {
-                                    old : {
-                                        id: 0,
-                                        data_date: 0,
-                                        upload_date: 0,
-                                        total_ave: 0,
-                                    }
-                                }
-
-                                resolve(cycletime);
-                            }
-
-                        });
-
-                        connection.release();
-                    });
-                });
-            }
 
             function cycletime_trend(){
                 return new Promise((resolve, reject) => {
@@ -182,28 +92,120 @@ module.exports = function(app){
                 });
             }
 
+            function median_efficiency_and_ne3_trend(){
+                return new Promise((resolve, reject) => {
+                    mysql.getConnection((err, connection) => {
+                        if(err){return reject(err)};
+
+                        let median_and_ne3_trend = [];
+
+                        connection.query({
+                            sql: 'SELECT * FROM meta_dashboard_eff_and_bin ORDER BY id DESC LIMIT 14'
+                        },  (err, results) => {
+                            if(err){return reject(err)};
+
+                            if(typeof results !== 'undefined' && results !== null && results.length > 0){
+
+                                for(let i=0; i<results.length;i++){
+                                    median_and_ne3_trend.push({
+                                        label: results[i].ww + '.' + results[i].wwday,
+                                        median_efficiency: results[i].median_efficiency,
+                                        ne3: results[i].ne3
+                                    })
+                                }
+
+                                let day = {
+                                    new: {
+                                        id: results[0].id,
+                                        ww: results[0].ww,
+                                        wwday: results[0].wwday,
+                                        median_efficiency: results[0].median_efficiency,
+                                        ne3: results[0].ne3
+                                    },
+
+                                    old: {
+                                        id: results[1].id,
+                                        ww: results[1].ww,
+                                        wwday: results[1].wwday,
+                                        median_efficiency: results[1].median_efficiency,
+                                        ne3: results[1].ne3
+                                    }
+                                }
+
+                                let efficiency_and_ne3 = {
+                                    day,
+                                    trend: median_and_ne3_trend
+                                }
+
+                                resolve(efficiency_and_ne3);
+
+                            } else {
+
+                                let day = {
+                                    new: {
+                                        id: 0,
+                                        ww: 0,
+                                        wwday: 0,
+                                        median_efficiency: 0,
+                                        ne3: 0
+                                    },
+
+                                    old: {
+                                        id: 0,
+                                        ww: 0,
+                                        wwday: 0,
+                                        median_efficiency: 0,
+                                        ne3: 0
+                                    }
+                                }
+
+                                let efficiency_and_ne3 = {
+                                    day,
+                                    trend: median_and_ne3_trend
+                                }
+
+                                resolve(efficiency_and_ne3);
+
+                            }
+
+                        });
+
+                        connection.release();
+
+                    });
+                });
+            }
+
             return cycletime_trend().then((cycletime_dashboard) => {
+                return median_efficiency_and_ne3_trend().then((median_efficiency_and_binning_dashboard) => {
 
-                let metaDashboard = { 
-                    dashboard: {
-                        code: 1,
-                        title: 'meta/fab4',
-                        author: 'kevinmocorro',
-                        claim: req.claim,
-                        dash: [
-                            {id: 1, name: 'Median Efficiency', value: 25.58, old_value: 24.50},
-                            {id: 2, name: 'Bin NE', value: 65.5, old_value: 60.2},
-                            {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
-                            {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_dashboard.day.old.value}
-                        ],
-                        cycletime_trend: cycletime_dashboard.trend.reverse()
+                    let metaDashboard = { 
+                        dashboard: {
+                            code: 1,
+                            title: 'meta/fab4',
+                            author: 'kevinmocorro',
+                            claim: req.claim,
+                            dash: [
+                                {id: 1, name: 'Median Efficiency', value: median_efficiency_and_binning_dashboard.new.median_efficiency, old_value: median_efficiency_and_binning_dashboard.old.median_efficiency},
+                                {id: 2, name: 'Bin NE', value: median_efficiency_and_binning_dashboard.new.ne3, old_value: median_efficiency_and_binning_dashboard.old.ne3},
+                                {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
+                                {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_dashboard.day.old.value}
+                            ],
+                            cycletime_trend: cycletime_dashboard.trend.reverse(),
+                            median_efficiency_trend: median_efficiency_and_binning_dashboard.trend.median_efficiency.reverse(),
+                            binning_trend: median_efficiency_and_binning_dashboard.trend.ne3.reverse()
+                        }
+                        
                     }
-                    
-                }
+    
+                    console.log(metaDashboard);
+            
+                    res.status(200).json(metaDashboard);
 
-                console.log(metaDashboard);
-        
-                res.status(200).json(metaDashboard);
+                    
+                }, (err) => (console.log(err)));
+ 
+                
 
             }, (err) => (console.log(err)));
         
