@@ -192,8 +192,7 @@ module.exports = function(app){
                                 {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_dashboard.day.old.value}
                             ],
                             cycletime_trend: cycletime_dashboard.trend.reverse(),
-                            median_efficiency_trend: median_efficiency_and_binning_dashboard.trend.median_efficiency.reverse(),
-                            binning_trend: median_efficiency_and_binning_dashboard.trend.ne3.reverse()
+                            eff_and_bin_trend: median_efficiency_and_binning_dashboard.trend.reverse()
                         }
                         
                     }
