@@ -188,7 +188,7 @@ module.exports = function(app){
                             dash: [
                                 {id: 1, name: 'Median Efficiency', value: median_efficiency_and_binning_dashboard.day.new.median_efficiency, old_value: median_efficiency_and_binning_dashboard.day.old.median_efficiency},
                                 {id: 2, name: 'Bin NE', value: median_efficiency_and_binning_dashboard.day.new.ne3, old_value: median_efficiency_and_binning_dashboard.day.old.ne3},
-                                {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
+                                {id: 3, name: 'Cosmetics', value: 0, old_value: 0},
                                 {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_dashboard.day.old.value}
                             ],
                             cycletime_trend: cycletime_dashboard.trend.reverse(),
