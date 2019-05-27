@@ -186,7 +186,7 @@ module.exports = function(app){
                             author: 'kevinmocorro',
                             claim: req.claim,
                             dash: [
-                                {id: 1, name: 'Median Efficiency', value: median_efficiency_and_binning_dashboard.new.median_efficiency, old_value: median_efficiency_and_binning_dashboard.old.median_efficiency},
+                                {id: 1, name: 'Median Efficiency', value: median_efficiency_and_binning_dashboard.day.new.median_efficiency, old_value: median_efficiency_and_binning_dashboard.day.old.median_efficiency},
                                 {id: 2, name: 'Bin NE', value: median_efficiency_and_binning_dashboard.new.ne3, old_value: median_efficiency_and_binning_dashboard.old.ne3},
                                 {id: 3, name: 'Cosmetics', value: 92.0, old_value: 91.0},
                                 {id: 4, name: 'Cycletime', value: cycletime_dashboard.day.new.value, old_value: cycletime_dashboard.day.old.value}
