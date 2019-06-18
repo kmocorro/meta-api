@@ -4,6 +4,7 @@ let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
 let moment = require('moment');
+let csv = require("csvtojson/v2");
 
 module.exports = function(app){
 
@@ -211,6 +212,26 @@ module.exports = function(app){
             
         }
 
+    });
+
+    app.get('/api/spares', (req, res) => {
+        let csvFilePath_spares_details = 'public/spares_db/201923.Details.csv';
+        let csvFilePath_spares_summary = 'public/spares_db/201923.Summary.csv';
+
+        csv().fromFile(csvFilePath_spares_details)
+        .then((spares_details) => {
+            csv().fromFile(csvFilePath_spares_summary)
+            .then((spares_summary) => {
+                let data = {
+                    summary: spares_summary,
+                    details: spares_details
+                }
+
+                console.log(data);
+                
+                res.status(200).json(data);
+            });
+        });
     });
 
     // RMP Upload History
