@@ -8,9 +8,10 @@ const corsOrigins = require('./config').corsOrigins;
 
 const apiLDAP = require('./controllers/apiLDAP');
 const apiController = require('./controllers/apiController');
-
+ 
 const app = express();
 const port = process.env.PORT || 8080;
+
 
 app.use(cookieParser());
 app.use(cors(
@@ -24,6 +25,8 @@ app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(morgan('combined'));
+
+app.use('/', express.static(__dirname + '/public'));
 
 apiLDAP(app);
 apiController(app);
