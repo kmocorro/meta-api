@@ -215,8 +215,8 @@ module.exports = function(app){
     });
 
     app.get('/api/spares', (req, res) => {
-        let csvFilePath_spares_details = 'public/spares_db/201923.Details.csv';
-        let csvFilePath_spares_summary = 'public/spares_db/201923.Summary.csv';
+        let csvFilePath_spares_details = 'public/spares_db/Details.csv';
+        let csvFilePath_spares_summary = 'public/spares_db/Summary.csv';
 
         csv().fromFile(csvFilePath_spares_details)
         .then((spares_details) => {
