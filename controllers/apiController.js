@@ -234,6 +234,19 @@ module.exports = function(app){
         });
     });
 
+    app.get('/api/oee', (req, res) => {
+        let csvFilePath_oee = 'public/OEE/OEE.csv';
+
+        csv().fromFile(csvFilePath_oee)
+        .then((oee_details) => {
+            let data = {
+                oee: oee_details
+            }
+
+            res.status(200).json(data);
+        })
+    })
+
     // RMP Upload History
     app.get('/api/rmp/:token', verifyTokenParams, (req, res) => {
 
