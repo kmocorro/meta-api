@@ -321,7 +321,7 @@ module.exports = function(app){
 
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
-        let plate = req.query.plate;
+        let plate = req.query;
 
         console.log(plate);
         res.status(200).json({message: plate});
