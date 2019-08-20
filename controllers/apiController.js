@@ -323,7 +323,7 @@ module.exports = function(app){
     app.get('/api/vehicle', (req, res) => {
         let plate_number = req.query.plate;
 
-        console.log(plate_number);
+        //console.log(plate_number);
         res.status(200).json({message: plate_number});
     })
 
