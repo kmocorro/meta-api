@@ -321,10 +321,10 @@ module.exports = function(app){
 
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
-        let plate = req.query;
+        let plate_number = req.query.plate;
 
-        console.log(plate);
-        res.status(200).json({message: plate});
+        console.log(plate_number);
+        res.status(200).json({message: plate_number});
     })
 
     // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
