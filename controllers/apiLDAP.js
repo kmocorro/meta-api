@@ -12,6 +12,8 @@ module.exports = function(app){
     app.post('/api/login', (req, res) => {
          
         let fields = req.body;
+
+        console.log(fields);
     
         passport.use(setupLDAP());
 
