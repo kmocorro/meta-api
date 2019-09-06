@@ -1,5 +1,6 @@
 let verifyToken = require('./verifyToken');
 let verifyTokenParams = require('./verifyTokenParams');
+let verifyTokenOasis = require('./verifyTokenOasis');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
@@ -320,7 +321,7 @@ module.exports = function(app){
     });
 
     // oasis login...
-    app.get('/api/oasis/:token', verifyTokenParams, (req, res) => {
+    app.get('/api/oasis/:token', verifyTokenOasis, (req, res) => {
 
         if(req.userID && req.claim){
             res.status(200).json(req.claim);
