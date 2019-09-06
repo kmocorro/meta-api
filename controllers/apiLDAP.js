@@ -11,7 +11,7 @@ module.exports = function(app){
 
     app.post('/api/login', (req, res) => {
          
-        let fields = req.body;
+        const fields = req.body;
 
         console.log(fields);
     

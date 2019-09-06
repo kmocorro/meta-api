@@ -319,6 +319,17 @@ module.exports = function(app){
 
     });
 
+    // oasis login...
+    app.get('/api/oasis/:token', verifyTokenParams, (req, res) => {
+
+        if(req.userID && req.claim){
+            res.status(200).json(req.claim);
+        } else {
+            res.status(200).json({err: 'Invalid token.'});
+        }
+
+    })
+
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
         let plate_number = req.query.plate;
