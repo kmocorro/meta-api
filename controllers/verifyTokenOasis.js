@@ -1,7 +1,8 @@
 let jwt = require('jsonwebtoken');
 let config = require('../config').jwt_secret;
+let mysql = require('../config').pool;
 
-function verifyTokenParams(req, res, next){
+function verifyTokenOasis(req, res, next){
     let token = req.params.token;
 
     if(!token){
@@ -16,6 +17,7 @@ function verifyTokenParams(req, res, next){
             if(err){
                 console.log('error: ', err);
             } else {
+
                 req.userID = decoded.id;
                 req.claim = decoded.claim;
                 next();
@@ -24,4 +26,4 @@ function verifyTokenParams(req, res, next){
     }
 }
 
-module.exports = verifyTokenParams;
+module.exports = verifyTokenOasis;

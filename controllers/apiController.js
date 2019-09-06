@@ -280,7 +280,8 @@ module.exports = function(app){
                                 resolve(rmp_history);
                             }
 
-                        })
+                        });
+                        connection.release();
                     });
                 });
             }
@@ -333,8 +334,88 @@ module.exports = function(app){
 
     // oasis save post  
     app.post('/api/yepsurvey', (req, res) => {
-
+        
         console.log(req.body);
+
+        //check if already voted.
+        function isVoted(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'SELECT * FROM yep_survey_participants WHERE employee_number = ?',
+                        values: [ req.body.employeeNumber ]
+                    },  (err, results) => {
+                        if(err){return reject(err)};
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            res.status(200).json({success: 'Already voted.'})
+                        } else {
+                            resolve();
+                        }
+        
+                    })
+                    connection.release();
+                });
+            });
+        }
+
+        function insertToYEP_data_table(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'INSERT INTO yep_survey_data SET employee_number = ?, survey_id = ?',
+                        values: [ req.body.employeeNumber, req.body.survey_id ]
+                    },  (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+                        
+                    })
+                    connection.release();
+                });
+            });
+        }
+
+        function insertToYEP_participants_table(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'INSERT INTO yep_survey_participants SET employee_number = ?',
+                        values: [ req.body.employeeNumber ]
+                    },  (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+                        
+                    })
+                    connection.release();
+                });
+            });
+        }
+
+        isVoted().then(()=>{
+            insertToYEP_data_table().then(()=>{
+                insertToYEP_participants_table().then(() => {
+                    res.status(200).json({success: 'Voted succesfully.'});
+                }, (err)=>{
+                    res.status(200).json({error: err});
+                })
+            }, (err)=>{
+                res.status(200).json({error: err});
+            })
+        }, (err)=>{
+            res.status(200).json({error: err});
+        });
 
     })
 
