@@ -328,6 +328,13 @@ module.exports = function(app){
             res.status(200).json({err: 'Invalid token.'});
         }
 
+    });
+
+    // oasis save post  
+    app.get('/api/yepsurvey', (req, res) => {
+
+        console.log(req.body);
+
     })
 
     // Vehicle QR
