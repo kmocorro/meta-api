@@ -331,7 +331,7 @@ module.exports = function(app){
     });
 
     // oasis save post  
-    app.get('/api/yepsurvey', (req, res) => {
+    app.post('/api/yepsurvey', (req, res) => {
 
         console.log(req.body);
 
