@@ -406,7 +406,7 @@ module.exports = function(app){
         isVoted().then(()=>{
             insertToYEP_data_table().then(()=>{
                 insertToYEP_participants_table().then(() => {
-                    res.status(200).json({success: 'Voted succesfully.'});
+                    res.status(200).json({success: 'Thank you for voting!'});
                 }, (err)=>{
                     res.status(200).json({error: err});
                 })
