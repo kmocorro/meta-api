@@ -350,7 +350,7 @@ module.exports = function(app){
                         if(err){return reject(err)};
 
                         if(typeof results !== 'undefined' && results !== null && results.length > 0){
-                            res.status(200).json({success: 'Already voted.'})
+                            res.status(200).json({error: 'Already voted.'})
                         } else {
                             resolve();
                         }
@@ -388,7 +388,7 @@ module.exports = function(app){
                     if(err){return reject(err)};
                     // is exists.
                     connection.query({
-                        sql: 'INSERT INTO yep_survey_participants SET employee_number = ?',
+                        sql: 'INSERT INTO yep_survey_participants SET employee_number = ?, dt = ?',
                         values: [ req.body.employeeNumber, new Date()  ]
                     },  (err, results) => {
                         
