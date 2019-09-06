@@ -367,8 +367,8 @@ module.exports = function(app){
                     if(err){return reject(err)};
                     // is exists.
                     connection.query({
-                        sql: 'INSERT INTO yep_survey_data SET employee_number = ?, survey_id = ?',
-                        values: [ req.body.employeeNumber, req.body.survey_id ]
+                        sql: 'INSERT INTO yep_survey_data SET employee_number = ?, survey_id = ?, dt = ?',
+                        values: [ req.body.employeeNumber, req.body.survey_id, new Date() ]
                     },  (err, results) => {
                         
                         if(err){reject(err)}
@@ -389,7 +389,7 @@ module.exports = function(app){
                     // is exists.
                     connection.query({
                         sql: 'INSERT INTO yep_survey_participants SET employee_number = ?',
-                        values: [ req.body.employeeNumber ]
+                        values: [ req.body.employeeNumber, new Date()  ]
                     },  (err, results) => {
                         
                         if(err){reject(err)}
