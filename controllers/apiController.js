@@ -403,19 +403,24 @@ module.exports = function(app){
             });
         }
 
-        isVoted().then(()=>{
-            insertToYEP_data_table().then(()=>{
-                insertToYEP_participants_table().then(() => {
-                    res.status(200).json({success: 'Thank you for voting!'});
+        if(req.body.employeeNumber && req.body.survey_id){
+            isVoted().then(()=>{
+                insertToYEP_data_table().then(()=>{
+                    insertToYEP_participants_table().then(() => {
+                        res.status(200).json({success: 'Thank you for voting!'});
+                    }, (err)=>{
+                        res.status(200).json({error: err});
+                    })
                 }, (err)=>{
                     res.status(200).json({error: err});
                 })
             }, (err)=>{
                 res.status(200).json({error: err});
-            })
-        }, (err)=>{
-            res.status(200).json({error: err});
-        });
+            });
+        } else {
+            res.status(200).json({error: 'Unable to submit. Refresh the page and make sure you are logged in.'})
+        }
+        
 
     })
 
