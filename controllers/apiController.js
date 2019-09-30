@@ -418,10 +418,14 @@ module.exports = function(app){
                 res.status(200).json({error: err});
             });
         } else {
-            res.status(200).json({error: 'Unable to submit. Refresh the page and make sure you are logged in.'})
+            res.status(200).json({error: 'Unable to submit. Refresh the page and make sure you are logged in'})
         }
         
 
+    })
+
+    app.post('/api/csatsurvey', (req, res) => {
+        console.log(req.body);
     })
 
     // Vehicle QR
