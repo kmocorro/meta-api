@@ -419,6 +419,13 @@ module.exports = function(app){
 
     })
 
+    // csat save post  
+    app.post('/api/csatsurvey', (req, res) => {
+        
+        console.log(req.body);
+
+    })
+
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
         let plate_number = req.query.plate;
@@ -427,6 +434,21 @@ module.exports = function(app){
         res.status(200).json({message: plate_number});
     })
 
-    // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
+    
+    // recertification web application
+    // examiner
+    app.post('/api/recert-excel-upload', (req, res) => {
+
+    })
+
+    // recertification web application
+    // web app exam code list
+
+    app.get('/api/recert-examcode-list', (req, res) => {
+
+    })
+
+    // recertification web application
+    // examinees
 
 }
