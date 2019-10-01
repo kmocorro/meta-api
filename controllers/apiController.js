@@ -440,9 +440,9 @@ module.exports = function(app){
                         if(err){return reject(err)};
 
                         if(typeof results !== 'undefined' && results !== null && results.length > 0){
-                            res.status(200).json({error: 'SID does not exists.'})
-                        } else {
                             resolve();
+                        } else {
+                            res.status(200).json({error: 'SID does not exists.'})
                         }
         
                     })
@@ -464,9 +464,9 @@ module.exports = function(app){
                         if(err){return reject(err)};
 
                         if(typeof results !== 'undefined' && results !== null && results.length > 0){
-                            res.status(200).json({error: 'BID does not exists.'})
-                        } else {
                             resolve();
+                        } else {
+                            res.status(200).json({error: 'BID does not exists.'})
                         }
         
                     })
