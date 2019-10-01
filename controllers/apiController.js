@@ -426,6 +426,102 @@ module.exports = function(app){
 
     app.post('/api/csatsurvey', (req, res) => {
         console.log(req.body);
+
+        // check if sid exists.
+        function isSidExists(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'SELECT * FROM csat_stakeholders WHERE sid = ?',
+                        values: [ req.body.sid ]
+                    },  (err, results) => {
+                        if(err){return reject(err)};
+
+                        if(typeof results == 'undefined' && results == null && results.length < 0){
+                            res.status(200).json({error: 'SID does not exists.'})
+                        } else {
+                            resolve();
+                        }
+        
+                    })
+                    connection.release();
+                });
+            })
+        }
+
+        // check if bid exists.
+        function isBidExists(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'SELECT * FROM csat_buyers WHERE bid = ?',
+                        values: [ req.body.sid ]
+                    },  (err, results) => {
+                        if(err){return reject(err)};
+
+                        if(typeof results == 'undefined' && results == null && results.length < 0){
+                            res.status(200).json({error: 'BID does not exists.'})
+                        } else {
+                            resolve();
+                        }
+        
+                    })
+                    connection.release();
+                });
+            })
+        }
+
+        // insert to database...
+        function insertToCSAT_ratings(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO csat_ratings SET dt=?, sid=?, bid=?, question_1=?, question_2=?, question_3=?, recommendation=?',
+                        values: [ new Date(), req.body.sid, req.body.bid, req.body.question_1, req.body.question_2, req.body.question_3, req.body.recommendation ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                })
+            });
+        }
+
+        if(req.body.sid && req.body.bid){
+            if(req.body.question_1 && req.body.question_2 && req.body.question_3){
+                isSidExists().then(() => {
+                    isBidExists().then(() => {
+                        insertToCSAT_ratings().then(() => {
+                            res.status(200).json({success: 'Your feedback has been submitted. Thank you!'});
+                        },  (err) => {
+                            res.status(200).json({error: err});
+                        })
+                    }, (err) => {
+                        res.status(200).json({error: err});
+                    })
+                }, (err) => {
+                    res.status(200).json({error: err});
+                })
+            } else {
+                res.status(200).json({error: 'Unable to submit. Fields might be incomplete...'})
+            }
+        } else {
+            res.status(200).json({error: 'Unable to submit. SID or BID is incorrect...'})
+        }
+
+
     })
 
     // Vehicle QR
