@@ -459,7 +459,7 @@ module.exports = function(app){
                     // is exists.
                     connection.query({
                         sql: 'SELECT * FROM csat_buyers WHERE bid = ?',
-                        values: [ req.body.sid ]
+                        values: [ req.body.bid ]
                     },  (err, results) => {
                         if(err){return reject(err)};
 
