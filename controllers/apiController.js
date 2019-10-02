@@ -554,7 +554,7 @@ module.exports = function(app){
 
         if(req.body.setID && req.body.tubeID){
             insertWTSTube().then(() => {
-                res.status(200).json({success: 'Your feedback has been submitted. Thank you!'});
+                res.status(200).json({success: 'Thank you! SetID and TubeID has been saved.'});
             }, (err) => {
                 res.status(200).json({error: err});
             })
