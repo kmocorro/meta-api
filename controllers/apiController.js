@@ -4,6 +4,7 @@ let verifyTokenOasis = require('./verifyTokenOasis');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
+let mysqlTrace = require('../config').poolTrace;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
 
@@ -495,7 +496,7 @@ module.exports = function(app){
 
                     connection.release();
 
-                })
+                });
             });
         }
 
@@ -526,6 +527,41 @@ module.exports = function(app){
     // WTS POLY TUBE Traceability API
     app.post('/api/polywts22', (req, res) => {
         console.log(req.body);
+
+        function insertWTSTube(){
+            return new Promise((resolve, reject) => {
+                // using traceability database
+                mysqlTrace.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO polywts_tube_mapping SET dt=?, setID=?, tubeID=?, username=?',
+                        values: [ new Date(), req.body.setID, req.body.tubeID, req.body.username ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            })
+        }
+
+        if(req.body.setID && req.body.tubeID){
+            insertWTSTube().then(() => {
+                res.status(200).json({success: 'Your feedback has been submitted. Thank you!'});
+            }, (err) => {
+                res.status(200).json({error: err});
+            })
+        } else {
+            res.status(200).json({error: 'Unable to submit. Fields might be incomplete...'})
+        }
+
     })
 
     // Vehicle QR
