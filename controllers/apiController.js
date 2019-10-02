@@ -524,7 +524,7 @@ module.exports = function(app){
     })
 
     // WTS POLY TUBE Traceability API
-    app.post('/api/polywts22', verifyToken, (req, res) => {
+    app.post('/api/polywts22', (req, res) => {
         console.log(req.body);
     })
 
