@@ -521,7 +521,11 @@ module.exports = function(app){
             res.status(200).json({error: 'Unable to submit. SID or BID is incorrect...'})
         }
 
+    })
 
+    // WTS POLY TUBE Traceability API
+    app.post('/api/polywts22', verifyToken, (req, res) => {
+        console.log(req.body);
     })
 
     // Vehicle QR
