@@ -31,8 +31,10 @@ function verifyTokenRecertapp(req, res, next){
         
                                 console.log(results);
                                 if(typeof results[0] !== 'undefined' && results[0] !== null && results.length > 0){
+                                    console.log('hello.. resolved')
                                     resolve();
                                 } else {
+                                    console.log('hello.. reject')
                                     reject();
                                 }
                 
