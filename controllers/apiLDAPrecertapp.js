@@ -39,13 +39,12 @@ module.exports = function(app){
                                 values: [ user.employeeNumber ]
                             },  (err, results) => {
                                 if(err){return reject(err)};
-        
-                                console.log(results);
+                                //console.log(results);
                                 if(typeof results[0] !== 'undefined' && results[0] !== null && results.length > 0){
-                                    console.log('hello.. resolved')
+                                    //console.log('hello.. resolved')
                                     resolve();
                                 } else {
-                                    console.log('hello.. reject')
+                                    //console.log('hello.. reject')
                                     reject();
                                 }
                 
@@ -59,7 +58,7 @@ module.exports = function(app){
                     res.cookie('auth_jwt', token); // auth_jwt - authenticated user jsonwebtoken
                     res.status(200).json(jsonToken);
                 },  (err) => {
-                    res.status(200).json({err: 'Login not available for non-examinee...'});
+                    res.status(200).json({err: 'Login not available for non-examinee.'});
                 })
                 
             }
