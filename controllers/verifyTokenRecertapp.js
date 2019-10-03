@@ -52,8 +52,7 @@ function verifyTokenRecertapp(req, res, next){
                     next();
 
                 }, (err)=>{
-                    //res.status(401).json({error: 'Unable to log non examinee.'});
-                    next();
+                    res.status(401).json({error: 'Unabled to login.'});
                 });
 
             }
