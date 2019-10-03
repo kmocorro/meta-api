@@ -29,6 +29,7 @@ app.use(morgan('combined'));
 app.use('/', express.static(__dirname + '/public'));
 
 apiLDAP(app);
+apiLDAPrecertapp(app);
 apiController(app);
 
 app.listen(port, () => {
