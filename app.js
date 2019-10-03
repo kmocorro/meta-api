@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const corsOrigins = require('./config').corsOrigins;
 
 const apiLDAP = require('./controllers/apiLDAP');
+const apiLDAPrecertapp = require('./controllers/apiLDAPrecertapp');
 const apiController = require('./controllers/apiController');
  
 const app = express();
