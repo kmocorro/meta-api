@@ -1,6 +1,7 @@
 let verifyToken = require('./verifyToken');
 let verifyTokenParams = require('./verifyTokenParams');
 let verifyTokenOasis = require('./verifyTokenOasis');
+let verifyTokenRecertapp = require('./verifyTokenRecertapp');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
@@ -563,6 +564,18 @@ module.exports = function(app){
         }
 
     })
+
+    // RECERTIFICATION WEB APP API
+    app.get('/api/recertapp/:token', verifyTokenRecertapp, (req, res) => {
+
+        if(req.userID && req.claim){
+            res.status(200).json(req.claim);
+        } else {
+            res.status(200).json({err: 'Invalid token.'});
+        }
+
+    });
+    
 
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
