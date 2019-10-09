@@ -2,6 +2,7 @@ let verifyToken = require('./verifyToken');
 let verifyTokenParams = require('./verifyTokenParams');
 let verifyTokenOasis = require('./verifyTokenOasis');
 let verifyTokenRecertapp = require('./verifyTokenRecertapp');
+let verifyToken2019YEP = require('./verifyToken2019YEP');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
@@ -575,7 +576,18 @@ module.exports = function(app){
         }
 
     });
-    
+
+    //  2019 YEP web app api
+    app.get('/api/yep2019/:token', verifyToken2019YEP, (req, res) => {
+
+        if(req.userID && req.claim){
+            res.status(200).json(req.claim);
+        } else {
+            res.status(200).json({err: 'Invalid token.'});
+        }
+
+    });
+
 
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
