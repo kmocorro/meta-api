@@ -8,6 +8,7 @@ const corsOrigins = require('./config').corsOrigins;
 
 const apiLDAP = require('./controllers/apiLDAP');
 const apiLDAPrecertapp = require('./controllers/apiLDAPrecertapp');
+const apiLDAP2019YEP = require('./controllers/apiLDAP2019YEP');
 const apiController = require('./controllers/apiController');
  
 const app = express();
@@ -31,6 +32,7 @@ app.use('/', express.static(__dirname + '/public'));
 
 apiLDAP(app);
 apiLDAPrecertapp(app);
+apiLDAP2019YEP(app);
 apiController(app);
 
 app.listen(port, () => {
