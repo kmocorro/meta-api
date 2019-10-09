@@ -99,14 +99,14 @@ module.exports = function(app){
                     res.status(200).json(jsonToken);
 
                 },  (err) => {
-                    res.status(200).json({err: 'Registration is only for Fab4 and selected SPT. If you think this is an error, contact Dyan Tasico immediately.'});
+                    res.status(200).json({err: 'Registration is only for Fab4 and selected SPT. If you think this is an error, contact Reg Martinez or Dyan Tasico immediately.'});
                 })
                 
             }
         })(req, res);
 
         // generateJWT - 
-        function generateJWT(user, processName){
+        function generateJWT(user, yep){
             let nickName_array = (user.displayName).split(" ");
 
             let token = jwt.sign(
@@ -119,7 +119,7 @@ module.exports = function(app){
                         title: user.title,
                         department: user.department,
                         username: user.sAMAccountName,
-                        processName: processName
+                        yep: yep
                     }
                 }, 
                 jwt_secret.key
