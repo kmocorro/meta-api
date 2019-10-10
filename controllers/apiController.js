@@ -596,7 +596,7 @@ module.exports = function(app){
         function insertYES2invite(){
             return new Promise((resolve, reject) => {
                 // using traceability database
-                mysqlTrace.getConnection((err, connection) => {
+                mysql.getConnection((err, connection) => {
                     if(err){return reject(err)};
 
                     connection.query({
