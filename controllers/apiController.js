@@ -588,6 +588,18 @@ module.exports = function(app){
 
     });
 
+    app.post('/api/yes', verifyToken2019YEP, (req, res) => {
+
+        if(req.userID && req.claim){
+            
+            console.log(req.userID);
+
+        } else {
+            res.status(200).json({err: 'Invalid token...'})
+        }
+        
+    });
+
 
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {

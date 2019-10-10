@@ -26,7 +26,53 @@ module.exports = function(app){
                 res.json({"err": info.message});
             } else {
 
+                let yep2019_participated = [];
                 let yep2019_details = [];
+
+                function isRegistered(){
+                    return new Promise((resolve, reject) => {
+                        mysql.getConnection((err, connection) => {
+                            if(err){return reject(err)};
+
+                            connection.query({
+                                sql: 'SELECT * FROM yep2019_registration WHERE employeeNumber = ?',
+                                values: [ user.employeeNumber ]
+                            },  (err, results) => {
+                                if(err){return reject(err)};
+
+                                if(typeof results[0] !== 'undefined' && results[0] !== null && results.length > 0){
+
+                                    for(let i=0;i<results.length;i++){
+                                        yep2019_participated.push({
+                                            dt: results[0].dt,
+                                            transportation: results[0].transportation,
+                                            incomingRoute: results[0].incomingRoute,
+                                            outgoingRoute: results[0].outgoingRoute,
+                                            reason: results[0].reason
+                                        })
+                                    }
+
+                                    resolve(yep2019_participated);
+
+                                } else {
+
+                                    yep2019_participated.push({
+                                        dt: '',
+                                        transportation: '',
+                                        incomingRoute: '',
+                                        outgoingRoute: '',
+                                        reason: ''
+                                    });
+
+                                    resolve(yep2019_participated)
+
+                                }
+                            });
+
+                            connection.release();
+                        })
+                    });
+                }
 
                 function verifyInviteHeadcount(){
                     return new Promise((resolve, reject)=>{
@@ -41,7 +87,7 @@ module.exports = function(app){
                                 //console.log(results);
                                 if(typeof results[0] !== 'undefined' && results[0] !== null && results.length > 0){
                                     //console.log('hello.. resolved')
-                                    for(i=0;i<results.length;i++){
+                                    for(let i=0;i<results.length;i++){
                                         yep2019_details.push({
                                             shift: results[i].shift,
                                             service_awardee: results[i].service_awardee,
@@ -61,43 +107,18 @@ module.exports = function(app){
                     });
                 }
 
-                function examineeProcess(){
-                    return new Promise((resolve, reject) => {
-                        mysql.getConnection((err, connection) => {
-                            if(err){return reject(err)};
-                            // is exists.
-                            connection.query({
-                                sql: 'SELECT * FROM recertapp_examinee_process WHERE employeeNumber = ?',
-                                values: [ user.employeeNumber ]
-                            },  (err, results) => {
-                                if(err){return reject(err)};
-                                //console.log(results);
-                                if(typeof results !== 'undefined' && results !== null && results.length > 0){
-                                    for(i=0;i<results.length;i++){
-                                        examineeProcessList.push({
-                                            processName: results[i].processName
-                                        })
-                                    }
+                verifyInviteHeadcount().then((yep2019_details) => {
+                    return isRegistered().then((yep2019_participated) => {
 
-                                    resolve(examineeProcessList);
-                                } else {
-                                    //console.log('hello.. reject')
-                                    reject();
-                                }
-                
-                            })
-                            connection.release();
-                        });
-                    });
-                }
+                        let token = generateJWT(user, yep2019_details, yep2019_participated);
+                        let jsonToken = {token: token};
+    
+                        res.cookie('auth_jwt', token); // auth_jwt - authenticated user jsonwebtoken
+                        res.status(200).json(jsonToken);
 
-                verifyInviteHeadcount(yep2019_details).then(() => {
-                    let token = generateJWT(user, yep2019_details);
-                    let jsonToken = {token: token};
-
-                    res.cookie('auth_jwt', token); // auth_jwt - authenticated user jsonwebtoken
-                    res.status(200).json(jsonToken);
-
+                    },  (err) => {
+                        res.status(200).json({err: 'There\'s an error while checking your registration. Please contact Kevin Mocorro. '});
+                    })
                 },  (err) => {
                     res.status(200).json({err: 'Registration is only for Fab4 and selected SPT. If you think this is an error, contact Reg Martinez or Dyan Tasico immediately.'});
                 })
@@ -106,7 +127,7 @@ module.exports = function(app){
         })(req, res);
 
         // generateJWT - 
-        function generateJWT(user, yep){
+        function generateJWT(user, yep, yep_participated){
             let nickName_array = (user.displayName).split(" ");
 
             let token = jwt.sign(
@@ -119,7 +140,8 @@ module.exports = function(app){
                         title: user.title,
                         department: user.department,
                         username: user.sAMAccountName,
-                        yep: yep
+                        yep: yep,
+                        participated: yep_participated
                     }
                 }, 
                 jwt_secret.key
