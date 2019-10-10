@@ -630,8 +630,6 @@ module.exports = function(app){
     app.post('/api/no', (req, res) => {
         console.log(req.body);
 
-        res.status(200).json({success: 'Thank you. You have declined the inivation'});
-
         function insertNO2invite(){
             return new Promise((resolve, reject) => {
                 // using traceability database
@@ -653,6 +651,14 @@ module.exports = function(app){
                     connection.release();
 
                 });
+            })
+        }
+
+        if(req.body.employeeNumber && req.body.isAccepted === 0 && req.body.transportation == '') {
+            insertNO2invite().then(() => {
+                res.status(200).json({success: 'Thank you. You have declined the inivation'});
+            },  (err) => {
+                res.status(200).json({error: err});
             })
         }
     });
