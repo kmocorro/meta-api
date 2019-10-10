@@ -589,16 +589,61 @@ module.exports = function(app){
 
     });
 
-    app.post('/api/yes', verifyToken2019YEP, (req, res) => {
+    app.post('/api/yes', (req, res) => {
+        console.log(req.body);
 
-        if(req.userID && req.claim){
-            
-            console.log(req.userID);
+        function insertYES2invite(){
+            return new Promise((resolve, reject) => {
+                // using traceability database
+                mysqlTrace.getConnection((err, connection) => {
+                    if(err){return reject(err)};
 
-        } else {
-            res.status(200).json({err: 'Invalid token...'})
+                    connection.query({
+                        sql: 'INSERT INTO yep2019_registration SET dt=?, employeeNumber=?, isAccepted=?, transportation=?, incomingRoute=?, outgoingRoute=?, reason=?',
+                        values: [ new Date(), req.body.employeeNumber, req.body.isAccepted, req.body.transportation, req.body.incomingRoute, req.body.outgoingRoute, req.body.reason ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            })
         }
         
+    });
+
+    app.post('/api/no', (req, res) => {
+        console.log(req.body);
+
+        function insertNO2invite(){
+            return new Promise((resolve, reject) => {
+                // using traceability database
+                mysqlTrace.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO yep2019_registration SET dt=?, employeeNumber=?, isAccepted=?, transportation=?, incomingRoute=?, outgoingRoute=?, reason=?',
+                        values: [ new Date(), req.body.employeeNumber, req.body.isAccepted, req.body.transportation, req.body.incomingRoute, req.body.outgoingRoute, req.body.reason ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            })
+        }
     });
 
 
