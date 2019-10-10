@@ -72,7 +72,7 @@ function verifyToken2019YEP(req, res, next){
                                     resolve(token_user_participated);
                                 } else {
                                     
-                                    yep2019_participated.push({
+                                    token_user_participated.push({
                                         dt: '',
                                         isAccepted: '',
                                         transportation: '',
