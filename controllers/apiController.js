@@ -630,10 +630,12 @@ module.exports = function(app){
     app.post('/api/no', (req, res) => {
         console.log(req.body);
 
+        res.status(200).json({success: 'Thank you. You have declined the inivation'});
+
         function insertNO2invite(){
             return new Promise((resolve, reject) => {
                 // using traceability database
-                mysqlTrace.getConnection((err, connection) => {
+                mysql.getConnection((err, connection) => {
                     if(err){return reject(err)};
 
                     connection.query({
