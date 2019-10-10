@@ -45,6 +45,7 @@ module.exports = function(app){
                                     for(let i=0;i<results.length;i++){
                                         yep2019_participated.push({
                                             dt: results[0].dt,
+                                            isAccepted: results[0].isAccepted,
                                             transportation: results[0].transportation,
                                             incomingRoute: results[0].incomingRoute,
                                             outgoingRoute: results[0].outgoingRoute,
@@ -58,6 +59,7 @@ module.exports = function(app){
 
                                     yep2019_participated.push({
                                         dt: '',
+                                        isAccepted: '',
                                         transportation: '',
                                         incomingRoute: '',
                                         outgoingRoute: '',
