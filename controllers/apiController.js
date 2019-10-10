@@ -581,7 +581,8 @@ module.exports = function(app){
     app.get('/api/yep2019/:token', verifyToken2019YEP, (req, res) => {
 
         if(req.userID && req.claim && req.registration){
-            res.status(200).json(req.claim, req.registration);
+    
+            res.status(200).json(extend(req.claim, req.registration));
         } else {
             res.status(200).json({err: 'Invalid token.'});
         }
