@@ -96,7 +96,7 @@ function verifyToken2019YEP(req, res, next){
 
                         req.userID = decoded.id;
                         req.claim = decoded.claim;
-                        req.registration = token_user_participated;
+                        req.registration = {updated_token: token_user_participated};
                         next();
                     })
 
