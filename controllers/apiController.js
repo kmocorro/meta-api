@@ -592,7 +592,6 @@ module.exports = function(app){
     app.post('/api/yes', (req, res) => {
         console.log(req.body);
 
-        res.status(200).json({success: 'Thank you!'});
 
         function insertYES2invite(){
             return new Promise((resolve, reject) => {
@@ -615,6 +614,14 @@ module.exports = function(app){
                     connection.release();
 
                 });
+            })
+        }
+
+        if(req.body.employeeNumber && req.body.isAccepted === 1 && req.body.transportation !== '') {
+            insertYES2invite().then(() => {
+                res.status(200).json({success: 'Thank you!'});
+            },  (err) => {
+                res.status(200).json({error: err});
             })
         }
         
