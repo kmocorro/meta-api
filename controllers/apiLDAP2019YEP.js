@@ -28,8 +28,8 @@ module.exports = function(app){
 
                 let yep2019_participated = [];
                 let yep2019_details = [];
-                
-                console.log(user);
+
+                //console.log(user);
 
                 function isRegistered(){
                     return new Promise((resolve, reject) => {
@@ -88,7 +88,8 @@ module.exports = function(app){
                                 values: [ user.employeeNumber ]
                             },  (err, results) => {
                                 if(err){return reject(err)};
-                                //console.log(results);
+                                console.log(results);
+
                                 if(typeof results[0] !== 'undefined' && results[0] !== null && results.length > 0){
                                     //console.log('hello.. resolved')
                                     for(let i=0;i<results.length;i++){
