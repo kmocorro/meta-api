@@ -125,7 +125,7 @@ module.exports = function(app){
                         res.status(200).json({err: 'There\'s an error while checking your registration. Please contact Kevin Mocorro. '});
                     })
                 },  (err) => {
-                    res.status(200).json({err: 'Registration is only for Fab4 and selected SPT. If you think this is an error, contact Reg Martinez or Dyan Tasico immediately.'  err});
+                    res.status(200).json({err: 'Registration is only for Fab4 and selected SPT. If you think this is an error, contact Reg Martinez or Dyan Tasico immediately. ' +  err});
                 })
                 
             }
