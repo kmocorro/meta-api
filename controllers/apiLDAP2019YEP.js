@@ -28,6 +28,8 @@ module.exports = function(app){
 
                 let yep2019_participated = [];
                 let yep2019_details = [];
+                
+                console.log(user);
 
                 function isRegistered(){
                     return new Promise((resolve, reject) => {
