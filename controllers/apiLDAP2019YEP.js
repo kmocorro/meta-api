@@ -29,7 +29,7 @@ module.exports = function(app){
                 let yep2019_participated = [];
                 let yep2019_details = [];
 
-                //console.log(user);
+                console.log(user);
 
                 function isRegistered(){
                     return new Promise((resolve, reject) => {
@@ -37,8 +37,8 @@ module.exports = function(app){
                             if(err){return reject(err)};
 
                             connection.query({
-                                sql: 'SELECT * FROM yep2019_registration WHERE employeeNumber = ?',
-                                values: [ user.employeeNumber ]
+                                sql: 'SELECT * FROM yep2019_registration WHERE employeeNumber = ? || username = ?',
+                                values: [ user.employeeNumber, user.sAMAccountName ]
                             },  (err, results) => {
                                 if(err){return reject(err)};
 
@@ -84,8 +84,8 @@ module.exports = function(app){
                             if(err){return reject(err)};
                             // is exists.
                             connection.query({
-                                sql: 'SELECT * FROM yep2019_headcount WHERE employeeNumber = ?',
-                                values: [ user.employeeNumber ]
+                                sql: 'SELECT * FROM yep2019_headcount WHERE employeeNumber = ? || username = ?',
+                                values: [ user.employeeNumber, user.sAMAccountName ]
                             },  (err, results) => {
                                 if(err){return reject(err)};
                                 console.log(results);
@@ -97,6 +97,7 @@ module.exports = function(app){
                                             shift: results[i].shift,
                                             service_awardee: results[i].service_awardee,
                                             location: results[i].location,
+					    employeeNumber: results[i].employeeNumber
                                         })
                                     }
 
@@ -139,7 +140,7 @@ module.exports = function(app){
                 {
                     id: user.employeeID,
                     claim: {
-                        employeeNumber: user.employeeNumber,
+                        employeeNumber: yep[0].employeeNumber,
                         nickName: nickName_array[0],
                         displayName: user.displayName,
                         title: user.title,

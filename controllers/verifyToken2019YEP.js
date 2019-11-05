@@ -26,8 +26,8 @@ function verifyToken2019YEP(req, res, next){
                             if(err){return reject(err)};
                             // is exists.
                             connection.query({
-                                sql: 'SELECT * FROM yep2019_headcount WHERE employeeNumber = ?',
-                                values: [ decoded.claim.employeeNumber ]
+                                sql: 'SELECT * FROM yep2019_headcount WHERE employeeNumber = ? || username = ?',
+                                values: [ decoded.claim.employeeNumber, decoded.claim.username ]
                             },  (err, results) => {
                                 if(err){return reject(err)};
         
@@ -51,8 +51,8 @@ function verifyToken2019YEP(req, res, next){
                             if(err){return reject(err)};
                             // is exists.
                             connection.query({
-                                sql: 'SELECT * FROM yep2019_registration WHERE employeeNumber = ?',
-                                values: [ decoded.claim.employeeNumber ]
+                                sql: 'SELECT * FROM yep2019_registration WHERE employeeNumber = ? || username = ?',
+                                values: [ decoded.claim.employeeNumber, decoded.claim.username ]
                             },  (err, results) => {
                                 if(err){return reject(err)};
         

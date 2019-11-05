@@ -579,8 +579,12 @@ module.exports = function(app){
 
     //  2019 YEP web app api
     app.get('/api/yep2019/:token', verifyToken2019YEP, (req, res) => {
+	
+	console.log(req.userID);
+	console.log(req.claim);
+	console.log(req.registration);	
 
-        if(req.userID && req.claim && req.registration){
+        if(req.claim && req.registration){
             let data = Object.assign(req.claim, req.registration);
             res.status(200).json(data);
         } else {
