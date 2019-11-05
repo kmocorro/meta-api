@@ -703,7 +703,7 @@ module.exports = function(app){
                                     sic_id: results[i].SIC_ID,
                                     read_time: results[i].READ_TIME,
                                     match_value: results[i].MATCH_VALUE,
-                                    sic_id_image: results[i].SIC_ID_IMAGE,
+                                    sic_id_image: results[i].SIC_ID_IMAGE.toString('utf8'),
                                     final_sic_id: results[i].FINAL_SIC_ID
                                 })
                             }
