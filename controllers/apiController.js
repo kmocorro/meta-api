@@ -693,7 +693,7 @@ module.exports = function(app){
                             for(let i=0; i<results.length;i++){
                                 poly_boatid.push({
                                     id: results[i].ID,
-                                    insert_time: results[i].INSERT_TIME,
+                                    insert_time: moment(results[i].INSERT_TIME).calendar(),
                                     sic_id: results[i].SIC_ID,
                                     read_time: results[i].READ_TIME,
                                     match_value: results[i].MATCH_VALUE,
