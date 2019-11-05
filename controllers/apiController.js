@@ -7,6 +7,7 @@ let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
 let mysqlTrace = require('../config').poolTrace;
+let mysqlRPi = require('../config').poolRPi;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
 
@@ -667,7 +668,6 @@ module.exports = function(app){
         }
     });
 
-
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
         let plate_number = req.query.plate;
@@ -679,3 +679,76 @@ module.exports = function(app){
     // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
 
 }
+
+    app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
+
+        function loadImages(){ // query to traceability local database---
+            return new Promise((resolve, reject) => {
+                mysqlRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'SELECT * FROM rpi_poly_wts WHERE FINAL_SIC_ID = NULL ORDER BY ID DESC LIMIT 10'
+                    },  (err, results) => {
+                        if(err){reject(err)}
+                        
+                        let poly_boatid = [];
+
+                        if(results){
+
+                            for(let i=0; i<results.length;i++){
+                                poly_boatid.push({
+                                    id: results[i].id,
+                                    insert_time: results[i].insert_time,
+                                    sic_id: results[i].sic_id,
+                                    read_time: results[i].read_time,
+                                    match_value: results[i].match_value,
+                                    sic_id_image: results[i].sic_id_image,
+                                    final_sic_id: results[i].final_sic_id
+                                })
+                            }
+
+                            resolve(poly_boatid);
+
+                        } else {
+
+                            poly_boatid.push({
+                                id: '',
+                                insert_time: '',
+                                sic_id: '',
+                                read_time: '',
+                                match_value: '',
+                                sic_id_image: '',
+                                final_sic_id: ''
+                            })
+                        }
+                    });
+
+                    connection.release();
+
+                });
+                
+            })
+        }
+
+        if(req.userID && req.claim){
+
+            loadImages().then((poly_boatid) => {
+
+                console.log(req.claim);
+                let data = Object.assign(req.claim, poly_boatid);
+                res.status(200).json(data);
+            }, (err) => {
+                res.status(501).json({err: err});
+            })
+
+        } else {
+            res.status(401).json({err: 'Invalid Token'});
+        }
+
+    });
+
+
+
+}
+
