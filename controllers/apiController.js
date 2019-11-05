@@ -698,13 +698,13 @@ module.exports = function(app){
 
                             for(let i=0; i<results.length;i++){
                                 poly_boatid.push({
-                                    id: results[i].id,
-                                    insert_time: results[i].insert_time,
-                                    sic_id: results[i].sic_id,
-                                    read_time: results[i].read_time,
-                                    match_value: results[i].match_value,
-                                    sic_id_image: results[i].sic_id_image,
-                                    final_sic_id: results[i].final_sic_id
+                                    id: results[i].ID,
+                                    insert_time: results[i].INSERT_TIME,
+                                    sic_id: results[i].SIC_ID,
+                                    read_time: results[i].READ_TIME,
+                                    match_value: results[i].MATCH_VALUE,
+                                    sic_id_image: results[i].SIC_ID_IMAGE,
+                                    final_sic_id: results[i].FINAL_SIC_ID
                                 })
                             }
 
