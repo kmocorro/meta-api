@@ -678,7 +678,7 @@ module.exports = function(app){
 
     // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
 
-}
+
 
     app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
 
