@@ -735,7 +735,7 @@ module.exports = function(app){
 
             loadImages().then((poly_boatid) => {
 
-                console.log(poly_boatid);
+                //console.log(poly_boatid);
                 let data = Object.assign(req.claim, poly_boatid);
                 res.status(200).json(data);
             }, (err) => {
