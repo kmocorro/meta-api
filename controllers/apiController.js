@@ -728,6 +728,8 @@ module.exports = function(app){
         if(req.userID && req.claim){
 
             loadImages().then((poly_boatid) => {
+
+                console.log(req.claim);
                 let data = Object.assign(req.claim, poly_boatid);
                 res.status(200).json(data);
             }, (err) => {
