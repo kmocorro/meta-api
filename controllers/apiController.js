@@ -682,7 +682,7 @@ module.exports = function(app){
                     if(err){return reject(err)};
 
                     connection.query({
-                        sql: 'SELECT * FROM rpi_poly_wts WHERE FINAL_SIC_ID IS NULL ORDER BY ID DESC LIMIT 10'
+                        sql: 'SELECT * FROM rpi_poly_wts WHERE FINAL_SIC_ID IS NULL ORDER BY ID DESC LIMIT 16'
                     },  (err, results) => {
                         if(err){reject(err)}
                         
