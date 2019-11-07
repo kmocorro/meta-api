@@ -704,6 +704,8 @@ module.exports = function(app){
                                     read_time: results[i].READ_TIME,
                                     match_value: results[i].MATCH_VALUE,
                                     base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
+                                    btoa_base64_sic_id_image: window.btoa(results[i].SIC_ID_IMAGE.toString('base64')),
+                                    atoa_base64_sic_id_image: window.atoa(results[i].SIC_ID_IMAGE.toString('base64')),
                                     buffer_sic_id_image: results[i].SIC_ID_IMAGE,
                                     final_sic_id: results[i].FINAL_SIC_ID
                                 })
@@ -749,7 +751,11 @@ module.exports = function(app){
 
     });
 
+<<<<<<< HEAD
 
 
 }
 
+=======
+}
+>>>>>>> 00b9d53697e468b7b745d32f81734cf569659563
