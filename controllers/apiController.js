@@ -10,6 +10,7 @@ let mysqlTrace = require('../config').poolTrace;
 let mysqlRPi = require('../config').poolRPi;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
+let URLSafeBase64 = require('urlsafe-base64');
 
 module.exports = function(app){
 
@@ -704,8 +705,7 @@ module.exports = function(app){
                                     read_time: results[i].READ_TIME,
                                     match_value: results[i].MATCH_VALUE,
                                     base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
-                                    btoa_base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
-                                    atoa_base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
+                                    urlsafe_sic_id_image: URLSafeBase64.encode(results[i].SIC_ID_IMAGE.toString('base64')),
                                     buffer_sic_id_image: results[i].SIC_ID_IMAGE,
                                     final_sic_id: results[i].FINAL_SIC_ID
                                 })
@@ -722,6 +722,9 @@ module.exports = function(app){
                                 read_time: '',
                                 match_value: '',
                                 sic_id_image: '',
+                                base64_sic_id_image: '',
+                                urlsafe_sic_id_image: '',
+                                buffer_sic_id_image: '',
                                 final_sic_id: ''
                             })
                         }
