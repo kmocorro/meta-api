@@ -752,7 +752,6 @@ module.exports = function(app){
         }
 
     });
-    */
 
     app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
 
