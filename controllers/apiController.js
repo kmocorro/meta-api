@@ -8,6 +8,7 @@ let XLSX = require('xlsx');
 let mysql = require('../config').pool;
 let mysqlTrace = require('../config').poolTrace;
 let mysqlRPi = require('../config').poolRPi;
+let mysqlImageRPi = require('../config').poolImageRPi;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
 let URLSafeBase64 = require('urlsafe-base64');
@@ -837,11 +838,34 @@ module.exports = function(app){
 
     });
     
-    app.post('/api/kamera', (req, res) => {
+    app.post('/api/updatesicboat', (req, res) => {
 
         let fields = req.body;
         console.log(fields);
 
+        if(fields.id){
+            UpdateSicBoat().then(data => {
+                res.status(200).json({success: 'Final SiC ID successfully updated!'});
+            })
+        } else {
+            res.status(200).json({error: 'Final SiC ID did not update.'});
+        }
+
+        function UpdateSicBoat(){
+            return new Promise((resolve, reject) => {
+                mysqlImageRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+                    connection.query({
+                        sql: 'UPDATE rpi_poly_wts SET FINAL_SIC_ID = ? WHERE ID = ?',
+                        values: [ fields.final_sic_id, fields.id ]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        resolve(results);
+                    });
+                    connection.release();
+                });
+            })
+        }
 
     })
 
