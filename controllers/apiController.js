@@ -857,7 +857,7 @@ module.exports = function(app){
                     if(err){return reject(err)}
                     connection.query({
                         sql: 'UPDATE rpi_poly_wts SET FINAL_SIC_ID = ? WHERE ID = ?',
-                        values: [ fields.final_sic_id, fields.id ]
+                        values: [ 'DE-46778' + fields.final_sic_id, fields.id ]
                     },  (err, results) => {
                         if(err){return reject(err)}
                         resolve(results);
