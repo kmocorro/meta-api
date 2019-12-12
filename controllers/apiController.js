@@ -679,7 +679,7 @@ module.exports = function(app){
 
     // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
     
-
+    /*
     app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
 
         function loadImages(){ // query to traceability local database---
@@ -752,6 +752,7 @@ module.exports = function(app){
         }
 
     });
+    */
 
     app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
 
