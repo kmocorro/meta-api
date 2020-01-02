@@ -930,7 +930,7 @@ module.exports = function(app){
                     if(err){return reject(err)}
 
                     connection.query({
-                        sql: 'SELECT qual, status, SUM(qty) as qty FROM themetrohub GROUP BY qual, status, mode'
+                        sql: 'SELECT qual, mode, status, SUM(qty) as qty FROM themetrohub GROUP BY qual, status, mode'
                     },  (err, results)=> {
                         if(err){return reject(err)}
                         let approved_inventory = [];
@@ -939,6 +939,7 @@ module.exports = function(app){
                         let pending_withdraw = [];
 
                         if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            console.log(results);
                             for(let i=0; i<results.length;i++){
                                 if(results[i].mode === 'add' &&  results[i].status === 'approved'){
                                     approved_inventory.push({
