@@ -915,7 +915,7 @@ module.exports = function(app){
 
     });
 
-    app.get('/api/themetrohub/onepager', (req, res) => {
+    app.get('/api/mh/onepager', (req, res) => {
 
         TheMetrohubSummary().then(data => {
             res.status(200).json(data);
