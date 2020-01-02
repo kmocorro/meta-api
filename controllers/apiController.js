@@ -939,7 +939,7 @@ module.exports = function(app){
                         let pending_withdraw = [];
 
                         if(typeof results !== 'undefined' && results !== null && results.length > 0){
-                            console.log(results);
+                            //console.log(results);
                             for(let i=0; i<results.length;i++){
                                 if(results[i].mode === 'add' &&  results[i].status === 'approved'){
                                     approved_inventory.push({
@@ -978,7 +978,7 @@ module.exports = function(app){
                                 approved_withdraw: approved_withdraw,
                                 pending_withdraw: pending_withdraw
                             };
-                            console.log(data);
+                            //console.log(data);
 
                             resolve(data);
                         } else {
