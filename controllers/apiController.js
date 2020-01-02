@@ -873,7 +873,7 @@ module.exports = function(app){
 
         if(req.userID && req.claim){
             TheMetrohub().then((themetrohub_data) => {
-                let data = Object.assign(req.claim, {data: themetrohub_data})
+                let data = Object.assign({user: req.claim}, {themetrohub: themetrohub_data})
                 res.status(200).json(data);
             })
         }
