@@ -869,4 +869,15 @@ module.exports = function(app){
 
     })
 
+    app.get('/api/themetrohub/:token',  verifyTokenParams, (req, res) => {
+
+        if(req.userId && req.claim){
+            console.log('hurray!');
+            res.status(200).json({success: 'API connected'});
+        } else {
+            res.status(401).json({err: 'Invalid token'});
+        }
+
+    });
+
 }
