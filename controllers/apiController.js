@@ -915,4 +915,85 @@ module.exports = function(app){
 
     });
 
+    app.get('/api/themetrohub/onepager', (req, res) => {
+
+        TheMetrohubSummary().then(data => {
+            res.status(200).json(data);
+        },  (err) => {
+            res.status(200).json({err: err});
+        })
+
+        function TheMetrohubSummary(){
+            return new Promise((resolve, reject) => {
+
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'SELECT qual, status, SUM(qty) as qty FROM themetrohub GROUP BY qual, status, mode'
+                    },  (err, results)=> {
+                        if(err){return reject(err)}
+                        let approved_inventory = [];
+                        let pending_inventory = [];
+                        let approved_withdraw = [];
+                        let pending_withdraw = [];
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            for(let i=0; i<results.length;i++){
+                                if(results[i].mode === 'add' &&  results[i].status === 'approved'){
+                                    approved_inventory.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                } else if (results[i].mode === 'add' &&  results[i].status === 'pending') {
+                                    pending_inventory.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                } else if (results[i].mode === 'withdraw' &&  results[i].status === 'approved'){
+                                    approved_withdraw.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                } else if (results[i].mode === 'withdraw' &&  results[i].status === 'pending') {
+                                    pending_withdraw.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                }
+                            }
+
+                            resolve({
+                                approved_inventory: approved_inventory,
+                                pending_inventory: pending_inventory,
+                                approved_withdraw: approved_withdraw,
+                                pending_withdraw: pending_withdraw
+                            });
+                        } else {
+                            
+                            resolve({
+                                approved_inventory: approved_inventory,
+                                pending_inventory: pending_inventory,
+                                approved_withdraw: approved_withdraw,
+                                pending_withdraw: pending_withdraw
+                            });
+                        }
+
+                    });
+                    connection.release();
+                })
+
+            })
+        }
+
+    })
+
 }
