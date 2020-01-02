@@ -872,8 +872,44 @@ module.exports = function(app){
     app.get('/api/themetrohub/:token',  verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
-            console.log('hurray!');
-            res.status(200).json({success: 'API connected'});
+            TheMetrohub().then((themetrohub_data) => {
+                let data = Object.assign(req.claim, {data: themetrohub_data})l
+                res.status(200).json(data);
+            })
+        }
+
+        function TheMetrohub(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+                    connection.query({
+                        sql: 'SELECT * FROM themetrohub'
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        let data = [];
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            for(let i=0; i<results.length; i++){
+                                data.push({
+                                    id: results[i].id,
+                                    created_dt: results[i].created_dt,
+                                    status_dt: results[i].status_dt,
+                                    qual: results[i].qual,
+                                    qty: results[i].qty,
+                                    mode: results[i].mode,
+                                    status: results[i].status,
+                                    username: results[i].username
+                                })
+                            }
+
+                            resolve(data);
+                        } else {
+                            
+                            resolve(data);
+                        }
+                    });
+                    connection.release();
+                })
+            })
         }
 
     });
