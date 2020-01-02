@@ -971,20 +971,25 @@ module.exports = function(app){
                                 }
                             }
 
-                            resolve({
+                            let data = {
                                 approved_inventory: approved_inventory,
                                 pending_inventory: pending_inventory,
                                 approved_withdraw: approved_withdraw,
                                 pending_withdraw: pending_withdraw
-                            });
+                            };
+                            console.log(data);
+
+                            resolve(data);
                         } else {
                             
-                            resolve({
+                            let data = {
                                 approved_inventory: approved_inventory,
                                 pending_inventory: pending_inventory,
                                 approved_withdraw: approved_withdraw,
                                 pending_withdraw: pending_withdraw
-                            });
+                            };
+
+                            resolve(data);
                         }
 
                     });
