@@ -1002,4 +1002,10 @@ module.exports = function(app){
 
     })
 
+    app.post('/api/mh/addinventory', (req, res) => {
+
+        console.log(req.body);
+
+    })
+
 }
