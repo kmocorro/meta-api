@@ -1004,7 +1004,7 @@ module.exports = function(app){
 
     app.post('/api/mh/addinventory', (req, res) => {
 
-        if(req.body.mode === 'add' && req.body.status === 'approved' && req.body.qual !== '' && req.body.qty !== '' && req.body.username){
+        if(req.body.mode === 'add' && req.body.status === 'approved' && req.body.qual !== '' && req.body.qty !== '' && req.body.username !== ''){
             MetrohubAddInventory().then(()=>{
                 res.status(200).json({success: 'Successfully added to inventory.'});
             },  (err) =>{
@@ -1036,7 +1036,7 @@ module.exports = function(app){
 
     app.post('/api/mh/withdrawinventory', (req, res) => {
 
-        if(req.body.mode === 'withdraw' && req.body.status === 'pending' && req.body.qual !== '' && req.body.qty !== '' && req.body.username){
+        if(req.body.mode === 'withdraw' && req.body.status === 'pending' && req.body.qual !== '' && req.body.qty !== '' && req.body.username !== '' && req.body.experiment_name !== '' && req.body.qual_purpose !== ''){
             MetrohubWithdrawInventory().then(()=>{
                 res.status(200).json({success: 'Pending for withdrawal.'});
             },  (err) =>{
@@ -1050,8 +1050,8 @@ module.exports = function(app){
                     if(err){return reject(err)}
 
                     connection.query({
-                        sql: 'INSERT INTO themetrohub SET created_dt =?, qual =?, qty =? , mode =?, status =?, username =?',
-                        values: [new Date(), req.body.qual, req.body.qty, req.body.mode, req.body.status, req.body.username]
+                        sql: 'INSERT INTO themetrohub SET created_dt =?, qual =?, qty =? , mode =?, status =?, username =?, experiment_name =?, qual_purpose =?',
+                        values: [new Date(), req.body.qual, req.body.qty, req.body.mode, req.body.status, req.body.username, req.body.experiment_name, req.body.qual_purpose]
                     },  (err, results) => {
                         if(err){return reject(err)}
                         if(results){
