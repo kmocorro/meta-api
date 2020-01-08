@@ -1004,7 +1004,33 @@ module.exports = function(app){
 
     app.post('/api/mh/addinventory', (req, res) => {
 
-        console.log(req.body);
+        if(req.body.mode === 'add' && req.body.status === 'approved' && req.body.qual !== '' && req.body.qty !== '' && req.body.username){
+            MetrohubAddInventory().then(()=>{
+                res.status(200).json({success: 'Successfully added to inventory.'});
+            },  (err) =>{
+                res.status(200).json({err: err});
+            })
+        }
+
+        function MetrohubAddInventory(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'INSERT INTO themetrohub SET created_dt =?, qual =?, qty =? , mode =?, status =?, username =?',
+                        values: [new Date(), req.body.qual, req.body.qty, req.body.mode, req.body.status, req.body.username]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        if(results){
+                            resolve()
+                        }
+                    });
+
+                    connection.release();
+                })
+            })
+        }
 
     })
 
