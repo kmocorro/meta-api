@@ -915,6 +915,56 @@ module.exports = function(app){
 
     });
 
+    app.get('/api/mh/withdrawpending', (req, res) => {
+
+        TheMetrohubWithdrawPending().then(data => {
+            res.status(200).json(data);
+        }, (err) => {
+            res.status(200).json({err: err});
+        })
+
+        function TheMetrohubWithdrawPending(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'SELECT * FROM themetrohub WHERE mode = "withdraw" AND status = "pending"'
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        let withdraw_pending = [];
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            
+                            for(let i=0;i<results.length;i++){
+                                withdraw_pending.push({
+                                    id: results[i].id,
+                                    created_dt: results[i].created_dt,
+                                    status_dt: results[i].status_dt,
+                                    qual: results[i].qual,
+                                    qty: results[i].qty,
+                                    mode: results[i].mode,
+                                    status: results[i].status,
+                                    username: results[i].username,
+                                    experiment_name: results[i].experiment_name,
+                                    qual_purpose: results[i].qual_purpose,
+                                })
+                            }
+
+                            resolve(withdraw_pending)
+                        } else {
+                            resolve(withdraw_pending)
+                        }
+
+                    })
+
+                    connection.release()
+                })
+            })
+        }
+
+    })
+
     app.get('/api/mh/onepager', (req, res) => {
 
         TheMetrohubSummary().then(data => {
