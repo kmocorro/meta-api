@@ -1148,6 +1148,8 @@ module.exports = function(app){
 
     app.get('/api/metadash/lcm', (req, res) => {
 
+        MetaDash_LCM();
+
         function MetaDash_LCM(){
             return new Promise((resolve, reject) => {
                 /* converts csv to json
