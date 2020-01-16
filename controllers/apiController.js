@@ -1148,7 +1148,9 @@ module.exports = function(app){
 
     app.get('/api/metadash/lcm', (req, res) => {
 
-        MetaDash_LCM();
+        MetaDash_LCM().then((data) => {
+            res.status(200).json(data);
+        });
 
         function MetaDash_LCM(){
             return new Promise((resolve, reject) => {
@@ -1195,8 +1197,7 @@ module.exports = function(app){
                                                         lcm22: lcm22,
                                                         lcm222: lcm222,
                                                     }
-
-                                                    res.status(200).json(data)
+                                                    resolve(data);
                                                 })
                                             })
                                         })
