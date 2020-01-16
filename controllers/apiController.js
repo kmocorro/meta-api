@@ -1116,4 +1116,99 @@ module.exports = function(app){
 
     })
 
+    
+    app.post('/api/mh/rejectwithdraw', (req, res) => {
+
+        if(req.body.id){
+            MetrohubWithdrawInventory().then(()=>{
+                res.status(200).json({success: 'Pending for withdrawal.'});
+            },  (err) =>{
+                res.status(200).json({err: err});
+            })
+        }
+
+        function MetrohubRejectWithdraw(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'UPDATE themetrohub SET status = "rejected", status_dt = ? WHERE id = ?',
+                        values: [ new Date(), req.body.id ]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                    })
+
+                    connection.release();
+                })
+            })
+        }
+
+    })
+
+    app.get('/api/metadash/lcm', (req, res) => {
+
+        function MetaDash_LCM(){
+            return new Promise((resolve, reject) => {
+                /* converts csv to json
+                platter_INNOLAS2005_LCM_L17L18.csv
+                platter_INNOLAS2006_LCM_L19L20
+                platter_INNOLAS3012_LCM_L22_2
+                platter_INNOLAS4019_LCM_L17
+                platter_INNOLAS4020_LCM_L18
+                platter_INNOLAS4021_LCM_L19
+                platter_INNOLAS4022_LCM_L20
+                platter_INNOLAS4023_LCM_L21
+                platter_INNOLAS4024_LCM_L22
+                */
+
+                let lcm17 = 'public/lcm/platter_INNOLAS4019_LCM_L17.csv';
+                let lcm1718 = 'public/lcm/platter_INNOLAS2005_LCM_L17L18.csv';
+                let lcm18 = 'public/lcm/platter_INNOLAS4020_LCM_L18.csv';
+                let lcm19 = 'public/lcm/platter_INNOLAS4021_LCM_L19.csv';
+                let lcm1920 = 'public/lcm/platter_INNOLAS2006_LCM_L19L20.csv';
+                let lcm20 = 'public/lcm/platter_INNOLAS4022_LCM_L20.csv';
+                let lcm21 = 'public/lcm/platter_INNOLAS4023_LCM_L21.csv';
+                let lcm22 = 'public/lcm/platter_INNOLAS4024_LCM_L22.csv';
+                let lcm222 = 'public/lcm/platter_INNOLAS3012_LCM_L22_2.csv';
+
+
+                csv().fromFile(lcm17).then((lcm17) => {
+                    csv().fromFile(lcm1718).then((lcm1718) => {
+                        csv().fromFile(lcm18).then((lcm18) => {
+                            csv().fromFile(lcm19).then((lcm19) => {
+                                csv().fromFile(lcm1920).then((lcm1920) => {
+                                    csv().fromFile(lcm20).then((lcm20) => {
+                                        csv().fromFile(lcm21).then((lcm21) => {
+                                            csv().fromFile(lcm22).then((lcm22) => {
+                                                csv().fromFile(lcm222).then((lcm222) => {
+                                                    let data = {
+                                                        lcm17: lcm17,
+                                                        lcm1718: lcm1718,
+                                                        lcm18: lcm18,
+                                                        lcm19: lcm19,
+                                                        lcm1920: lcm1920,
+                                                        lcm20: lcm20,
+                                                        lcm21: lcm21,
+                                                        lcm22: lcm22,
+                                                        lcm222: lcm222,
+                                                    }
+
+                                                    res.status(200).json(data)
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                }) 
+
+
+            })
+        }
+
+    })
+
 }
