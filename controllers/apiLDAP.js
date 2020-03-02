@@ -1,5 +1,3 @@
-
-let formidable = require('formidable');
 let passport = require('passport');
 let LdapStrategy = require('passport-ldapauth');
 let jwt = require('jsonwebtoken');
