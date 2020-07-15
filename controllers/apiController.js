@@ -763,7 +763,7 @@ module.exports = function(app){
                     if(err){return reject(err)};
 
                     connection.query({
-                        sql: 'SELECT * FROM matched_rpi WHERE FINAL_SIC_ID IS NULL AND BOAT_LOADTIME > DATE_ADD(CURDATE(), INTERVAL - 10 DAY) LIMIT 10'
+                        sql: 'SELECT * FROM matched_rpi WHERE FINAL_SIC_ID IS NULL AND BOAT_LOADTIME > DATE_ADD(CURDATE(), INTERVAL - 10 DAY) LIMIT 100'
                     },  (err, results) => {
                         if(err){reject(err)}
                         
