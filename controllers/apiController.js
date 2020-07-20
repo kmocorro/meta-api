@@ -907,7 +907,7 @@ module.exports = function(app){
         loadImages().then((poly_boatid) => {
 
             //console.log(poly_boatid);
-            let data = Object.assign(req.claim, {data: poly_boatid});
+            let data = Object.assign({data: poly_boatid});
             res.status(200).json(data);
         }, (err) => {
             res.status(501).json({err: err});
