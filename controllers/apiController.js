@@ -837,6 +837,89 @@ module.exports = function(app){
         }
 
     });
+
+    app.get('/api/tesseract-no-token/', (req, res) => {
+
+        function loadImages(){ // query to traceability local database---
+            return new Promise((resolve, reject) => {
+                mysqlRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'SELECT * FROM matched_rpi WHERE FINAL_SIC_ID IS NULL AND BOAT_LOADTIME > DATE_ADD(CURDATE(), INTERVAL - 10 DAY) ORDER BY id DESC LIMIT 1000 '
+                    },  (err, results) => {
+                        if(err){reject(err)}
+                        
+                        let poly_boatid = [];
+
+                        if(results){
+
+                            for(let i=0; i<results.length;i++){
+                                poly_boatid.push({
+                                    boat_loadtime: results[i].BOAT_LOADTIME,
+                                    wafer_count: results[i].WAFER_COUNT,
+                                    boat_id: results[i].BOAT_ID,
+                                    rpi_record_id: results[i].RPI_RECORD_ID,
+                                    id: results[i].ID,
+                                    insert_time: moment(results[i].INSERT_TIME).calendar(),
+                                    sic_id: results[i].SIC_ID,
+                                    read_time: results[i].READ_TIME,
+                                    match_value: results[i].MATCH_VALUE,
+                                    base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
+                                    urlsafe_sic_id_image: URLSafeBase64.encode(results[i].SIC_ID_IMAGE.toString('base64')),
+                                    buffer_sic_id_image: results[i].SIC_ID_IMAGE,
+                                    final_sic_id: results[i].FINAL_SIC_ID,
+                                    transfer_type: results[i].TRANSFER_TYPE
+                                })
+                            }
+
+                            resolve(poly_boatid);
+
+                        } else {
+
+                            poly_boatid.push({
+                                boat_loadtime: '',
+                                wafer_count: '',
+                                boat_id: '',
+                                rpi_record_id: '',
+                                id: '',
+                                insert_time: '',
+                                sic_id: '',
+                                read_time: '',
+                                match_value: '',
+                                sic_id_image: '',
+                                base64_sic_id_image: '',
+                                urlsafe_sic_id_image: '',
+                                buffer_sic_id_image: '',
+                                final_sic_id: '',
+                                transfer_type: ''
+                            })
+                        }
+                    });
+
+                    connection.release();
+
+                });
+                
+            })
+        }
+
+        if(req.userID && req.claim){
+
+            loadImages().then((poly_boatid) => {
+
+                //console.log(poly_boatid);
+                let data = Object.assign(req.claim, {data: poly_boatid});
+                res.status(200).json(data);
+            }, (err) => {
+                res.status(501).json({err: err});
+            })
+
+        } else {
+            res.status(401).json({err: 'Invalid Token'});
+        }
+
+    });
     
     app.post('/api/updatesicboat', (req, res) => {
 
