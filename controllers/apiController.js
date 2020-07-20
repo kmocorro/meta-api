@@ -904,20 +904,14 @@ module.exports = function(app){
             })
         }
 
-        if(req.userID && req.claim){
+        loadImages().then((poly_boatid) => {
 
-            loadImages().then((poly_boatid) => {
-
-                //console.log(poly_boatid);
-                let data = Object.assign(req.claim, {data: poly_boatid});
-                res.status(200).json(data);
-            }, (err) => {
-                res.status(501).json({err: err});
-            })
-
-        } else {
-            res.status(401).json({err: 'Invalid Token'});
-        }
+            //console.log(poly_boatid);
+            let data = Object.assign(req.claim, {data: poly_boatid});
+            res.status(200).json(data);
+        }, (err) => {
+            res.status(501).json({err: err});
+        })
 
     });
     
