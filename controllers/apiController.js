@@ -946,6 +946,37 @@ module.exports = function(app){
 
     })
 
+    app.post('/api/deletesicboat', (req, res) => {
+
+        let fields = req.body;
+        console.log(fields);
+
+        if(fields.id){
+            UpdateSicBoat().then(data => {
+                res.status(200).json({success: 'SiC ID successfully DELETED!'});
+            })
+        } else {
+            res.status(200).json({error: 'SiC ID did not delete.'});
+        }
+
+        function UpdateSicBoat(){
+            return new Promise((resolve, reject) => {
+                mysqlImageRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+                    connection.query({
+                        sql: 'DELETE rpi_poly_wts WHERE ID = ?',
+                        values: [ fields.id ]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        resolve(results);
+                    });
+                    connection.release();
+                });
+            })
+        }
+
+    })
+
     app.get('/api/themetrohub/:token',  verifyTokenParams, (req, res) => {
 
         if(req.userID && req.claim){
