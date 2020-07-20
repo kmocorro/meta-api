@@ -964,7 +964,7 @@ module.exports = function(app){
                 mysqlImageRPi.getConnection((err, connection) => {
                     if(err){return reject(err)}
                     connection.query({
-                        sql: 'DELETE rpi_poly_wts WHERE ID = ?',
+                        sql: 'DELETE FROM rpi_poly_wts WHERE ID = ?',
                         values: [ fields.id ]
                     },  (err, results) => {
                         if(err){return reject(err)}
