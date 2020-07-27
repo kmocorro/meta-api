@@ -935,7 +935,7 @@ module.exports = function(app){
             connection.query({
               sql: 'INSERT INTO triage SET date_time=?, employeeNumber=?, status=?',
               values: [new Date(), fields.employeeNumber, fields.status]
-            },  (err, results){
+            },  (err, results) => {
               if(err){return reject(err)}
               if(results){
                   resolve()
