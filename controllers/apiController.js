@@ -9,6 +9,7 @@ let mysql = require('../config').pool;
 let mysqlTrace = require('../config').poolTrace;
 let mysqlRPi = require('../config').poolRPi;
 let mysqlImageRPi = require('../config').poolImageRPi;
+let mysqlCodecs = require('../config').poolCodecs;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
 let URLSafeBase64 = require('urlsafe-base64');
@@ -914,6 +915,39 @@ module.exports = function(app){
         })
 
     });
+
+    app.post('/api/triage', (req, res) => {
+      
+      let fields = req.body;
+
+      if(fields.employeeNumber){
+        InsertTriage().then((data) => {
+          res.status(200).send({status: 'success', message: data});
+        },(err) => {
+          res.status(200).send({status: 'error', message: err});
+        })
+      }
+
+      function InsertTriage(){
+        return new Promise((resolve, reject) => {
+          mysqlCodecs.getConnection((err, connection) => {
+            if(err){return reject(err)}
+            connection.query({
+              sql: 'INSERT INTO triage SET date_time=?, employeeNumber=?, status=?',
+              values: [new Date(), fields.employeeNumber, fields.status]
+            },  (err, results){
+              if(err){return reject(err)}
+              if(results){
+                  resolve()
+              }
+            });
+            
+            connection.release();
+          })
+        })
+      }
+
+    })
     
     app.post('/api/updatesicboat', (req, res) => {
 
