@@ -16,13 +16,17 @@ const port = process.env.PORT || 8080;
 
 
 app.use(cookieParser());
+/*
 app.use(cors(
     { 
         credentials: true,
         origin: [corsOrigins.dev, corsOrigins.prod]
     })
 );
+*/
 
+
+app.use(cors())
 app.use(helmet());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
