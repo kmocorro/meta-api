@@ -13,6 +13,7 @@ let mysqlCodecs = require('../config').poolCodecs;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
 let URLSafeBase64 = require('urlsafe-base64');
+const cors = require('cors');
 
 module.exports = function(app){
 
@@ -949,7 +950,8 @@ module.exports = function(app){
 
     })
     
-    app.post('/api/updatesicboat', (req, res) => {
+    app.options('/api/updatesicboat/', cors())
+    app.post('/api/updatesicboat', cors(), (req, res) => {
 
         let fields = req.body;
         console.log(fields);
