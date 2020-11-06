@@ -1,11 +1,19 @@
 let verifyToken = require('./verifyToken');
 let verifyTokenParams = require('./verifyTokenParams');
 let verifyTokenOasis = require('./verifyTokenOasis');
+let verifyTokenRecertapp = require('./verifyTokenRecertapp');
+let verifyToken2019YEP = require('./verifyToken2019YEP');
 let formidable = require('formidable');
 let XLSX = require('xlsx');
 let mysql = require('../config').pool;
+let mysqlTrace = require('../config').poolTrace;
+let mysqlRPi = require('../config').poolRPi;
+let mysqlImageRPi = require('../config').poolImageRPi;
+let mysqlCodecs = require('../config').poolCodecs;
 let moment = require('moment');
 let csv = require("csvtojson/v2");
+let URLSafeBase64 = require('urlsafe-base64');
+const cors = require('cors');
 
 module.exports = function(app){
 
@@ -403,22 +411,127 @@ module.exports = function(app){
             });
         }
 
-        isVoted().then(()=>{
-            insertToYEP_data_table().then(()=>{
-                insertToYEP_participants_table().then(() => {
-                    res.status(200).json({success: 'Thank you for voting!'});
+        if(req.body.employeeNumber && req.body.survey_id){
+            isVoted().then(()=>{
+                insertToYEP_data_table().then(()=>{
+                    insertToYEP_participants_table().then(() => {
+                        res.status(200).json({success: 'Thank you for voting!'});
+                    }, (err)=>{
+                        res.status(200).json({error: err});
+                    })
                 }, (err)=>{
                     res.status(200).json({error: err});
                 })
             }, (err)=>{
                 res.status(200).json({error: err});
-            })
-        }, (err)=>{
-            res.status(200).json({error: err});
-        });
+            });
+        } else {
+            res.status(200).json({error: 'Unable to submit. Refresh the page and make sure you are logged in'})
+        }
+        
 
     })
 
+    app.post('/api/csatsurvey', (req, res) => {
+        console.log(req.body);
+
+        // check if sid exists.
+        function isSidExists(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'SELECT * FROM csat_stakeholders WHERE sid = ?',
+                        values: [ req.body.sid ]
+                    },  (err, results) => {
+                        if(err){return reject(err)};
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            resolve();
+                        } else {
+                            res.status(200).json({error: 'SID does not exists.'})
+                        }
+        
+                    })
+                    connection.release();
+                });
+            })
+        }
+
+        // check if bid exists.
+        function isBidExists(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+                    // is exists.
+                    connection.query({
+                        sql: 'SELECT * FROM csat_buyers WHERE bid = ?',
+                        values: [ req.body.bid ]
+                    },  (err, results) => {
+                        if(err){return reject(err)};
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            resolve();
+                        } else {
+                            res.status(200).json({error: 'BID does not exists.'})
+                        }
+        
+                    })
+                    connection.release();
+                });
+            })
+        }
+
+        // insert to database...
+        function insertToCSAT_ratings(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO csat_ratings SET dt=?, sid=?, bid=?, question_1=?, question_2=?, question_3=?, recommendation=?',
+                        values: [ new Date(), req.body.sid, req.body.bid, req.body.question_1, req.body.question_2, req.body.question_3, req.body.recommendation ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            });
+        }
+
+        if(req.body.sid && req.body.bid){
+            if(req.body.question_1 && req.body.question_2 && req.body.question_3){
+                isSidExists().then(() => {
+                    isBidExists().then(() => {
+                        insertToCSAT_ratings().then(() => {
+                            res.status(200).json({success: 'Your feedback has been submitted. Thank you!'});
+                        },  (err) => {
+                            res.status(200).json({error: err});
+                        })
+                    }, (err) => {
+                        res.status(200).json({error: err});
+                    })
+                }, (err) => {
+                    res.status(200).json({error: err});
+                })
+            } else {
+                res.status(200).json({error: 'Unable to submit. Fields might be incomplete...'})
+            }
+        } else {
+            res.status(200).json({error: 'Unable to submit. SID or BID is incorrect...'})
+        }
+
+    })
+
+<<<<<<< HEAD
     // csat save post  
     app.post('/api/csatsurvey', (req, res) => {
         
@@ -426,6 +539,149 @@ module.exports = function(app){
 
     })
 
+=======
+    // WTS POLY TUBE Traceability API
+    app.post('/api/polywts22', (req, res) => {
+        console.log(req.body);
+
+        function insertWTSTube(){
+            return new Promise((resolve, reject) => {
+                // using traceability database
+                mysqlTrace.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO polywts_tube_mapping SET dt=?, setID=?, tubeID=?, username=?',
+                        values: [ new Date(), req.body.setID, req.body.tubeID, req.body.username ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            })
+        }
+
+        if(req.body.setID && req.body.tubeID){
+            insertWTSTube().then(() => {
+                res.status(200).json({success: 'Thank you! SetID and TubeID has been saved.'});
+            }, (err) => {
+                res.status(200).json({error: err});
+            })
+        } else {
+            res.status(200).json({error: 'Unable to submit. Fields might be incomplete...'})
+        }
+
+    })
+
+    // RECERTIFICATION WEB APP API
+    app.get('/api/recertapp/:token', verifyTokenRecertapp, (req, res) => {
+
+        if(req.userID && req.claim){
+            res.status(200).json(req.claim);
+        } else {
+            res.status(200).json({err: 'Invalid token.'});
+        }
+
+    });
+
+    //  2019 YEP web app api
+    app.get('/api/yep2019/:token', verifyToken2019YEP, (req, res) => {
+	
+	console.log(req.userID);
+	console.log(req.claim);
+	console.log(req.registration);	
+
+        if(req.claim && req.registration){
+            let data = Object.assign(req.claim, req.registration);
+            res.status(200).json(data);
+        } else {
+            res.status(200).json({err: 'Invalid token.'});
+        }
+
+    });
+
+    app.post('/api/yes', (req, res) => {
+        console.log(req.body);
+
+
+        function insertYES2invite(){
+            return new Promise((resolve, reject) => {
+                // using traceability database
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO yep2019_registration SET dt=?, employeeNumber=?, isAccepted=?, transportation=?, incomingRoute=?, outgoingRoute=?, reason=?',
+                        values: [ new Date(), req.body.employeeNumber, req.body.isAccepted, req.body.transportation, req.body.incomingRoute, req.body.outgoingRoute, req.body.reason ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            })
+        }
+
+        if(req.body.employeeNumber && req.body.isAccepted === 1 && req.body.transportation !== '') {
+            insertYES2invite().then(() => {
+                res.status(200).json({success: 'Thank you!'});
+            },  (err) => {
+                res.status(200).json({error: err});
+            })
+        }
+        
+    });
+
+    app.post('/api/no', (req, res) => {
+        console.log(req.body);
+
+        function insertNO2invite(){
+            return new Promise((resolve, reject) => {
+                // using traceability database
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'INSERT INTO yep2019_registration SET dt=?, employeeNumber=?, isAccepted=?, transportation=?, incomingRoute=?, outgoingRoute=?, reason=?',
+                        values: [ new Date(), req.body.employeeNumber, req.body.isAccepted, req.body.transportation, req.body.incomingRoute, req.body.outgoingRoute, req.body.reason ]
+                    }, (err, results) => {
+                        
+                        if(err){reject(err)}
+                        if(results){
+                            resolve();
+                        }
+
+                    });
+
+                    connection.release();
+
+                });
+            })
+        }
+
+        if(req.body.employeeNumber && req.body.isAccepted === 0 && req.body.transportation == '') {
+            insertNO2invite().then(() => {
+                res.status(200).json({success: 'Thank you. You have declined the inivation'});
+            },  (err) => {
+                res.status(200).json({error: err});
+            })
+        }
+    });
+
+>>>>>>> 2c24340d8fc1e75a2690ab3fb2c87b549a94bc93
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
         let plate_number = req.query.plate;
@@ -434,6 +690,7 @@ module.exports = function(app){
         res.status(200).json({message: plate_number});
     })
 
+<<<<<<< HEAD
     
     // recertification web application
     // examiner
@@ -450,5 +707,684 @@ module.exports = function(app){
 
     // recertification web application
     // examinees
+=======
+    // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
+    
+    /*
+    app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
+
+        function loadImages(){ // query to traceability local database---
+            return new Promise((resolve, reject) => {
+                mysqlRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'SELECT * FROM rpi_poly_wts WHERE FINAL_SIC_ID IS NULL ORDER BY ID DESC LIMIT 16'
+                    },  (err, results) => {
+                        if(err){reject(err)}
+                        
+                        let poly_boatid = [];
+
+                        if(results){
+
+                            for(let i=0; i<results.length;i++){
+                                poly_boatid.push({
+                                    id: results[i].ID,
+                                    insert_time: moment(results[i].INSERT_TIME).calendar(),
+                                    sic_id: results[i].SIC_ID,
+                                    read_time: results[i].READ_TIME,
+                                    match_value: results[i].MATCH_VALUE,
+                                    base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
+                                    urlsafe_sic_id_image: URLSafeBase64.encode(results[i].SIC_ID_IMAGE.toString('base64')),
+                                    buffer_sic_id_image: results[i].SIC_ID_IMAGE,
+                                    final_sic_id: results[i].FINAL_SIC_ID
+                                })
+                            }
+
+                            resolve(poly_boatid);
+
+                        } else {
+
+                            poly_boatid.push({
+                                id: '',
+                                insert_time: '',
+                                sic_id: '',
+                                read_time: '',
+                                match_value: '',
+                                sic_id_image: '',
+                                base64_sic_id_image: '',
+                                urlsafe_sic_id_image: '',
+                                buffer_sic_id_image: '',
+                                final_sic_id: ''
+                            })
+                        }
+                    });
+
+                    connection.release();
+
+                });
+                
+            })
+        }
+
+        if(req.userID && req.claim){
+
+            loadImages().then((poly_boatid) => {
+
+                //console.log(poly_boatid);
+                let data = Object.assign(req.claim, {data: poly_boatid});
+                res.status(200).json(data);
+            }, (err) => {
+                res.status(501).json({err: err});
+            })
+
+        } else {
+            res.status(401).json({err: 'Invalid Token'});
+        }
+
+    });
+    */
+
+    app.get('/api/tesseract/:token', verifyTokenParams, (req, res) => {
+
+        function loadImages(){ // query to traceability local database---
+            return new Promise((resolve, reject) => {
+                mysqlRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'SELECT * FROM matched_rpi WHERE FINAL_SIC_ID IS NULL AND BOAT_LOADTIME > DATE_ADD(CURDATE(), INTERVAL - 10 DAY) ORDER BY id DESC LIMIT 1000 '
+                    },  (err, results) => {
+                        if(err){reject(err)}
+                        
+                        let poly_boatid = [];
+
+                        if(results){
+
+                            for(let i=0; i<results.length;i++){
+                                poly_boatid.push({
+                                    boat_loadtime: results[i].BOAT_LOADTIME,
+                                    wafer_count: results[i].WAFER_COUNT,
+                                    boat_id: results[i].BOAT_ID,
+                                    rpi_record_id: results[i].RPI_RECORD_ID,
+                                    id: results[i].ID,
+                                    insert_time: moment(results[i].INSERT_TIME).calendar(),
+                                    sic_id: results[i].SIC_ID,
+                                    read_time: results[i].READ_TIME,
+                                    match_value: results[i].MATCH_VALUE,
+                                    base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
+                                    urlsafe_sic_id_image: URLSafeBase64.encode(results[i].SIC_ID_IMAGE.toString('base64')),
+                                    buffer_sic_id_image: results[i].SIC_ID_IMAGE,
+                                    final_sic_id: results[i].FINAL_SIC_ID,
+                                    transfer_type: results[i].TRANSFER_TYPE
+                                })
+                            }
+
+                            resolve(poly_boatid);
+
+                        } else {
+
+                            poly_boatid.push({
+                                boat_loadtime: '',
+                                wafer_count: '',
+                                boat_id: '',
+                                rpi_record_id: '',
+                                id: '',
+                                insert_time: '',
+                                sic_id: '',
+                                read_time: '',
+                                match_value: '',
+                                sic_id_image: '',
+                                base64_sic_id_image: '',
+                                urlsafe_sic_id_image: '',
+                                buffer_sic_id_image: '',
+                                final_sic_id: '',
+                                transfer_type: ''
+                            })
+                        }
+                    });
+
+                    connection.release();
+
+                });
+                
+            })
+        }
+
+        if(req.userID && req.claim){
+
+            loadImages().then((poly_boatid) => {
+
+                //console.log(poly_boatid);
+                let data = Object.assign(req.claim, {data: poly_boatid});
+                res.status(200).json(data);
+            }, (err) => {
+                res.status(501).json({err: err});
+            })
+
+        } else {
+            res.status(401).json({err: 'Invalid Token'});
+        }
+
+    });
+
+    app.get('/api/tesseract-no-token/', (req, res) => {
+
+        function loadImages(){ // query to traceability local database---
+            return new Promise((resolve, reject) => {
+                mysqlRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)};
+
+                    connection.query({
+                        sql: 'SELECT * FROM matched_rpi WHERE FINAL_SIC_ID IS NULL AND BOAT_LOADTIME > DATE_ADD(CURDATE(), INTERVAL - 20 DAY) ORDER BY id DESC LIMIT 10'
+                    },  (err, results) => {
+                        if(err){reject(err)}
+                        
+                        let poly_boatid = [];
+
+                        if(results){
+
+                            for(let i=0; i<results.length;i++){
+                                poly_boatid.push({
+                                    boat_loadtime: results[i].BOAT_LOADTIME,
+                                    wafer_count: results[i].WAFER_COUNT,
+                                    boat_id: results[i].BOAT_ID,
+                                    rpi_record_id: results[i].RPI_RECORD_ID,
+                                    id: results[i].ID,
+                                    insert_time: moment(results[i].INSERT_TIME).calendar(),
+                                    sic_id: results[i].SIC_ID,
+                                    read_time: results[i].READ_TIME,
+                                    match_value: results[i].MATCH_VALUE,
+                                    base64_sic_id_image: results[i].SIC_ID_IMAGE.toString('base64'),
+                                    urlsafe_sic_id_image: URLSafeBase64.encode(results[i].SIC_ID_IMAGE.toString('base64')),
+                                    buffer_sic_id_image: results[i].SIC_ID_IMAGE,
+                                    final_sic_id: results[i].FINAL_SIC_ID,
+                                    transfer_type: results[i].TRANSFER_TYPE
+                                })
+                            }
+
+                            resolve(poly_boatid);
+
+                        } else {
+
+                            poly_boatid.push({
+                                boat_loadtime: '',
+                                wafer_count: '',
+                                boat_id: '',
+                                rpi_record_id: '',
+                                id: '',
+                                insert_time: '',
+                                sic_id: '',
+                                read_time: '',
+                                match_value: '',
+                                sic_id_image: '',
+                                base64_sic_id_image: '',
+                                urlsafe_sic_id_image: '',
+                                buffer_sic_id_image: '',
+                                final_sic_id: '',
+                                transfer_type: ''
+                            })
+                        }
+                    });
+
+                    connection.release();
+
+                });
+                
+            })
+        }
+
+        loadImages().then((poly_boatid) => {
+
+            //console.log(poly_boatid);
+            let data = Object.assign({data: poly_boatid});
+            res.status(200).json(data);
+        }, (err) => {
+            res.status(501).json({err: err});
+        })
+
+    });
+
+    app.post('/api/triage', (req, res) => {
+      
+      let fields = req.body;
+
+      if(fields.employeeNumber){
+        InsertTriage().then((data) => {
+          res.status(200).send({status: 'success', message: data});
+        },(err) => {
+          res.status(200).send({status: 'error', message: err});
+        })
+      }
+
+      function InsertTriage(){
+        return new Promise((resolve, reject) => {
+          mysqlCodecs.getConnection((err, connection) => {
+            if(err){return reject(err)}
+            connection.query({
+              sql: 'INSERT INTO triage SET date_time=?, employeeNumber=?, status=?',
+              values: [new Date(), fields.employeeNumber, fields.status]
+            },  (err, results) => {
+              if(err){return reject(err)}
+              if(results){
+                  resolve()
+              }
+            });
+            
+            connection.release();
+          })
+        })
+      }
+
+    })
+    
+    app.options('/api/updatesicboat/', cors())
+    app.post('/api/updatesicboat', cors(), (req, res) => {
+
+        let fields = req.body;
+        console.log(fields);
+
+        if(fields.id){
+            UpdateSicBoat().then(data => {
+                res.status(200).json({success: 'Final SiC ID successfully updated!'});
+            })
+        } else {
+            res.status(200).json({error: 'Final SiC ID did not update.'});
+        }
+
+        function UpdateSicBoat(){
+            return new Promise((resolve, reject) => {
+                mysqlImageRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+                    connection.query({
+                        sql: 'UPDATE rpi_poly_wts SET FINAL_SIC_ID = ? WHERE ID = ?',
+                        values: [ 'DE-46778' + fields.final_sic_id, fields.id ]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        resolve(results);
+                    });
+                    connection.release();
+                });
+            })
+        }
+
+    })
+
+    app.post('/api/deletesicboat', (req, res) => {
+
+        let fields = req.body;
+        console.log(fields);
+
+        if(fields.id){
+            UpdateSicBoat().then(data => {
+                res.status(200).json({success: 'SiC ID successfully DELETED!'});
+            })
+        } else {
+            res.status(200).json({error: 'SiC ID did not delete.'});
+        }
+
+        function UpdateSicBoat(){
+            return new Promise((resolve, reject) => {
+                mysqlImageRPi.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+                    connection.query({
+                        sql: 'DELETE FROM rpi_poly_wts WHERE ID = ?',
+                        values: [ fields.id ]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        resolve(results);
+                    });
+                    connection.release();
+                });
+            })
+        }
+
+    })
+
+    app.get('/api/themetrohub/:token',  verifyTokenParams, (req, res) => {
+
+        if(req.userID && req.claim){
+            TheMetrohub().then((themetrohub_data) => {
+                let data = Object.assign({user: req.claim}, {themetrohub: themetrohub_data})
+                console.log(data);
+                res.status(200).json(data);
+            })
+        }
+
+        function TheMetrohub(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+                    connection.query({
+                        sql: 'SELECT * FROM themetrohub'
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        let data = [];
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            for(let i=0; i<results.length; i++){
+                                data.push({
+                                    id: results[i].id,
+                                    created_dt: results[i].created_dt,
+                                    status_dt: results[i].status_dt,
+                                    qual: results[i].qual,
+                                    qty: results[i].qty,
+                                    mode: results[i].mode,
+                                    status: results[i].status,
+                                    username: results[i].username
+                                })
+                            }
+
+                            resolve(data);
+                        } else {
+                            
+                            resolve(data);
+                        }
+                    });
+                    connection.release();
+                })
+            })
+        }
+
+    });
+
+    app.get('/api/mh/withdrawpending', (req, res) => {
+
+        TheMetrohubWithdrawPending().then(data => {
+            res.status(200).json(data);
+        }, (err) => {
+            res.status(200).json({err: err});
+        })
+
+        function TheMetrohubWithdrawPending(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'SELECT * FROM themetrohub WHERE mode = "withdraw" AND status = "pending"'
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        let withdraw_pending = [];
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            
+                            for(let i=0;i<results.length;i++){
+                                withdraw_pending.push({
+                                    id: results[i].id,
+                                    created_dt: results[i].created_dt,
+                                    status_dt: results[i].status_dt,
+                                    qual: results[i].qual,
+                                    qty: results[i].qty,
+                                    mode: results[i].mode,
+                                    status: results[i].status,
+                                    username: results[i].username,
+                                    experiment_name: results[i].experiment_name,
+                                    qual_purpose: results[i].qual_purpose,
+                                })
+                            }
+
+                            resolve(withdraw_pending)
+                        } else {
+                            resolve(withdraw_pending)
+                        }
+
+                    })
+
+                    connection.release()
+                })
+            })
+        }
+
+    })
+
+    app.get('/api/mh/onepager', (req, res) => {
+
+        TheMetrohubSummary().then(data => {
+            res.status(200).json(data);
+        },  (err) => {
+            res.status(200).json({err: err});
+        })
+
+        function TheMetrohubSummary(){
+            return new Promise((resolve, reject) => {
+
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'SELECT qual, mode, status, SUM(qty) as qty FROM themetrohub GROUP BY qual, status, mode'
+                    },  (err, results)=> {
+                        if(err){return reject(err)}
+                        let approved_inventory = [];
+                        let pending_inventory = [];
+                        let approved_withdraw = [];
+                        let pending_withdraw = [];
+
+                        if(typeof results !== 'undefined' && results !== null && results.length > 0){
+                            //console.log(results);
+                            for(let i=0; i<results.length;i++){
+                                if(results[i].mode === 'add' &&  results[i].status === 'approved'){
+                                    approved_inventory.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                } else if (results[i].mode === 'add' &&  results[i].status === 'pending') {
+                                    pending_inventory.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                } else if (results[i].mode === 'withdraw' &&  results[i].status === 'approved'){
+                                    approved_withdraw.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                } else if (results[i].mode === 'withdraw' &&  results[i].status === 'pending') {
+                                    pending_withdraw.push({
+                                        qual: results[i].qual,
+                                        mode: results[i].mode,
+                                        status: results[i].status,
+                                        qty: results[i].qty
+                                    })
+                                }
+                            }
+
+                            let data = {
+                                approved_inventory: approved_inventory,
+                                pending_inventory: pending_inventory,
+                                approved_withdraw: approved_withdraw,
+                                pending_withdraw: pending_withdraw
+                            };
+                            //console.log(data);
+
+                            resolve(data);
+                        } else {
+                            
+                            let data = {
+                                approved_inventory: approved_inventory,
+                                pending_inventory: pending_inventory,
+                                approved_withdraw: approved_withdraw,
+                                pending_withdraw: pending_withdraw
+                            };
+
+                            resolve(data);
+                        }
+
+                    });
+                    connection.release();
+                })
+
+            })
+        }
+
+    })
+
+    app.post('/api/mh/addinventory', (req, res) => {
+
+        if(req.body.mode === 'add' && req.body.status === 'approved' && req.body.qual !== '' && req.body.qty !== '' && req.body.username !== ''){
+            MetrohubAddInventory().then(()=>{
+                res.status(200).json({success: 'Successfully added to inventory.'});
+            },  (err) =>{
+                res.status(200).json({err: err});
+            })
+        }
+
+        function MetrohubAddInventory(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'INSERT INTO themetrohub SET created_dt =?, qual =?, qty =? , mode =?, status =?, username =?',
+                        values: [new Date(), req.body.qual, req.body.qty, req.body.mode, req.body.status, req.body.username]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        if(results){
+                            resolve()
+                        }
+                    });
+
+                    connection.release();
+                })
+            })
+        }
+
+    })
+
+    app.post('/api/mh/withdrawinventory', (req, res) => {
+
+        if(req.body.mode === 'withdraw' && req.body.status === 'pending' && req.body.qual !== '' && req.body.qty !== '' && req.body.username !== '' && req.body.experiment_name !== '' && req.body.qual_purpose !== ''){
+            MetrohubWithdrawInventory().then(()=>{
+                res.status(200).json({success: 'Pending for withdrawal.'});
+            },  (err) =>{
+                res.status(200).json({err: err});
+            })
+        }
+
+        function MetrohubWithdrawInventory(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'INSERT INTO themetrohub SET created_dt =?, qual =?, qty =? , mode =?, status =?, username =?, experiment_name =?, qual_purpose =?',
+                        values: [new Date(), req.body.qual, req.body.qty, req.body.mode, req.body.status, req.body.username, req.body.experiment_name, req.body.qual_purpose]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                        if(results){
+                            resolve()
+                        }
+                    });
+
+                    connection.release();
+                })
+            })
+        }
+
+    })
+
+    
+    app.post('/api/mh/rejectwithdraw', (req, res) => {
+
+        if(req.body.id){
+            MetrohubWithdrawInventory().then(()=>{
+                res.status(200).json({success: 'Pending for withdrawal.'});
+            },  (err) =>{
+                res.status(200).json({err: err});
+            })
+        }
+
+        function MetrohubRejectWithdraw(){
+            return new Promise((resolve, reject) => {
+                mysql.getConnection((err, connection) => {
+                    if(err){return reject(err)}
+
+                    connection.query({
+                        sql: 'UPDATE themetrohub SET status = "rejected", status_dt = ? WHERE id = ?',
+                        values: [ new Date(), req.body.id ]
+                    },  (err, results) => {
+                        if(err){return reject(err)}
+                    })
+
+                    connection.release();
+                })
+            })
+        }
+
+    })
+
+    app.get('/api/metadash/lcm', (req, res) => {
+
+        MetaDash_LCM().then((data) => {
+            res.status(200).json(data);
+        });
+
+        function MetaDash_LCM(){
+            return new Promise((resolve, reject) => {
+                /* converts csv to json
+                platter_INNOLAS2005_LCM_L17L18.csv
+                platter_INNOLAS2006_LCM_L19L20
+                platter_INNOLAS3012_LCM_L22_2
+                platter_INNOLAS4019_LCM_L17
+                platter_INNOLAS4020_LCM_L18
+                platter_INNOLAS4021_LCM_L19
+                platter_INNOLAS4022_LCM_L20
+                platter_INNOLAS4023_LCM_L21
+                platter_INNOLAS4024_LCM_L22
+                */
+
+                let lcm17 = 'public/lcm/platter_INNOLAS4019_LCM_L17.csv';
+                let lcm1718 = 'public/lcm/platter_INNOLAS2005_LCM_L17L18.csv';
+                let lcm18 = 'public/lcm/platter_INNOLAS4020_LCM_L18.csv';
+                let lcm19 = 'public/lcm/platter_INNOLAS4021_LCM_L19.csv';
+                let lcm1920 = 'public/lcm/platter_INNOLAS2006_LCM_L19L20.csv';
+                let lcm20 = 'public/lcm/platter_INNOLAS4022_LCM_L20.csv';
+                let lcm21 = 'public/lcm/platter_INNOLAS4023_LCM_L21.csv';
+                let lcm22 = 'public/lcm/platter_INNOLAS4024_LCM_L22.csv';
+                let lcm222 = 'public/lcm/platter_INNOLAS3012_LCM_L22_2.csv';
+
+
+                csv().fromFile(lcm17).then((lcm17) => {
+                    csv().fromFile(lcm1718).then((lcm1718) => {
+                        csv().fromFile(lcm18).then((lcm18) => {
+                            csv().fromFile(lcm19).then((lcm19) => {
+                                csv().fromFile(lcm1920).then((lcm1920) => {
+                                    csv().fromFile(lcm20).then((lcm20) => {
+                                        csv().fromFile(lcm21).then((lcm21) => {
+                                            csv().fromFile(lcm22).then((lcm22) => {
+                                                csv().fromFile(lcm222).then((lcm222) => {
+                                                    let data = {
+                                                        lcm17: lcm17,
+                                                        lcm1718: lcm1718,
+                                                        lcm18: lcm18,
+                                                        lcm19: lcm19,
+                                                        lcm1920: lcm1920,
+                                                        lcm20: lcm20,
+                                                        lcm21: lcm21,
+                                                        lcm22: lcm22,
+                                                        lcm222: lcm222,
+                                                    }
+                                                    resolve(data);
+                                                })
+                                            })
+                                        })
+                                    })
+                                })
+                            })
+                        })
+                    })
+                }) 
+
+
+            })
+        }
+
+    })
+>>>>>>> 2c24340d8fc1e75a2690ab3fb2c87b549a94bc93
 
 }
