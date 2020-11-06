@@ -531,15 +531,6 @@ module.exports = function(app){
 
     })
 
-<<<<<<< HEAD
-    // csat save post  
-    app.post('/api/csatsurvey', (req, res) => {
-        
-        console.log(req.body);
-
-    })
-
-=======
     // WTS POLY TUBE Traceability API
     app.post('/api/polywts22', (req, res) => {
         console.log(req.body);
@@ -681,7 +672,6 @@ module.exports = function(app){
         }
     });
 
->>>>>>> 2c24340d8fc1e75a2690ab3fb2c87b549a94bc93
     // Vehicle QR
     app.get('/api/vehicle', (req, res) => {
         let plate_number = req.query.plate;
@@ -690,24 +680,6 @@ module.exports = function(app){
         res.status(200).json({message: plate_number});
     })
 
-<<<<<<< HEAD
-    
-    // recertification web application
-    // examiner
-    app.post('/api/recert-excel-upload', (req, res) => {
-
-    })
-
-    // recertification web application
-    // web app exam code list
-
-    app.get('/api/recert-examcode-list', (req, res) => {
-
-    })
-
-    // recertification web application
-    // examinees
-=======
     // rmp uploader -- DEPRECATED -TRANSFERED TO server port 8081
     
     /*
@@ -1385,6 +1357,5 @@ module.exports = function(app){
         }
 
     })
->>>>>>> 2c24340d8fc1e75a2690ab3fb2c87b549a94bc93
 
 }
