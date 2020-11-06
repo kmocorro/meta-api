@@ -21,9 +21,9 @@ module.exports = function(app){
 
         passport.authenticate('ldapauth', (err, user, info) => {
             if(err){
-                res.json({"err": err})
+                res.status(401).json({"err": err})
             } else if(!user){
-                res.json({"err": info.message});
+                res.status(401).json({"err": info.message});
             } else {
 
                 let token = generateJWT(user);
